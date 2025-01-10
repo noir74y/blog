@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.noir74.blog.util.config.ApplicationConfig;
 
-//@SpringBootApplication
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
         //SpringApplication.run(Main.class, args);
