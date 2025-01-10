@@ -9,7 +9,7 @@ import ru.noir74.blog.util.config.ApplicationConfig;
 @SpringBootApplication
 public class Main {
     public static void main(String[] args) {
-        //SpringApplication.run(Main.class, args);
-        ApplicationContext context1 = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+        SpringApplication.run(Main.class, args);
+        //ApplicationContext context1 = new AnnotationConfigApplicationContext(ApplicationConfig.class);
     }
 }
