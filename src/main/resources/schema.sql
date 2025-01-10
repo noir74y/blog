@@ -32,5 +32,6 @@ CREATE TABLE IF NOT EXISTS posts_tags
     tag_id     INTEGER NOT NULL,
     CONSTRAINT pk_post_tag PRIMARY KEY (id),
     CONSTRAINT fk_post FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
-    CONSTRAINT fk_tag FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE CASCADE
+    CONSTRAINT fk_tag FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE cascade,
+    CONSTRAINT uk_post_tag UNIQUE (post_id, tag_id)
 )
