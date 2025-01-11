@@ -5,15 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class Tag {
     private Integer id;
-    private String comment;
-    private Integer postId;
-    private LocalDateTime created;
+    private String tag;
 }
