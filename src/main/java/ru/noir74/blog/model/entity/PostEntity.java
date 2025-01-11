@@ -36,8 +36,8 @@ public class PostEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "posts_tags",
+            name = "posts_tags", schema = "blog",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags;
+    private Set<TagEntity> tags;
 }
