@@ -14,6 +14,5 @@ import java.time.LocalDateTime;
 public class Comment {
     private Integer id;
     private String comment;
-    private Integer postId;
     private LocalDateTime created;
 }
