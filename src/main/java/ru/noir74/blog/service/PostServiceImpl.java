@@ -2,19 +2,27 @@ package ru.noir74.blog.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.model.domain.Post;
+import ru.noir74.blog.model.mapper.PostMapper;
+import ru.noir74.blog.repository.PostRepository;
 
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService{
+    private final PostRepository postRepository;
+    private final PostMapper postMapper;
+
     @Override
+    @Transactional(readOnly = true)
     public Post findById(Integer id) {
-        return null;
+        return postMapper.entity2Model(postRepository.findById(id).orElseThrow(RuntimeException::new));
     }
 
     @Override
-    public Post create(Post item) {
-        return null;
+    @Transactional
+    public Post create(Post post) {
+        return postMapper.entity2Model(postRepository.save(postMapper.model2entity(post)));
     }
 
     @Override
