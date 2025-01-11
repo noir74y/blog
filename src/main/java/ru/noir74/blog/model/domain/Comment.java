@@ -13,6 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Comment {
     private Integer id;
-    private String comment;
+    private String message;
     private LocalDateTime created;
 }

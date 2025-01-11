@@ -17,8 +17,8 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
-    @Column(name = "comment")
-    private String comment;
+    @Column(name = "message")
+    private String message;
     @Column(name = "created", nullable = false)
     private LocalDateTime created;
 }

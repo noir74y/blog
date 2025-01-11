@@ -2,7 +2,6 @@ package ru.noir74.blog.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.noir74.blog.model.domain.Post;
 
 import java.util.Set;
 
@@ -22,5 +21,5 @@ public class TagEntity {
     private String tag;
 
     @ManyToMany(mappedBy = "tags")
-    Set<PostEntity> posts;
+    Set<ItemEntity> items;
 }

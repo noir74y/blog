@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public class PostDtoResp {
+public class ItemDtoResp {
     private Integer id;
     private String title;
-    private String post;
+    private String message;
     private byte[] picture;
     private Integer likes;
     private LocalDateTime created;
