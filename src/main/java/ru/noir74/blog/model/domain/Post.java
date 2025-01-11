@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -20,6 +22,6 @@ public class Post {
     private byte[] picture;
     private Integer likes;
     private LocalDateTime created;
-    private HashSet<Tag> tags;
-    private LinkedHashSet<Comment> comments;
+    private Set<Tag> tags;
+    private List<Comment> comments;
 }
