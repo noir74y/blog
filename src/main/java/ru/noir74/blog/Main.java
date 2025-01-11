@@ -12,9 +12,11 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 import ru.noir74.blog.util.config.ApplicationConfig;
 
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) throws LifecycleException {
-        //ApplicationContext context1 = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+        //SpringApplication.run(ApplicationConfig.class, args);
+        //ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
 
         Tomcat tomcat = new Tomcat();
         tomcat.setSilent(true);

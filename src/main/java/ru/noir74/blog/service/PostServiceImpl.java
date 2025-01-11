@@ -1,10 +1,14 @@
 package ru.noir74.blog.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.model.domain.Post;
+import ru.noir74.blog.model.entity.PostEntity;
 import ru.noir74.blog.model.mapper.PostMapper;
+import ru.noir74.blog.repository.CommentRepository;
 import ru.noir74.blog.repository.PostRepository;
 
 @Service
