@@ -20,7 +20,9 @@ public class ItemMapper {
     }
 
     public ItemDtoResp model2dtoResp(Item model) {
-        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
+        var dtoResp = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
+        Optional.ofNullable(dtoResp).ifPresent(obj -> obj.setCommentsCounter(obj.getComments().size()));
+        return dtoResp;
     }
 
     public ItemEntity model2entity(Item model) {

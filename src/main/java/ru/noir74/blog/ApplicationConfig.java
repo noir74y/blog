@@ -11,6 +11,8 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan(basePackages = "ru.noir74.blog")
 @PropertySource("classpath:application.properties")
 public class ApplicationConfig {
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss";
+
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
