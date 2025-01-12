@@ -11,7 +11,7 @@ public class ItemDtoReq {
     private Integer id;
     private String title;
     private String message;
-    private byte[] picture;
+    //private byte[] picture;
     private Integer likes;
     private LocalDateTime created;
     private Set<Tag> tags;

@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.noir74.blog.model.mapper.ItemMapper;
-import ru.noir74.blog.service.ItemService;
 import ru.noir74.blog.model.dto.ItemDtoReq;
 import ru.noir74.blog.model.dto.ItemDtoResp;
+import ru.noir74.blog.model.mapper.ItemMapper;
+import ru.noir74.blog.service.ItemService;
 import ru.noir74.blog.util.validation.OnCreate;
 import ru.noir74.blog.util.validation.OnUpdate;
 
@@ -46,13 +46,13 @@ public class ItemController {
 
     @PatchMapping("/addLike/{id}")
     public void addLike(@NotNull @PathVariable Integer id) {
-        log.info("ADD LIKE /item/{}", id);
+        log.info("PATCH /item/addLike/{}", id);
         itemService.addLike(id);
     }
 
     @PatchMapping("/removeLike/{id}")
     public void removeLike(@NotNull @PathVariable Integer id) {
-        log.info("REMOVE LIKE /item/{}", id);
+        log.info("PATCH /item/removeLike/{}", id);
         itemService.removeLike(id);
     }
 }
