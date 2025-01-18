@@ -1,5 +1,6 @@
 package ru.noir74.blog.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class ItemDtoResp {
     private String message;
     //private byte[] picture;
     private Integer likes;
-    @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime created;
     private Set<Tag> tags;
     private List<Comment> comments;
