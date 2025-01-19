@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS blog.comments
     item_id    INTEGER NOT NULL,
     created    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     CONSTRAINT pk_comment PRIMARY KEY (id),
-    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE
+    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES blog.items (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS blog.tags
@@ -30,6 +30,6 @@ CREATE TABLE IF NOT EXISTS blog.items_tags
     item_id    INTEGER NOT NULL,
     tag_id     INTEGER NOT NULL,
     CONSTRAINT uk_item_tag UNIQUE (item_id, tag_id),
-    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE,
-    CONSTRAINT fk_tag FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE cascade
+    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES blog.items (id) ON DELETE CASCADE,
+    CONSTRAINT fk_tag FOREIGN KEY (tag_id) REFERENCES blog.tags (id) ON DELETE CASCADE
 );
