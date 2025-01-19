@@ -1,8 +1,8 @@
-package ru.noir74.blog.util.exception;
+package ru.noir74.blog.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import ru.noir74.blog.util.exception.handler.ErrorMessage;
+import ru.noir74.blog.exception.handler.ErrorMessage;
 
 
 public class AppException extends RuntimeException {

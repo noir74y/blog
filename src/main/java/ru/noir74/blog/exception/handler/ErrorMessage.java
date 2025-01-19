@@ -1,4 +1,4 @@
-package ru.noir74.blog.util.exception.handler;
+package ru.noir74.blog.exception.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

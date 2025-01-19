@@ -1,10 +1,9 @@
-package ru.noir74.blog.util.exception.handler;
+package ru.noir74.blog.exception.handler;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.noir74.blog.util.exception.*;
+import ru.noir74.blog.exception.*;
 
 @RestControllerAdvice
 public class ExceptionController {

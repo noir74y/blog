@@ -1,4 +1,4 @@
-package ru.noir74.blog.util.exception;
+package ru.noir74.blog.exception;
 
 import org.springframework.http.HttpStatus;
 
