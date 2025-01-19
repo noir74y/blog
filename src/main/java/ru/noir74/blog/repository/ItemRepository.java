@@ -1,18 +1,24 @@
 package ru.noir74.blog.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+
+import ru.noir74.blog.model.domain.Item;
 import ru.noir74.blog.model.entity.ItemEntity;
 
-@Repository
-public interface ItemRepository extends JpaRepository<ItemEntity, Integer> {
-    @Modifying
-    @Query("UPDATE ItemEntity SET likes = likes + 1 WHERE id = ?1")
+import java.util.Optional;
+
+public interface ItemRepository {
+
+    Optional<ItemEntity> findById(Integer id);
+
+    ItemEntity save(ItemEntity itemEntity);
+
+    boolean existsById(Integer id);
+
+    void deleteById(Integer id);
+
+    //@Query("UPDATE ItemEntity SET likes = likes + 1 WHERE id = ?1")
     void addLike(Integer id);
 
-    @Modifying
-    @Query("UPDATE ItemEntity SET likes = likes - 1 WHERE id = ?1")
+    //@Query("UPDATE ItemEntity SET likes = likes - 1 WHERE id = ?1")
     void removeLike(Integer id);
 }
