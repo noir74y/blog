@@ -1,19 +1,19 @@
 package ru.noir74.blog.controller;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.noir74.blog.model.dto.ItemDtoReq;
 import ru.noir74.blog.model.dto.ItemDtoResp;
 import ru.noir74.blog.model.mapper.ItemMapper;
 import ru.noir74.blog.service.ItemService;
-import ru.noir74.blog.util.validation.OnCreate;
-import ru.noir74.blog.util.validation.OnUpdate;
+import ru.noir74.blog.validation.OnCreate;
+import ru.noir74.blog.validation.OnUpdate;
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/item")
 @RequiredArgsConstructor
 public class ItemController {
@@ -39,19 +39,19 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@NotNull @PathVariable Integer id) {
+    public void delete(@PathVariable Integer id) {
         log.info("DELETE /item/{}", id);
         itemService.delete(id);
     }
 
     @PatchMapping("/addLike/{id}")
-    public void addLike(@NotNull @PathVariable Integer id) {
+    public void addLike(@PathVariable Integer id) {
         log.info("PATCH /item/addLike/{}", id);
         itemService.addLike(id);
     }
 
     @PatchMapping("/removeLike/{id}")
-    public void removeLike(@NotNull @PathVariable Integer id) {
+    public void removeLike(@PathVariable Integer id) {
         log.info("PATCH /item/removeLike/{}", id);
         itemService.removeLike(id);
     }

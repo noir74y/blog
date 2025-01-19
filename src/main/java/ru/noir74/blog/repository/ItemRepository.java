@@ -1,7 +1,6 @@
 package ru.noir74.blog.repository;
 
 
-import ru.noir74.blog.model.domain.Item;
 import ru.noir74.blog.model.entity.ItemEntity;
 
 import java.util.Optional;

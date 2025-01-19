@@ -1,10 +1,14 @@
 package ru.noir74.blog.repository;
 
+import org.springframework.stereotype.Repository;
 import ru.noir74.blog.model.entity.ItemEntity;
 
 import java.util.Optional;
 
+@Repository
 public class ItemRepositoryImpl implements ItemRepository {
+
+    //private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Optional<ItemEntity> findById(Integer id) {
