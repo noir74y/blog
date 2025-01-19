@@ -5,16 +5,14 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+@Data
 @Builder
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemEntity {
     private Integer id;
     private String title;
     private String message;
-    private byte[] picture;
     private Integer likes;
     private LocalDateTime created;
     private Set<CommentEntity> comments;

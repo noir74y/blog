@@ -5,16 +5,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.exception.NotFoundException;
 import ru.noir74.blog.model.domain.Item;
+import ru.noir74.blog.model.domain.ItemBrief;
 import ru.noir74.blog.model.mapper.ItemMapper;
 import ru.noir74.blog.repository.ItemRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
+
+    @Override
+    public List<ItemBrief> getPage(Integer page, Integer size) {
+        return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(page, size));
+    }
 
     @Override
     @Transactional(readOnly = true)

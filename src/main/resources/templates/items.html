@@ -59,19 +59,21 @@
 <table>
     <thead>
     <tr>
-        <th>Превью</th>
-        <th>Количество комментариев</th>
+        <th>Название</th>
+        <th>Текст</th>
         <th>Количество лайков</th>
+        <th>Количество комментариев</th>
         <th>Теги</th>
     </tr>
     </thead>
 
     <tbody>
-    <tr th:each="post : ${items}">
-        <td th:text="${post.preview}"></td>
-        <td th:text="${post.commentsCounter}"></td>
-        <td th:text="${post.likesCounter}"></td>
-        <td th:text="${post.tags}"></td>
+    <tr th:each="item : ${items}">
+        <td th:text="${item.title}"></td>
+        <td th:text="${item.message}"></td>
+        <td th:text="${item.likes}"></td>
+        <td th:text="${item.commentsCounter}"></td>
+        <td th:text="${item.tagsCSV}"></td>
     </tr>
     </tbody>
 </table>

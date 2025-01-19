@@ -4,9 +4,8 @@ import lombok.*;
 
 import java.util.Set;
 
+@Data
 @Builder
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TagEntity {

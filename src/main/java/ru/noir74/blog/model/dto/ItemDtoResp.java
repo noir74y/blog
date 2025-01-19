@@ -16,11 +16,11 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemDtoRespDetail {
+public class ItemDtoResp {
     private Integer id;
     private String title;
     private String message;
-    //private byte[] picture;
+    private byte[] picture;
     private Integer likes;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime created;

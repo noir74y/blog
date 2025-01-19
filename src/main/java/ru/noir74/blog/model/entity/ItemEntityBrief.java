@@ -2,14 +2,15 @@ package ru.noir74.blog.model.entity;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentEntity {
+public class ItemEntityBrief {
     private Integer id;
+    private String title;
     private String message;
-    private LocalDateTime created;
+    private Integer likes;
+    private Integer commentsCounter;
+    private String tagsCSV;
 }
