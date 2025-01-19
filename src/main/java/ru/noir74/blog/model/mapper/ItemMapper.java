@@ -5,7 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import ru.noir74.blog.model.domain.Item;
 import ru.noir74.blog.model.dto.ItemDtoReq;
-import ru.noir74.blog.model.dto.ItemDtoResp;
+import ru.noir74.blog.model.dto.ItemDtoRespDetail;
 import ru.noir74.blog.model.entity.ItemEntity;
 
 import java.util.Optional;
@@ -19,8 +19,8 @@ public class ItemMapper {
         return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
     }
 
-    public ItemDtoResp model2dtoResp(Item model) {
-        var dtoResp = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
+    public ItemDtoRespDetail model2dtoResp(Item model) {
+        var dtoResp = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoRespDetail.class)).orElse(null);
         Optional.ofNullable(dtoResp).ifPresent(obj -> obj.setCommentsCounter(obj.getComments().size()));
         return dtoResp;
     }

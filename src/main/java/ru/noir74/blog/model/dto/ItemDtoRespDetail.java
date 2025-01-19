@@ -16,7 +16,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemDtoResp {
+public class ItemDtoRespDetail {
     private Integer id;
     private String title;
     private String message;
