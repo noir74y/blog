@@ -77,6 +77,15 @@
     </tr>
     </tbody>
 </table>
+
+<form>
+    <label for="dropDownList">Выберите тег:</label>
+    <select id="dropDownList">
+        <option value="0"></option>
+        <option th:each="option : ${tags}" th:value="${option}" th:text="${option}"></option>
+    </select>
+</form>
+
 <button class="btn-add" onclick="toggleForm()">Добавить пост</button>
 </body>
 </html>

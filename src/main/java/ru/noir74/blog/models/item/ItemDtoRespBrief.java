@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,4 +19,8 @@ public class ItemDtoRespBrief {
     private Integer likes;
     private Integer commentsCounter;
     private String tagsCSV;
+
+    public List<String> getTags() {
+        return Arrays.stream(tagsCSV.split(",")).toList();
+    }
 }

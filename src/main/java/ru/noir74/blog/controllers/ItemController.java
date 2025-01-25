@@ -14,7 +14,9 @@ import ru.noir74.blog.services.ItemService;
 import ru.noir74.blog.validations.OnCreate;
 import ru.noir74.blog.validations.OnUpdate;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -32,7 +34,12 @@ public class ItemController {
                 itemService.getPage(
                         Integer.parseInt(page),
                         Integer.parseInt(size)));
+
         model.addAttribute("items", items);
+        model.addAttribute("tags", items.stream()
+                .flatMap(obj -> obj.getTags().stream())
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
         return "items";
     }
 
