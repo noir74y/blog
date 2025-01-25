@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -19,8 +20,5 @@ public class ItemDtoRespBrief {
     private Integer likes;
     private Integer commentsCounter;
     private String tagsCSV;
-
-    public List<String> getTags() {
-        return Arrays.stream(tagsCSV.split(",")).toList();
-    }
+    private Set<String> tags;
 }

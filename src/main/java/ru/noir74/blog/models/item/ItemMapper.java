@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,9 +42,14 @@ public class ItemMapper {
     }
 
     public ItemDtoRespBrief modelBrief2dtoRespBrief(ItemBrief model) {
-        return Optional.ofNullable(model)
+        ItemDtoRespBrief dtoRespBrief = Optional.ofNullable(model)
                 .map(obj -> modelMapper.map(model, ItemDtoRespBrief.class))
                 .orElse(null);
+        Optional.ofNullable(dtoRespBrief)
+                .ifPresent(obj -> obj.setTags(
+                                Arrays.stream(dtoRespBrief.getTagsCSV().split(",")).collect(Collectors.toSet()
+                                        )));
+        return dtoRespBrief;
     }
 
     public List<ItemBrief> BulkEntityBrief2ModelBrief(List<ItemEntityBrief> entities) {
