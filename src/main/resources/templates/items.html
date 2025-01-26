@@ -15,51 +15,57 @@
 
 <body>
 <h1>Пользователи</h1>
-<p></p>
-<form>
-    <label for="pageSizeList">Количество постов на странице:</label>
-    <select id="pageSizeList">
-        <option>10</option>
-        <option>20</option>
-        <option>50</option>
-    </select>
+
+<form action="" method="get">
+    <p>
+        <label for="size">Количество постов на странице:</label>
+        <select id="size" name="size">
+            <option th:selected="(${size}==10)">10</option>
+            <option th:selected="(${size}==20)">20</option>
+            <option th:selected="(${size}==50)">50</option>
+        </select>
+    </p>
+    <p>
+        <label for="page">Страница:</label>
+        <input id="page" type="text" name="page" pattern="\d+" min=1 th:value="${page}" size=10>
+    </p>
+    <p>
+        <label for="tag">Выберите тег:</label>
+        <select id="tag" name="tag">
+            <option value=""></option>
+            <option th:each="option : ${tags}" th:text="${option}" th:selected="(${option}==${tag})"></option>
+        </select>
+    </p>
+    <p>
+        <button>Показать посты</button>
+    </p>
 </form>
-<p></p>
-<label>Страница:
-    <input type="text" min=1 name="pageNumber" pattern="\d+" value=1 size=10>
-</label>
-<p></p>
-<form>
-    <label for="tagList">Выберите тег:</label>
-    <select id="tagList">
-        <option value="0"></option>
-        <option th:each="option : ${tags}" th:value="${option}" th:text="${option}"></option>
-    </select>
-</form>
-<p></p>
-<button>Добавить пост</button>
-<p></p>
+
 <table>
     <thead>
-    <tr>
-        <th>Название</th>
-        <th>Текст</th>
-        <th>Количество лайков</th>
-        <th>Количество комментариев</th>
-        <th>Теги</th>
-    </tr>
+        <tr>
+            <th>Название</th>
+            <th>Текст</th>
+            <th>Количество лайков</th>
+            <th>Количество комментариев</th>
+            <th>Теги</th>
+        </tr>
     </thead>
 
     <tbody>
-    <tr th:each="item : ${items}">
-        <td th:text="${item.title}"></td>
-        <td th:text="${item.message}"></td>
-        <td th:text="${item.likes}"></td>
-        <td th:text="${item.commentsCounter}"></td>
-        <td th:text="${item.tagsCSV}"></td>
-    </tr>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.title}"></td>
+            <td th:text="${item.message}"></td>
+            <td th:text="${item.likes}"></td>
+            <td th:text="${item.commentsCounter}"></td>
+            <td th:text="${item.tagsCSV}"></td>
+        </tr>
     </tbody>
 </table>
+
+<p>
+<button>Добавить пост</button>
+</p>
 
 </body>
 </html>
