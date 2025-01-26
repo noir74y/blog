@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.noir74.blog.models.item.ItemEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +31,10 @@ public class ItemRepositoryImpl implements ItemRepository {
                 "SELECT t1.id, t1.title, t1.message, t1.likes, t2.commentsCounter, t3.tagsCSV " +
                 "FROM t1 " +
                 "JOIN t2 ON t2.item_id = t1.id " +
-                "JOIN t3 ON t3.item_id = t1.id";
+                "JOIN t3 ON t3.item_id = t1.id " +
+                "ORDER BY t1.created DESC";
 
-        return jdbcTemplate.query(sql,
+        return new LinkedList<>(jdbcTemplate.query(sql,
                 (rs, rowNum) -> ItemEntityBrief.builder()
                         .id(rs.getInt("id"))
                         .title(rs.getString("title"))
@@ -40,7 +42,7 @@ public class ItemRepositoryImpl implements ItemRepository {
                         .likes(rs.getInt("likes"))
                         .commentsCounter(rs.getInt("commentsCounter"))
                         .tagsCSV(rs.getString("tagsCSV")).build()
-                , (page - 1) * size, size);
+                , (page - 1) * size, size));
     }
 
     @Override
