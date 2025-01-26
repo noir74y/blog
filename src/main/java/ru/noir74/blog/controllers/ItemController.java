@@ -34,7 +34,8 @@ public class ItemController {
         List<ItemDtoRespBrief> items = itemMapper.BulkModelBrief2dtoRespBrief(
                 itemService.getPage(
                         Integer.parseInt(page),
-                        Integer.parseInt(size)));
+                        Integer.parseInt(size),
+                        tag));
 
         model.addAttribute("page", page);
         model.addAttribute("size", size);

@@ -11,6 +11,7 @@ import ru.noir74.blog.repositories.ItemRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +20,11 @@ public class ItemServiceImpl implements ItemService {
     private final ItemMapper itemMapper;
 
     @Override
-    public List<ItemBrief> getPage(Integer page, Integer size) {
-        return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(page, size));
+    public List<ItemBrief> getPage(Integer page, Integer size, String tag) {
+        return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(page, size))
+                .stream()
+                .filter(obj -> tag.isEmpty() || obj.getTagsCSV().matches(".*,?" + tag + ",?.*"))
+                .collect(Collectors.toList());
     }
 
     @Override
