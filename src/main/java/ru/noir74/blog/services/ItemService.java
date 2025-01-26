@@ -6,7 +6,7 @@ import ru.noir74.blog.models.item.ItemBrief;
 import java.util.List;
 
 public interface ItemService {
-    List<ItemBrief> getPage(Integer page, Integer size, String tag);
+    List<ItemBrief> getPage(String page, String size, String tag);
 
     Item get(Integer id);
 

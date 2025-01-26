@@ -31,20 +31,19 @@ public class ItemController {
                           @RequestParam(defaultValue = "1", required = false, name = "page") String page,
                           @RequestParam(defaultValue = "10", required = false, name = "size") String size,
                           @RequestParam(defaultValue = "", required = false, name = "tag") String tag) {
-        List<ItemDtoRespBrief> items = itemMapper.BulkModelBrief2dtoRespBrief(
-                itemService.getPage(
-                        Integer.parseInt(page),
-                        Integer.parseInt(size),
-                        tag));
+
+        List<ItemDtoRespBrief> items = itemMapper.BulkModelBrief2dtoRespBrief(itemService.getPage(page, size, tag));
 
         model.addAttribute("page", page);
         model.addAttribute("size", size);
         model.addAttribute("tag", tag);
         model.addAttribute("items", items);
+
         model.addAttribute("tags", items.stream()
                 .flatMap(obj -> obj.getTags().stream())
                 .sorted()
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
+        
         return "items";
     }
 

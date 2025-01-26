@@ -20,8 +20,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemMapper itemMapper;
 
     @Override
-    public List<ItemBrief> getPage(Integer page, Integer size, String tag) {
-        return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(page, size))
+    public List<ItemBrief> getPage(String page, String size, String tag) {
+        return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(Integer.parseInt(page), Integer.parseInt(size)))
                 .stream()
                 .filter(obj -> tag.isEmpty() || obj.getTagsCSV().matches(".*,?" + tag + ",?.*"))
                 .collect(Collectors.toList());
