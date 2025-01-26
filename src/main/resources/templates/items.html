@@ -2,60 +2,43 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Посты</title>
-
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
+             border-collapse: collapse;
         }
         th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        .actions {
-            text-align: center;
-        }
-        .form-container {
-            margin-top: 20px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        input[type="text"], input[type="number"], input[type="checkbox"] {
-            width: 100%;
-            padding: 5px;
-            margin-top: 5px;
-        }
-        button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-        .btn-add {
-            margin-bottom: 20px;
+            border: 1px solid;
         }
     </style>
 </head>
 
 <body>
 <h1>Пользователи</h1>
-
+<p></p>
+<form>
+    <label for="pageSizeList">Количество постов на странице:</label>
+    <select id="pageSizeList">
+        <option>10</option>
+        <option>20</option>
+        <option>50</option>
+    </select>
+</form>
+<p></p>
+<label>Страница:
+    <input type="text" min=1 name="pageNumber" pattern="\d+" value=1 size=10>
+</label>
+<p></p>
+<form>
+    <label for="tagList">Выберите тег:</label>
+    <select id="tagList">
+        <option value="0"></option>
+        <option th:each="option : ${tags}" th:value="${option}" th:text="${option}"></option>
+    </select>
+</form>
+<p></p>
+<button>Добавить пост</button>
+<p></p>
 <table>
     <thead>
     <tr>
@@ -78,14 +61,5 @@
     </tbody>
 </table>
 
-<form>
-    <label for="dropDownList">Выберите тег:</label>
-    <select id="dropDownList">
-        <option value="0"></option>
-        <option th:each="option : ${tags}" th:value="${option}" th:text="${option}"></option>
-    </select>
-</form>
-
-<button class="btn-add" onclick="toggleForm()">Добавить пост</button>
 </body>
 </html>
