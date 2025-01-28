@@ -4,9 +4,10 @@ import ru.noir74.blog.models.item.Item;
 import ru.noir74.blog.models.item.ItemBrief;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ItemService {
-    List<ItemBrief> getPage(String page, String size, String tag);
+    List<ItemBrief> getPage(String page, String size, Set<String> tags);
 
     Item get(Integer id);
 
