@@ -14,8 +14,7 @@ import ru.noir74.blog.services.ItemService;
 import ru.noir74.blog.validations.OnCreate;
 import ru.noir74.blog.validations.OnUpdate;
 
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,13 +29,16 @@ public class ItemController {
     public String getPage(Model model,
                           @RequestParam(defaultValue = "1", required = false, name = "page") String page,
                           @RequestParam(defaultValue = "10", required = false, name = "size") String size,
-                          @RequestParam(defaultValue = "", required = false, name = "tag") String tag) {
+                          @RequestParam(defaultValue = "", required = false, name = "tags") String tags) {
 
-        List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.getPage(page, size, tag));
+        List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.getPage(
+                page,
+                size,
+                new HashSet<>(new ArrayList<>(Arrays.asList(tags.split(","))))));
 
         model.addAttribute("page", page);
         model.addAttribute("size", size);
-        model.addAttribute("tag", tag);
+        model.addAttribute("tags", tags);
         model.addAttribute("posts", posts);
 
         model.addAttribute("tags", posts.stream()
