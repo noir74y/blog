@@ -32,18 +32,18 @@ public class ItemController {
                           @RequestParam(defaultValue = "10", required = false, name = "size") String size,
                           @RequestParam(defaultValue = "", required = false, name = "tag") String tag) {
 
-        List<ItemDtoRespBrief> items = itemMapper.BulkModelBrief2dtoRespBrief(itemService.getPage(page, size, tag));
+        List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.getPage(page, size, tag));
 
         model.addAttribute("page", page);
         model.addAttribute("size", size);
         model.addAttribute("tag", tag);
-        model.addAttribute("items", items);
+        model.addAttribute("posts", posts);
 
-        model.addAttribute("tags", items.stream()
+        model.addAttribute("tags", posts.stream()
                 .flatMap(obj -> obj.getTags().stream())
                 .sorted()
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
-        
+
         return "items";
     }
 
