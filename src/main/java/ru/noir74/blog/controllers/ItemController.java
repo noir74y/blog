@@ -10,11 +10,16 @@ import ru.noir74.blog.models.item.ItemDtoReq;
 import ru.noir74.blog.models.item.ItemDtoResp;
 import ru.noir74.blog.models.item.ItemDtoRespBrief;
 import ru.noir74.blog.models.item.ItemMapper;
+import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.services.ItemService;
+import ru.noir74.blog.services.TagService;
 import ru.noir74.blog.validations.OnCreate;
 import ru.noir74.blog.validations.OnUpdate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,27 +29,21 @@ import java.util.stream.Collectors;
 public class ItemController {
     private final ItemMapper itemMapper;
     private final ItemService itemService;
+    private final TagService tagService;
 
     @GetMapping("/list")
     public String getPage(Model model,
                           @RequestParam(defaultValue = "1", required = false, name = "page") String page,
                           @RequestParam(defaultValue = "10", required = false, name = "size") String size,
-                          @RequestParam(defaultValue = "", required = false, name = "tags") String tags) {
+                          @RequestParam(defaultValue = "", required = false, name = "selectedTags") String selectedTags) {
 
-        List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.getPage(
-                page,
-                size,
-                new HashSet<>(new ArrayList<>(Arrays.asList(tags.split(","))))));
+        List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.getPage(page, size, selectedTags));
 
         model.addAttribute("page", page);
         model.addAttribute("size", size);
-        model.addAttribute("tags", tags);
         model.addAttribute("posts", posts);
-
-        model.addAttribute("tags", posts.stream()
-                .flatMap(obj -> obj.getTags().stream())
-                .sorted()
-                .collect(Collectors.toCollection(LinkedHashSet::new)));
+        model.addAttribute("selectedTags", selectedTags);
+        model.addAttribute("allTags", tagService.getAll().stream().map(Tag::getTag).collect(Collectors.toList()));
 
         return "items";
     }

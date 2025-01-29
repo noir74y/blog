@@ -31,7 +31,7 @@ public class ItemMapper {
                 .orElse(null);
     }
 
-    public Item entity2Model(ItemEntity save) {
+    public Item entity2Model(ItemEntity entity) {
         return null;
     }
 
@@ -63,6 +63,4 @@ public class ItemMapper {
                 .map(this::modelBrief2dtoRespBrief)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
-
 }

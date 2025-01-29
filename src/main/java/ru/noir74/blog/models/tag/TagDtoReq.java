@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TagDtoReq {
     private Integer id;
+    private String tag;
 }

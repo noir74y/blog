@@ -10,8 +10,10 @@ import ru.noir74.blog.models.item.ItemMapper;
 import ru.noir74.blog.repositories.ItemRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,12 +23,15 @@ public class ItemServiceImpl implements ItemService {
     private final ItemMapper itemMapper;
 
     @Override
-    public List<ItemBrief> getPage(String page, String size, Set<String> tags) {
+    public List<ItemBrief> getPage(String page, String size, String selectedTags) {
+        var selectedTagSet = new HashSet<>(new ArrayList<>(Arrays.asList(selectedTags.split(","))));
         return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(Integer.parseInt(page), Integer.parseInt(size)))
                 .stream()
                 .filter(obj -> {
-                    if (tags.isEmpty()) return true;
-                    else for (String tag : tags) if (obj.getTagsCSV().matches(".*,?" + tag + ",?.*")) return true;
+                    if (selectedTagSet.isEmpty()) return true;
+                    else
+                        for (String tag : selectedTagSet)
+                            if (obj.getTagsCSV().matches(".*,?" + tag + ",?.*")) return true;
                     return false;
                 })
                 .collect(Collectors.toList());

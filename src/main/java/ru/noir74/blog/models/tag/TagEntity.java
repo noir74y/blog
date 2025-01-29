@@ -12,5 +12,4 @@ import java.util.Set;
 public class TagEntity {
     private Integer id;
     private String tag;
-    Set<ItemEntity> items;
 }
