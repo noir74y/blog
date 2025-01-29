@@ -14,7 +14,7 @@
         </style>
     </head>
 
-    <body>
+    <body onload = "selectTags()">
         <h1>Посты</h1>
 
         <form action="" method="get">
@@ -38,16 +38,6 @@
                     <option th:each="option : ${allTags}" th:text="${option}"></option>
                 </select>
             </p>
-
-<!--            <p>-->
-<!--                <label for="tags">Выберите тег:</label>-->
-<!--                <select id="tags" name="tags" multiple size="3">-->
-<!--                    <option th:selected="(${option}==${tag})">tag1</option>-->
-<!--                    <option th:selected="(${option}==${tag})">tag2</option>-->
-<!--                    <option th:selected="(${option}==${tag})">tag3</option>-->
-<!--                    <option th:selected="(${option}==${tag})">tag4</option>-->
-<!--                </select>-->
-<!--            </p>-->
 
             <p>
                 <button>Показать посты</button>
@@ -79,5 +69,12 @@
         <p>
             <button>Добавить пост</button>
         </p>
+
+        <script defer type="text/javascript" th:inline="javascript">
+             var list = [[${allTags}]];
+            function selectTags() {
+               alert(list );
+            };
+        </script>
     </body>
 </html>
