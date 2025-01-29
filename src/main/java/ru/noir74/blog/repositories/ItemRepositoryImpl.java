@@ -23,7 +23,7 @@ public class ItemRepositoryImpl implements ItemRepository {
                 "FROM blog.comments c " +
                 "WHERE c.item_id IN (SELECT id FROM t1) " +
                 "GROUP BY c.item_id), " +
-                "t3 AS ( SELECT it.item_id item_id, STRING_AGG(t.tag,',') tagsCSV " +
+                "t3 AS ( SELECT it.item_id item_id, STRING_AGG(t.name,',') tagsCSV " +
                 "FROM blog.items_tags it " +
                 "JOIN t1 ON t1.id = it.item_id " +
                 "JOIN blog.tags t ON t.id = it.tag_id " +

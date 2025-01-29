@@ -15,9 +15,9 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<TagEntity> getAll() {
-        return new LinkedList<>(jdbcTemplate.query("SELECT id, tag FROM blog.tags ORDER BY tag",
+        return new LinkedList<>(jdbcTemplate.query("SELECT id, name FROM blog.tags ORDER BY name",
                 (rs, rowNum) -> TagEntity.builder()
                         .id(rs.getInt("id"))
-                        .tag(rs.getString("tag")).build()));
+                        .name(rs.getString("name")).build()));
     }
 }

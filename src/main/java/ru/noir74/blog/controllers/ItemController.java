@@ -16,9 +16,6 @@ import ru.noir74.blog.services.TagService;
 import ru.noir74.blog.validations.OnCreate;
 import ru.noir74.blog.validations.OnUpdate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +40,7 @@ public class ItemController {
         model.addAttribute("size", size);
         model.addAttribute("posts", posts);
         model.addAttribute("selectedTags", selectedTags);
-        model.addAttribute("allTags", tagService.getAll().stream().map(Tag::getTag).collect(Collectors.toList()));
+        model.addAttribute("allTags", tagService.getAll().stream().map(Tag::getName).collect(Collectors.toList()));
 
         return "items";
     }

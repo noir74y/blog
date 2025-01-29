@@ -1,9 +1,6 @@
 package ru.noir74.blog.models.tag;
 
 import lombok.*;
-import ru.noir74.blog.models.item.ItemEntity;
-
-import java.util.Set;
 
 @Data
 @Builder
@@ -11,5 +8,5 @@ import java.util.Set;
 @AllArgsConstructor
 public class TagEntity {
     private Integer id;
-    private String tag;
+    private String name;
 }
