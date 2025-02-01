@@ -47,6 +47,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void throwIfNotFound(Integer id) {
-        if (!commentRepository.existsById(id)) throw new NotFoundException("comment is not found", "comment_id = " + id);
+        if (!commentRepository.existsById(id))
+            throw new NotFoundException("comment is not found", "comment_id = " + id);
     }
 }

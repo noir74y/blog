@@ -46,4 +46,10 @@ public class TagMapper {
                 .map(this::model2dtoResp)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
+
+    public List<TagEntity> BulkModel2Entity(List<Tag> models) {
+        return models.stream()
+                .map(this::model2entity)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 }

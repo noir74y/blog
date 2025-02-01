@@ -14,6 +14,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ItemRepositoryImpl implements ItemRepository {
     private final JdbcTemplate jdbcTemplate;
+    private final CommentRepository commentRepository;
+    private final TagRepository tagRepository;
 
     @Override
     public List<ItemEntityBrief> findByPage(Integer page, Integer size) {
@@ -47,14 +49,15 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Optional<ItemEntity> findById(Integer id) {
-        var row = jdbcTemplate.queryForRowSet("SELECT id, title, message, likes FROM blog.items WHERE id = ?", id);
-        var item = ItemEntity.builder()
-                .id(row.getInt("id"))
+        var row = jdbcTemplate.queryForRowSet("SELECT title, message, likes FROM blog.items WHERE id = ?", id);
+        return Optional.of(ItemEntity.builder()
+                .id(id)
                 .title(row.getString("title"))
                 .message(row.getString("message"))
                 .likes(row.getInt("likes"))
-                .build();
-        return Optional.ofNullable(item);
+                .comments(commentRepository.findAllByItemId(id))
+                .tags(tagRepository.findAllByItemId(id))
+                .build());
     }
 
     @Override

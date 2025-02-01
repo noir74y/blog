@@ -22,6 +22,6 @@ public class Item {
     private byte[] picture;
     private Integer likes;
     private LocalDateTime created;
-    private Set<Tag> tags;
     private List<Comment> comments;
+    private Set<Tag> tags;
 }

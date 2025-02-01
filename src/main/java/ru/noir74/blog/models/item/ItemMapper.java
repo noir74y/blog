@@ -1,9 +1,17 @@
 package ru.noir74.blog.models.item;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 import ru.noir74.blog.models.comment.Comment;
+import ru.noir74.blog.models.comment.CommentEntity;
+import ru.noir74.blog.models.comment.CommentMapper;
+import ru.noir74.blog.models.tag.Tag;
+import ru.noir74.blog.models.tag.TagEntity;
+import ru.noir74.blog.models.tag.TagMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,15 +23,40 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemMapper {
     private final ModelMapper modelMapper;
+    private final CommentMapper commentMapper;
+    private final TagMapper tagMapper;
+
+    @PostConstruct
+    private void setup() {
+        Converter<List<Comment>, List<CommentEntity>> commentModels2EntitiesConverter =
+                models -> commentMapper.BulkModel2Entity(models.getSource());
+        Converter<List<CommentEntity>, List<Comment>> commentEntities2ModelsConverter =
+                entities -> commentMapper.BulkEntity2Model(entities.getSource());
+        Converter<List<Tag>, List<TagEntity>> tagModels2EntitiesConverter =
+                models -> tagMapper.BulkModel2Entity(models.getSource());
+        Converter<List<TagEntity>, List<Tag>> tagEntities2ModelsConverter =
+                entities -> tagMapper.BulkEntity2Model(entities.getSource());
+
+        TypeMap<Item, ItemEntity> model2EntityPropertyMapper = modelMapper.createTypeMap(Item.class, ItemEntity.class);
+        TypeMap<ItemEntity, Item> entity2ModelPropertyMapper = modelMapper.createTypeMap(ItemEntity.class, Item.class);
+
+        model2EntityPropertyMapper.addMappings(modelMapper ->
+                modelMapper.using(commentModels2EntitiesConverter).map(Item::getComments, ItemEntity::setComments));
+        model2EntityPropertyMapper.addMappings(modelMapper ->
+                modelMapper.using(tagModels2EntitiesConverter).map(Item::getTags, ItemEntity::setTags));
+
+        entity2ModelPropertyMapper.addMappings(modelMapper ->
+                modelMapper.using(commentEntities2ModelsConverter).map(ItemEntity::getComments, Item::setComments));
+        entity2ModelPropertyMapper.addMappings(modelMapper ->
+                modelMapper.using(tagEntities2ModelsConverter).map(ItemEntity::getTags, Item::setTags));
+    }
 
     public Item dtoReq2Model(ItemDtoReq dtoReq) {
         return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
     }
 
     public ItemDtoResp model2dtoResp(Item model) {
-        var dtoResp = Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
-        Optional.ofNullable(dtoResp).ifPresent(obj -> obj.setCommentsCounter(obj.getComments().size()));
-        return dtoResp;
+        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
     }
 
     public ItemEntity model2entity(Item model) {
@@ -50,8 +83,8 @@ public class ItemMapper {
                 .orElse(null);
         Optional.ofNullable(dtoRespBrief)
                 .ifPresent(obj -> obj.setTags(
-                                Arrays.stream(dtoRespBrief.getTagsCSV().split(",")).collect(Collectors.toSet()
-                                        )));
+                        Arrays.stream(dtoRespBrief.getTagsCSV().split(",")).collect(Collectors.toSet()
+                        )));
         return dtoRespBrief;
     }
 

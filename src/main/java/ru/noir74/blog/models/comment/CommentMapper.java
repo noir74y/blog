@@ -3,10 +3,8 @@ package ru.noir74.blog.models.comment;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import ru.noir74.blog.models.item.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,6 +37,12 @@ public class CommentMapper {
     public List<Comment> BulkEntity2Model(List<CommentEntity> entities) {
         return entities.stream()
                 .map(this::entity2Model)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public List<CommentEntity> BulkModel2Entity(List<Comment> models) {
+        return models.stream()
+                .map(this::model2entity)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

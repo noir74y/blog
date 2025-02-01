@@ -4,12 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.noir74.blog.models.comment.Comment;
-import ru.noir74.blog.models.tag.Tag;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
@@ -19,9 +13,6 @@ public class ItemDtoReq {
     private Integer id;
     private String title;
     private String message;
-    //private byte[] picture;
+    private byte[] picture;
     private Integer likes;
-    private LocalDateTime created;
-    private Set<Tag> tags;
-    private List<Comment> comments;
 }
