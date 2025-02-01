@@ -57,8 +57,13 @@
 
     <tbody>
     <tr th:each="post : ${posts}">
-        <td th:text="${post.title}"></td>
-        <td th:text="${post.message}"></td>
+        <td><a th:href="${post.id}" th:text="${post.title}"></a></td>
+        <td>
+            <label>
+                            <textarea rows="3" th:text="${post.message}" disabled>
+                            </textarea>
+            </label>
+        </td>
         <td th:text="${post.likes}"></td>
         <td th:text="${post.commentsCounter}"></td>
         <td th:text="${post.tagsCSV}"></td>

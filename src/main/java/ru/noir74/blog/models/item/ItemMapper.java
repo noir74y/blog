@@ -3,6 +3,7 @@ package ru.noir74.blog.models.item;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import ru.noir74.blog.models.comment.Comment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,9 @@ public class ItemMapper {
     }
 
     public Item entity2Model(ItemEntity entity) {
-        return null;
+        return Optional.ofNullable(entity)
+                .map(obj -> modelMapper.map(obj, Item.class))
+                .orElse(null);
     }
 
     public ItemBrief entityBrief2ModelBrief(ItemEntityBrief entity) {

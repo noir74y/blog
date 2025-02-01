@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommentDtoResp {
     private Integer id;
+    private String message;
 }

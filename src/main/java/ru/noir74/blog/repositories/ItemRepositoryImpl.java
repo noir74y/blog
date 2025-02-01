@@ -47,7 +47,14 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Optional<ItemEntity> findById(Integer id) {
-        return Optional.empty();
+        var row = jdbcTemplate.queryForRowSet("SELECT id, title, message, likes FROM blog.items WHERE id = ?", id);
+        var item = ItemEntity.builder()
+                .id(row.getInt("id"))
+                .title(row.getString("title"))
+                .message(row.getString("message"))
+                .likes(row.getInt("likes"))
+                .build();
+        return Optional.ofNullable(item);
     }
 
     @Override
@@ -57,12 +64,11 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public boolean existsById(Integer id) {
-        return false;
+        return true;
     }
 
     @Override
     public void deleteById(Integer id) {
-
     }
 
     @Override
