@@ -1,80 +1,87 @@
 <!DOCTYPE html>
 
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Посты</title>
-        <style>
-            table {
-                 border-collapse: collapse;
+<head>
+    <meta charset="UTF-8">
+    <title>Посты</title>
+    <style>
+        table {
+             border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid;
+        }
+    </style>
+</head>
+
+<body onload="selectTags()">
+<h1>Посты</h1>
+
+<form action="" method="get">
+    <p>
+        <label for="size">Количество постов на странице:</label>
+        <select id="size" name="size">
+            <option th:selected="(${size}==10)">10</option>
+            <option th:selected="(${size}==20)">20</option>
+            <option th:selected="(${size}==50)">50</option>
+        </select>
+    </p>
+    <p>
+        <label for="page">Страница:</label>
+        <input id="page" type="text" name="page" pattern="\d+" min=1 th:value="${page}" size=10>
+    </p>
+
+    <p>
+        <label for="selectedTags">Выберите тег:</label>
+        <select id="selectedTags" name="selectedTags" multiple size="6">
+            <option value=""></option>
+            <option th:each="option : ${allTags}" th:text="${option}"></option>
+        </select>
+    </p>
+
+    <p>
+        <button>Показать посты</button>
+    </p>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Текст</th>
+        <th>Количество лайков</th>
+        <th>Количество комментариев</th>
+        <th>Теги</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="post : ${posts}">
+        <td th:text="${post.title}"></td>
+        <td th:text="${post.message}"></td>
+        <td th:text="${post.likes}"></td>
+        <td th:text="${post.commentsCounter}"></td>
+        <td th:text="${post.tagsCSV}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    <button>Добавить пост</button>
+</p>
+
+<script defer type="text/javascript" th:inline="javascript">
+    var allTagsList = [[${allTags}]];
+    var selectedTagsList = [[${selectedTags}]];
+
+    function selectTags() {
+        const options = document.getElementById("selectedTags").options;
+        allTagsList.forEach((value, index) => {
+            if (selectedTagsList.includes(value))
+                options[index+1].selected = true;
             }
-            th, td {
-                border: 1px solid;
-            }
-        </style>
-    </head>
-
-    <body onload = "selectTags()">
-        <h1>Посты</h1>
-
-        <form action="" method="get">
-            <p>
-                <label for="size">Количество постов на странице:</label>
-                <select id="size" name="size">
-                    <option th:selected="(${size}==10)">10</option>
-                    <option th:selected="(${size}==20)">20</option>
-                    <option th:selected="(${size}==50)">50</option>
-                </select>
-            </p>
-            <p>
-                <label for="page">Страница:</label>
-                <input id="page" type="text" name="page" pattern="\d+" min=1 th:value="${page}" size=10>
-            </p>
-
-            <p>
-                <label for="selectedTags">Выберите тег:</label>
-                <select id="selectedTags" name="selectedTags" multiple size="3">
-                    <option value=""></option>
-                    <option th:each="option : ${allTags}" th:text="${option}"></option>
-                </select>
-            </p>
-
-            <p>
-                <button>Показать посты</button>
-            </p>
-        </form>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Текст</th>
-                    <th>Количество лайков</th>
-                    <th>Количество комментариев</th>
-                    <th>Теги</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr th:each="post : ${posts}">
-                    <td th:text="${post.title}"></td>
-                    <td th:text="${post.message}"></td>
-                    <td th:text="${post.likes}"></td>
-                    <td th:text="${post.commentsCounter}"></td>
-                    <td th:text="${post.tagsCSV}"></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p>
-            <button>Добавить пост</button>
-        </p>
-
-        <script defer type="text/javascript" th:inline="javascript">
-             var list = [[${allTags}]];
-            function selectTags() {
-               alert(list );
-            };
-        </script>
-    </body>
+        );
+    }
+</script>
+</body>
 </html>
