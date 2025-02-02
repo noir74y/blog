@@ -34,7 +34,6 @@ public class TagMapper {
                 .orElse(null);
     }
 
-
     public List<Tag> BulkEntity2Model(List<TagEntity> entities) {
         return entities.stream()
                 .map(this::entity2Model)

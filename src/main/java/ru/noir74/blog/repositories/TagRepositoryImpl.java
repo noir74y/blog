@@ -1,5 +1,7 @@
 package ru.noir74.blog.repositories;
 
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,13 +13,19 @@ import java.util.*;
 @RequiredArgsConstructor
 public class TagRepositoryImpl implements TagRepository {
     private final JdbcTemplate jdbcTemplate;
+    private List<TagEntity> allTagsEntityList;
 
-    @Override
-    public List<TagEntity> findAll() {
-        return new LinkedList<>(jdbcTemplate.query("SELECT id, name FROM blog.tags ORDER BY name",
+    @PostConstruct
+    private void initializeAllTagsEntityList() {
+        this.allTagsEntityList = new LinkedList<>(jdbcTemplate.query("SELECT id, name FROM blog.tags ORDER BY name",
                 (rs, rowNum) -> TagEntity.builder()
                         .id(rs.getInt("id"))
                         .name(rs.getString("name")).build()));
+    }
+
+    @Override
+    public List<TagEntity> findAll() {
+        return this.allTagsEntityList;
     }
 
     @Override
@@ -36,12 +44,13 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public TagEntity save(TagEntity tagEntity) {
+        this.initializeAllTagsEntityList();
         return null;
     }
 
     @Override
     public void deleteById(Integer id) {
-
+        this.initializeAllTagsEntityList();
     }
 
     @Override

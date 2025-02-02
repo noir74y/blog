@@ -86,8 +86,8 @@
         <textarea rows="5" name="message" id="message"></textarea>
 
         <p></p>
-        <label for="newItemTags">Выберите теги:</label>
-        <select id="newItemTags" name="newItemTags" multiple size="6">
+        <label for="newItemTagsCsv">Выберите теги:</label>
+        <select id="newItemTagsCsv" name="newItemTagsCsv" multiple size="6">
             <option th:each="option : ${allTags}" th:text="${option}"></option>
         </select>
 

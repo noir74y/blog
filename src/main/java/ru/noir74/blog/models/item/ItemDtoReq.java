@@ -14,5 +14,5 @@ import java.util.Set;
 public class ItemDtoReq {
     private String title;
     private String message;
-    private String newItemTags;
+    private String newItemTagsCsv;
 }

@@ -12,7 +12,7 @@ import ru.noir74.blog.models.comment.CommentMapper;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagEntity;
 import ru.noir74.blog.models.tag.TagMapper;
-import ru.noir74.blog.repositories.TagRepository;
+import ru.noir74.blog.services.TagService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,37 +26,24 @@ public class ItemMapper {
     private final ModelMapper modelMapper;
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
-    private final TagRepository tagRepository;
+    private final TagService tagService;
 
     @PostConstruct
     private void setup() {
-        Converter<List<Comment>, List<CommentEntity>> commentModels2EntitiesConverter =
-                models -> commentMapper.BulkModel2Entity(models.getSource());
-        Converter<List<CommentEntity>, List<Comment>> commentEntities2ModelsConverter =
-                entities -> commentMapper.BulkEntity2Model(entities.getSource());
-        Converter<List<Tag>, List<TagEntity>> tagModels2EntitiesConverter =
-                models -> tagMapper.BulkModel2Entity(models.getSource());
-        Converter<List<TagEntity>, List<Tag>> tagEntities2ModelsConverter =
-                entities -> tagMapper.BulkEntity2Model(entities.getSource());
-
-        TypeMap<Item, ItemEntity> model2EntityPropertyMapper = modelMapper.createTypeMap(Item.class, ItemEntity.class);
-        TypeMap<ItemEntity, Item> entity2ModelPropertyMapper = modelMapper.createTypeMap(ItemEntity.class, Item.class);
-
-        model2EntityPropertyMapper.addMappings(modelMapper ->
-                modelMapper.using(commentModels2EntitiesConverter).map(Item::getComments, ItemEntity::setComments));
-        model2EntityPropertyMapper.addMappings(modelMapper ->
-                modelMapper.using(tagModels2EntitiesConverter).map(Item::getTags, ItemEntity::setTags));
-
-        entity2ModelPropertyMapper.addMappings(modelMapper ->
-                modelMapper.using(commentEntities2ModelsConverter).map(ItemEntity::getComments, Item::setComments));
-        entity2ModelPropertyMapper.addMappings(modelMapper ->
-                modelMapper.using(tagEntities2ModelsConverter).map(ItemEntity::getTags, Item::setTags));
+        Converter<String, List<Tag>> tagStringCsv2ModelConverter = tagStringCsv ->
+                Arrays.stream(tagStringCsv.getSource().split(","))
+                        .map(tagName -> tagService.getAll()
+                                .stream()
+                                .filter(tagObj -> tagObj.getName().equals(tagName))
+                                .findAny().orElse(Tag.builder().name(tagName).build()))
+                        .toList();
+        TypeMap<ItemDtoReq, Item> dtoReq2ModelPropertyMapper = modelMapper.createTypeMap(ItemDtoReq.class, Item.class);
+        dtoReq2ModelPropertyMapper.addMappings(modelMapper ->
+                modelMapper.using(tagStringCsv2ModelConverter).map(ItemDtoReq::getNewItemTagsCsv, Item::setTags));
     }
 
     public Item dtoReq2Model(ItemDtoReq dtoReq) {
-        var model = Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
-        var allTags = tagRepository.findAll();
-        return model;
+        return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
     }
 
     public ItemDtoResp model2dtoResp(Item model) {
