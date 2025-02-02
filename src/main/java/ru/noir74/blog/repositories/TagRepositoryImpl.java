@@ -1,13 +1,14 @@
 package ru.noir74.blog.repositories;
 
 import jakarta.annotation.PostConstruct;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.noir74.blog.models.tag.TagEntity;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -35,6 +36,18 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<TagEntity> findAllByItemId(Integer itemId) {
+//        new LinkedList<>(jdbcTemplate.query(
+//                        "SELECT tag_id FROM blog.items_tags item_id = ?",
+//                        (rs, rowNum) -> rs.getInt("tag_id"), itemId)
+//                .stream()
+//                .map(tag_id ->
+//                        allTagsEntityList
+//                                .stream()
+//                                .filter(obj -> obj.getId().equals(tag_id))
+//                                .findAny()
+//                                .orElse(null))
+//                .toList());
+
         return new LinkedList<>(jdbcTemplate.query(
                 "SELECT t.id, t.name FROM blog.tags t JOIN blog.items_tags it ON it.tag_id = t.id AND it.item_id = ? ORDER BY t.name",
                 (rs, rowNum) -> TagEntity.builder()
