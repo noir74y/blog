@@ -54,7 +54,7 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDtoResp create(@Validated(OnCreate.class) @RequestBody ItemDtoReq dtoReq) {
+    public ItemDtoResp create(@ModelAttribute ItemDtoReq dtoReq) {
         log.info("POST /item, item={}", dtoReq.toString());
         return itemMapper.model2dtoResp(itemService.create(itemMapper.dtoReq2Model(dtoReq)));
     }

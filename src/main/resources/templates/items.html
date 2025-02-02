@@ -72,8 +72,30 @@
 </table>
 
 <p>
-    <button>Добавить пост</button>
+    <button onclick="toggleNewItemForm()">Добавить пост</button>
 </p>
+
+<div class="new-item-form" style="display: none;" id="newItemForm">
+    <h2>Новый пост</h2>
+    <form method="POST" th:action="@{/item}">
+        <label for="title">Название</label>
+        <input type="text" id="title" name="title" required>
+
+        <p></p>
+        <label for="message">Текст</label>
+        <textarea rows="5" name="message" id="message"></textarea>
+
+        <p></p>
+        <label for="newItemTags">Выберите теги:</label>
+        <select id="newItemTags" name="newItemTags" multiple size="6">
+            <option th:each="option : ${allTags}" th:text="${option}"></option>
+        </select>
+
+        <p></p>
+        <button type="submit" onclick="toggleNewItemForm()">Добавить</button>
+    </form>
+</div>
+
 
 <script defer type="text/javascript" th:inline="javascript">
     var allTagsList = [[${allTags}]];
@@ -87,6 +109,12 @@
             }
         );
     }
+
+    function toggleNewItemForm() {
+        const newItemForm = document.getElementById('newItemForm');
+        newItemForm.style.display = newItemForm.style.display === 'none' ? 'block' : 'none';
+    }
 </script>
+
 </body>
 </html>

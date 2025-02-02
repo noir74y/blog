@@ -5,14 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemDtoReq {
-    private Integer id;
     private String title;
     private String message;
-    private byte[] picture;
-    private Integer likes;
+    private String newItemTags;
 }

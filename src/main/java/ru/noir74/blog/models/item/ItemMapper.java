@@ -12,6 +12,7 @@ import ru.noir74.blog.models.comment.CommentMapper;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagEntity;
 import ru.noir74.blog.models.tag.TagMapper;
+import ru.noir74.blog.repositories.TagRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +26,7 @@ public class ItemMapper {
     private final ModelMapper modelMapper;
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
+    private final TagRepository tagRepository;
 
     @PostConstruct
     private void setup() {
@@ -52,7 +54,9 @@ public class ItemMapper {
     }
 
     public Item dtoReq2Model(ItemDtoReq dtoReq) {
-        return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
+        var model = Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
+        var allTags = tagRepository.findAll();
+        return model;
     }
 
     public ItemDtoResp model2dtoResp(Item model) {
