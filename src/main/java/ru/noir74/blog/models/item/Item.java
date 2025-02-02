@@ -23,5 +23,5 @@ public class Item {
     private Integer likes;
     private LocalDateTime created;
     private List<Comment> comments;
-    private Set<Tag> tags;
+    private List<Tag> tags;
 }

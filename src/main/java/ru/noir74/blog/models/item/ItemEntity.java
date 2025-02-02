@@ -23,5 +23,5 @@ public class ItemEntity {
     private Integer likes;
     private LocalDateTime created;
     private List<CommentEntity> comments;
-    private Set<TagEntity> tags;
+    private List<TagEntity> tags;
 }

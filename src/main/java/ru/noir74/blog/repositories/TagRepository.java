@@ -11,7 +11,7 @@ public interface TagRepository {
 
     Optional<TagEntity> findById(Integer id);
 
-    Set<TagEntity> findAllByItemId(Integer itemId);
+    List<TagEntity> findAllByItemId(Integer itemId);
 
     TagEntity save(TagEntity tagEntity);
 

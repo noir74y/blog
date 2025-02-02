@@ -87,7 +87,7 @@ public class ItemMapper {
                 .orElse(null);
         Optional.ofNullable(dtoRespBrief)
                 .ifPresent(obj -> obj.setTags(
-                        Arrays.stream(dtoRespBrief.getTagsCSV().split(",")).collect(Collectors.toSet()
+                        Arrays.stream(dtoRespBrief.getTagsCSV().split(",")).collect(Collectors.toList()
                         )));
         return dtoRespBrief;
     }

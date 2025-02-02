@@ -19,6 +19,6 @@ public class ItemDtoResp {
     private String title;
     private String message;
     private Integer likes;
-    private Set<Tag> tags;
+    private List<Tag> tags;
     private List<Comment> comments;
 }

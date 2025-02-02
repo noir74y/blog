@@ -26,8 +26,8 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Set<TagEntity> findAllByItemId(Integer itemId) {
-        return new LinkedHashSet<>(jdbcTemplate.query(
+    public List<TagEntity> findAllByItemId(Integer itemId) {
+        return new LinkedList<>(jdbcTemplate.query(
                 "SELECT t.id, t.name FROM blog.tags t JOIN blog.items_tags it ON it.tag_id = t.id AND it.item_id = ? ORDER BY t.name",
                 (rs, rowNum) -> TagEntity.builder()
                         .id(rs.getInt("id"))

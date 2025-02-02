@@ -18,19 +18,20 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
 
     @Override
     public List<ItemBrief> getPage(String page, String size, String selectedTags) {
-        var selectedTagSet = new HashSet<>(new ArrayList<>(Arrays.asList(selectedTags.split(","))));
+        var selectedTagList = new ArrayList<>(new ArrayList<>(Arrays.asList(selectedTags.split(","))));
         return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(Integer.parseInt(page), Integer.parseInt(size)))
                 .stream()
                 .filter(obj -> {
-                    if (selectedTagSet.isEmpty()) return true;
+                    if (selectedTagList.isEmpty()) return true;
                     else
-                        for (String tag : selectedTagSet)
+                        for (String tag : selectedTagList)
                             if (obj.getTagsCSV().matches(".*,?" + tag + ",?.*")) return true;
                     return false;
                 })
