@@ -54,9 +54,10 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDtoResp create(@ModelAttribute ItemDtoReq dtoReq) {
+    public String create(@ModelAttribute ItemDtoReq dtoReq) {
         log.info("POST /item, item={}", dtoReq.toString());
-        return itemMapper.model2dtoResp(itemService.create(itemMapper.dtoReq2Model(dtoReq)));
+        itemService.create(itemMapper.dtoReq2Model(dtoReq));
+        return "redirect:/list";
     }
 
     @PatchMapping

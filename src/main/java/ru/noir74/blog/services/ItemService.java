@@ -10,7 +10,7 @@ public interface ItemService {
 
     Item get(Integer id);
 
-    Item create(Item item);
+    void create(Item item);
 
     void update(Item item);
 

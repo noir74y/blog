@@ -46,9 +46,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public Item create(Item item) {
+    public void create(Item item) {
         item.setCreated(LocalDateTime.now());
-        return itemMapper.entity2Model(itemRepository.save(itemMapper.model2entity(item)));
+        itemRepository.save(itemMapper.model2entity(item));
     }
 
     @Override

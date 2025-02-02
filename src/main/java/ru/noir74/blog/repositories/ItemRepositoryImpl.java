@@ -61,8 +61,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public ItemEntity save(ItemEntity itemEntity) {
-        return null;
+    public void save(ItemEntity itemEntity) {
     }
 
     @Override
