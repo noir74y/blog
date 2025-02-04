@@ -18,11 +18,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TagRepositoryImpl implements TagRepository {
     private final JdbcTemplate jdbcTemplate;
-    private List<TagEntity> allTagsEntityList;
+    private List<TagEntity> allTagEntityList;
 
     @PostConstruct
-    private void initializeAllTagsEntityList() {
-        this.allTagsEntityList = new LinkedList<>(jdbcTemplate.query("SELECT id, name FROM blog.tags ORDER BY name",
+    private void populateAllTagEntityList() {
+        this.allTagEntityList = new LinkedList<>(jdbcTemplate.query("SELECT id, name FROM blog.tags ORDER BY name",
                 (rs, rowNum) -> TagEntity.builder()
                         .id(rs.getInt("id"))
                         .name(rs.getString("name")).build()));
@@ -30,12 +30,17 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<TagEntity> findAll() {
-        return this.allTagsEntityList;
+        return this.allTagEntityList;
     }
 
     @Override
     public Optional<TagEntity> findById(Integer id) {
-        return Optional.empty();
+        return this.allTagEntityList.stream().filter(tagEntity -> tagEntity.getId().equals(id)).findAny();
+    }
+
+    @Override
+    public Optional<TagEntity> findByName(String name) {
+        return this.allTagEntityList.stream().filter(tagEntity -> tagEntity.getName().equals(name)).findAny();
     }
 
     @Override
@@ -45,25 +50,15 @@ public class TagRepositoryImpl implements TagRepository {
                         (rs, rowNum) -> rs.getInt("tag_id"), itemId)
                 .stream()
                 .map(tag_id ->
-                        allTagsEntityList
-                                .stream()
+                        allTagEntityList.stream()
                                 .filter(obj -> obj.getId().equals(tag_id))
-                                .findAny()
-                                .orElse(null))
-                .filter(Objects::nonNull)
-                .sorted()
-                .toList());
-
-//        return new LinkedList<>(jdbcTemplate.query(
-//                "SELECT t.id, t.name FROM blog.tags t JOIN blog.items_tags it ON it.tag_id = t.id AND it.item_id = ? ORDER BY t.name",
-//                (rs, rowNum) -> TagEntity.builder()
-//                        .id(rs.getInt("id"))
-//                        .name(rs.getString("name")).build(), itemId));
+                                .findAny().orElse(null))
+                .filter(Objects::nonNull).sorted().toList());
     }
 
     @Override
-    public TagEntity save(TagEntity tagEntity) {
-        String sql = "INSERT INTO blogs.items (name) VALUES (?)";
+    public void save(TagEntity tagEntity) {
+        String sql = "INSERT INTO blog.tags (name) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -72,24 +67,26 @@ public class TagRepositoryImpl implements TagRepository {
             return stmt;
         }, keyHolder);
 
-        tagEntity.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
-
-        this.initializeAllTagsEntityList();
-        return tagEntity;
+        this.allTagEntityList.add(TagEntity.builder().id(Objects.requireNonNull(keyHolder.getKey()).intValue()).name(tagEntity.getName()).build());
+        this.allTagEntityList = this.allTagEntityList.stream().sorted().toList();
     }
 
     @Override
     public void deleteById(Integer id) {
-        this.initializeAllTagsEntityList();
+        jdbcTemplate.update("DELETE FROM blog.tags WHERE id = ?", id);
+        this.allTagEntityList = this.allTagEntityList.stream()
+                .filter(tagEntity -> !tagEntity.getId().equals(id))
+                .sorted().toList();
+        this.populateAllTagEntityList();
     }
 
     @Override
     public boolean existsById(Integer id) {
-        return allTagsEntityList.stream().anyMatch(tag -> Objects.equals(tag.getId(), id));
+        return allTagEntityList.stream().anyMatch(tag -> Objects.equals(tag.getId(), id));
     }
 
     @Override
     public boolean existsByName(String name) {
-        return allTagsEntityList.stream().anyMatch(tag -> Objects.equals(tag.getName(), name));
+        return allTagEntityList.stream().anyMatch(tag -> Objects.equals(tag.getName(), name));
     }
 }

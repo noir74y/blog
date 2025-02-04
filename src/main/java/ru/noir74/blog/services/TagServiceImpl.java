@@ -5,12 +5,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagMapper;
 import ru.noir74.blog.repositories.TagRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class TagServiceImpl implements TagService {
 
     @PostConstruct
     @Transactional(readOnly = true)
-    private void initializeAllTagsList() {
+    private void populateAllTagList() {
         this.allTagsList = tagMapper.BulkEntity2Model(tagRepository.findAll());
     }
 
@@ -34,32 +34,41 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Tag> findById(Integer id) {
-        return Optional.empty();
+    public Tag findById(Integer id) {
+        return tagMapper.entity2Model(tagRepository.findById(id).orElseThrow(() -> new NotFoundException("tag is not found", "id = " + id)));
+
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Tag> findAllByItemId(Integer itemId) {
-        return List.of();
+        return tagMapper.BulkEntity2Model(tagRepository.findAllByItemId(itemId));
     }
 
     @Override
     @Transactional
-    public Tag save(Tag tag) {
-        this.initializeAllTagsList();
-        return null;
+    public void save(Tag tag) {
+        this.tagRepository.save(tagMapper.model2entity(tag));
+        this.populateAllTagList();
     }
 
     @Override
     @Transactional
     public void deleteById(Integer id) {
-        this.initializeAllTagsList();
+        this.tagRepository.deleteById(id);
+        this.populateAllTagList();
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existsById(Integer id) {
-        return false;
+        return this.tagRepository.existsById(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsByName(String name) {
+        return this.tagRepository.existsByName(name);
+    }
+
 }

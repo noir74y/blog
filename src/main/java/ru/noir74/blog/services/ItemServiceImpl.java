@@ -7,13 +7,12 @@ import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.item.Item;
 import ru.noir74.blog.models.item.ItemBrief;
 import ru.noir74.blog.models.item.ItemMapper;
+import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.ItemRepository;
+import ru.noir74.blog.repositories.TagRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +21,7 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
+    private final TagService tagService;
 
     @Override
     @Transactional(readOnly = true)
@@ -52,6 +52,9 @@ public class ItemServiceImpl implements ItemService {
         item.setLikes(0);
         item.setCreated(LocalDateTime.now());
         itemRepository.save(itemMapper.model2entity(item));
+        item.getTags().stream()
+                .filter(tag -> Objects.isNull(tag.getId()))
+                .forEach(tagService::save);
     }
 
     @Override

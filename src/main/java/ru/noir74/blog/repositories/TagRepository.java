@@ -11,9 +11,11 @@ public interface TagRepository {
 
     Optional<TagEntity> findById(Integer id);
 
+    Optional<TagEntity> findByName(String name);
+
     List<TagEntity> findAllByItemId(Integer itemId);
 
-    TagEntity save(TagEntity tagEntity);
+    void save(TagEntity tagEntity);
 
     void deleteById(Integer id);
 
