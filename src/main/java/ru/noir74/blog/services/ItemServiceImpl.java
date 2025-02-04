@@ -12,8 +12,8 @@ import ru.noir74.blog.repositories.ItemRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,15 +24,17 @@ public class ItemServiceImpl implements ItemService {
     private final ItemMapper itemMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ItemBrief> getPage(String page, String size, String selectedTags) {
         var selectedTagList = new ArrayList<>(new ArrayList<>(Arrays.asList(selectedTags.split(","))));
         return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(Integer.parseInt(page), Integer.parseInt(size)))
                 .stream()
                 .filter(obj -> {
-                    if (selectedTagList.isEmpty()) return true;
+                    if (selectedTags.isEmpty()) return true;
                     else
                         for (String tag : selectedTagList)
-                            if (obj.getTagsCSV().matches(".*,?" + tag + ",?.*")) return true;
+                            if (Optional.ofNullable(obj.getTagsCSV()).orElse("").matches(".*,?" + tag + ",?.*"))
+                                return true;
                     return false;
                 })
                 .collect(Collectors.toList());
@@ -47,6 +49,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void create(Item item) {
+        item.setLikes(0);
         item.setCreated(LocalDateTime.now());
         itemRepository.save(itemMapper.model2entity(item));
     }

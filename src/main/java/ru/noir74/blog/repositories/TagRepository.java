@@ -18,4 +18,6 @@ public interface TagRepository {
     void deleteById(Integer id);
 
     boolean existsById(Integer id);
+
+    boolean existsByName(String name);
 }

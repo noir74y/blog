@@ -2,6 +2,7 @@ package ru.noir74.blog.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.comment.CommentMapper;
@@ -17,11 +18,13 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Comment> getAllByItemId(Integer itemId) {
         return commentMapper.BulkEntity2Model(commentRepository.findAllByItemId(itemId));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Comment get(Integer id) {
         throwIfNotFound(id);
         return commentMapper.entity2Model(commentRepository.findById(id)
@@ -29,18 +32,21 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public Comment create(Comment comment) {
         comment.setCreated(LocalDateTime.now());
         return commentMapper.entity2Model(commentRepository.save(commentMapper.model2entity(comment)));
     }
 
     @Override
+    @Transactional
     public void update(Comment comment) {
         throwIfNotFound(comment.getId());
         commentRepository.save(commentMapper.model2entity(comment));
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         throwIfNotFound(id);
         commentRepository.deleteById(id);

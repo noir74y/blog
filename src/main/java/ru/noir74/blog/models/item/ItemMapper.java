@@ -6,11 +6,8 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
-import ru.noir74.blog.models.comment.Comment;
-import ru.noir74.blog.models.comment.CommentEntity;
 import ru.noir74.blog.models.comment.CommentMapper;
 import ru.noir74.blog.models.tag.Tag;
-import ru.noir74.blog.models.tag.TagEntity;
 import ru.noir74.blog.models.tag.TagMapper;
 import ru.noir74.blog.services.TagService;
 
@@ -31,7 +28,8 @@ public class ItemMapper {
     @PostConstruct
     private void setup() {
         Converter<String, List<Tag>> tagStringCsv2ModelConverter = tagStringCsv ->
-                Arrays.stream(tagStringCsv.getSource().split(","))
+                Arrays.stream(Optional.ofNullable(tagStringCsv.getSource()).orElse("").split(","))
+                        .filter(obj -> !obj.isBlank())
                         .map(tagName -> tagService.getAll()
                                 .stream()
                                 .filter(tagObj -> tagObj.getName().equals(tagName))
@@ -74,8 +72,10 @@ public class ItemMapper {
                 .orElse(null);
         Optional.ofNullable(dtoRespBrief)
                 .ifPresent(obj -> obj.setTags(
-                        Arrays.stream(dtoRespBrief.getTagsCSV().split(",")).collect(Collectors.toList()
-                        )));
+                        Arrays.stream(Optional.ofNullable(dtoRespBrief.getTagsCSV())
+                                        .orElse("")
+                                        .split(","))
+                                .collect(Collectors.toList())));
         return dtoRespBrief;
     }
 

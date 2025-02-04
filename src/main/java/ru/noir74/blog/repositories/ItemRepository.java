@@ -13,7 +13,7 @@ public interface ItemRepository {
 
     Optional<ItemEntity> findById(Integer id);
 
-    void save(ItemEntity itemEntity);
+    ItemEntity save(ItemEntity itemEntity);
 
     boolean existsById(Integer id);
 

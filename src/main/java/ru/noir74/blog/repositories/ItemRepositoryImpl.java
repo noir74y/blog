@@ -2,12 +2,19 @@ package ru.noir74.blog.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.item.ItemEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
 
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.time.ZoneOffset;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -32,8 +39,8 @@ public class ItemRepositoryImpl implements ItemRepository {
                 "GROUP BY it.item_id) " +
                 "SELECT t1.id, t1.title, t1.message, t1.likes, t2.commentsCounter, t3.tagsCSV " +
                 "FROM t1 " +
-                "JOIN t2 ON t2.item_id = t1.id " +
-                "JOIN t3 ON t3.item_id = t1.id " +
+                "LEFT OUTER JOIN t2 ON t2.item_id = t1.id " +
+                "LEFT OUTER JOIN t3 ON t3.item_id = t1.id " +
                 "ORDER BY t1.created DESC";
 
         return new LinkedList<>(jdbcTemplate.query(sql,
@@ -61,7 +68,22 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public void save(ItemEntity itemEntity) {
+    public ItemEntity save(ItemEntity itemEntity) {
+        String sql = "INSERT INTO blog.items (title, message, likes, created) VALUES (?, ?, ?, ?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"id"});
+            stmt.setString(1, itemEntity.getTitle());
+            stmt.setString(2, itemEntity.getMessage());
+            stmt.setInt(3, itemEntity.getLikes());
+            stmt.setTimestamp(4, Timestamp.from(itemEntity.getCreated().toInstant((ZoneOffset.UTC))));
+            return stmt;
+        }, keyHolder);
+
+        itemEntity.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
+        return itemEntity;
     }
 
     @Override
@@ -75,7 +97,6 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public void addLike(Integer id) {
-
     }
 
     @Override

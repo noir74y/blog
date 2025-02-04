@@ -3,9 +3,12 @@ package ru.noir74.blog.repositories;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.noir74.blog.models.tag.TagEntity;
 
+import java.sql.PreparedStatement;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -60,8 +63,19 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public TagEntity save(TagEntity tagEntity) {
+        String sql = "INSERT INTO blogs.items (name) VALUES (?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"id"});
+            stmt.setString(1, tagEntity.getName());
+            return stmt;
+        }, keyHolder);
+
+        tagEntity.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
+
         this.initializeAllTagsEntityList();
-        return null;
+        return tagEntity;
     }
 
     @Override
@@ -71,6 +85,11 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public boolean existsById(Integer id) {
-        return false;
+        return allTagsEntityList.stream().anyMatch(tag -> Objects.equals(tag.getId(), id));
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return allTagsEntityList.stream().anyMatch(tag -> Objects.equals(tag.getName(), name));
     }
 }
