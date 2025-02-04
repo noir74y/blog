@@ -62,8 +62,6 @@ public class ItemRepositoryImpl implements ItemRepository {
                 .title(row.getString("title"))
                 .message(row.getString("message"))
                 .likes(row.getInt("likes"))
-                .comments(commentRepository.findAllByItemId(id))
-                .tags(tagRepository.findAllByItemId(id))
                 .build());
     }
 

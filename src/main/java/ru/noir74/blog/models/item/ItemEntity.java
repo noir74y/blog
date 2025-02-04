@@ -22,6 +22,4 @@ public class ItemEntity {
     private byte[] picture;
     private Integer likes;
     private LocalDateTime created;
-    private List<CommentEntity> comments;
-    private List<TagEntity> tags;
 }

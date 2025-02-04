@@ -27,17 +27,17 @@ public class ItemMapper {
 
     @PostConstruct
     private void setup() {
-        Converter<String, List<Tag>> tagStringCsv2ModelConverter = tagStringCsv ->
-                Arrays.stream(Optional.ofNullable(tagStringCsv.getSource()).orElse("").split(","))
-                        .filter(obj -> !obj.isBlank())
-                        .map(tagName -> tagService.getAll()
+        Converter<List<String>, List<Tag>> tagStringCsv2ModelConverter = newItemTagNameList ->
+                newItemTagNameList.getSource()
+                        .stream()
+                        .map(newItemTagName -> tagService.getAll()
                                 .stream()
-                                .filter(tagObj -> tagObj.getName().equals(tagName))
-                                .findAny().orElse(Tag.builder().name(tagName).build()))
+                                .filter(tag -> tag.getName().equals(newItemTagName))
+                                .findAny().orElse(Tag.builder().name(newItemTagName).build()))
                         .toList();
         TypeMap<ItemDtoReq, Item> dtoReq2ModelPropertyMapper = modelMapper.createTypeMap(ItemDtoReq.class, Item.class);
         dtoReq2ModelPropertyMapper.addMappings(modelMapper ->
-                modelMapper.using(tagStringCsv2ModelConverter).map(ItemDtoReq::getNewItemTagsCsv, Item::setTags));
+                modelMapper.using(tagStringCsv2ModelConverter).map(ItemDtoReq::newItemTagNameList, Item::setTags));
     }
 
     public Item dtoReq2Model(ItemDtoReq dtoReq) {
