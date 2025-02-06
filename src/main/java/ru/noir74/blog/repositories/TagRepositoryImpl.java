@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.tag.TagEntity;
 
 import java.sql.PreparedStatement;
@@ -30,7 +31,7 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<TagEntity> findAll() {
-        return this.allTagEntityList;
+        return this.allTagEntityList.stream().sorted().toList();
     }
 
     @Override
@@ -57,6 +58,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
+    @Transactional
     public void save(TagEntity tagEntity) {
         String sql = "INSERT INTO blog.tags (name) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -67,8 +69,8 @@ public class TagRepositoryImpl implements TagRepository {
             return stmt;
         }, keyHolder);
 
-        this.allTagEntityList.add(TagEntity.builder().id(Objects.requireNonNull(keyHolder.getKey()).intValue()).name(tagEntity.getName()).build());
-        this.allTagEntityList = this.allTagEntityList.stream().sorted().toList();
+        var newTag = TagEntity.builder().id(Objects.requireNonNull(keyHolder.getKey()).intValue()).name(tagEntity.getName()).build();
+        this.allTagEntityList.add(newTag);
     }
 
     @Override

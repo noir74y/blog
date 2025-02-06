@@ -2,7 +2,7 @@
 
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta>
     <title>Посты</title>
     <style>
         table {
@@ -77,7 +77,7 @@
 
 <div class="new-item-form" style="display: none;" id="newItemForm">
     <h2>Новый пост</h2>
-    <form method="POST" th:action="@{/item}">
+    <form  id="postNewItemForm" method="post" accept-charset="UTF-8" enctype="application/x-www-form-urlencoded" th:action="@{/item}">
         <label for="title">Название</label>
         <input type="text" id="title" name="title" required>
 
@@ -93,8 +93,7 @@
 
         <p></p>
         <label for="newItemNewTagsCsv">Добавьте новые теги (через запятую):</label>
-        <input type="text" id="newItemNewTagsCsv" name="newItemNewTagsCsv" required>
-
+        <input type="text" id="newItemNewTagsCsv" name="newItemNewTagsCsv">
 
         <p></p>
         <button type="submit" onclick="toggleNewItemForm()">Добавить</button>
@@ -117,8 +116,25 @@
 
     function toggleNewItemForm() {
         const newItemForm = document.getElementById('newItemForm');
-        newItemForm.style.display = newItemForm.style.display === 'none' ? 'block' : 'none';
+
+        if (newItemForm.style.display === 'none') {
+           newItemForm.style.display = 'block'
+        }
+        else {
+            const postNewItemForm = document.getElementById('postNewItemForm');
+            const formData = new URLSearchParams(new FormData(postNewItemForm));
+
+            fetch('http://localhost:9090/item', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                body: formData
+            });
+            newItemForm.style.display = 'none'
+        }
     }
+
 </script>
 
 </body>
