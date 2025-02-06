@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagMapper;
 import ru.noir74.blog.repositories.TagRepository;
@@ -21,35 +20,36 @@ public class TagServiceImpl implements TagService {
     private List<Tag> allTagsList;
 
     @PostConstruct
-    @Transactional(readOnly = true)
     private void populateAllTagList() {
         this.allTagsList = tagMapper.BulkEntity2Model(tagRepository.findAll());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Tag> getAll() {
         return this.allTagsList;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Tag findById(Integer id) {
-        return tagMapper.entity2Model(tagRepository.findById(id).orElseThrow(() -> new NotFoundException("tag is not found", "id = " + id)));
-
+        return this.allTagsList.stream().filter(tagEntity -> tagEntity.getId().equals(id)).findAny().orElse(null);
     }
 
     @Override
-    @Transactional(readOnly = true)
+    public Tag findByName(String name) {
+        return this.allTagsList.stream().filter(tagEntity -> tagEntity.getName().equals(name)).findAny().orElse(null);
+    }
+
+    @Override
     public List<Tag> findAllByItemId(Integer itemId) {
         return tagMapper.BulkEntity2Model(tagRepository.findAllByItemId(itemId));
     }
 
     @Override
     @Transactional
-    public void save(Tag tag) {
-        this.tagRepository.save(tagMapper.model2entity(tag));
+    public Tag save(Tag tag) {
+        var newTag = tagMapper.entity2Model(this.tagRepository.save(tagMapper.model2entity(tag)));
         this.populateAllTagList();
+        return newTag;
     }
 
     @Override
@@ -60,13 +60,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public boolean existsById(Integer id) {
         return this.tagRepository.existsById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public boolean existsByName(String name) {
         return this.tagRepository.existsByName(name);
     }

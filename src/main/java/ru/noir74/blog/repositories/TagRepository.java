@@ -15,7 +15,7 @@ public interface TagRepository {
 
     List<TagEntity> findAllByItemId(Integer itemId);
 
-    void save(TagEntity tagEntity);
+    TagEntity save(TagEntity tagEntity);
 
     void deleteById(Integer id);
 

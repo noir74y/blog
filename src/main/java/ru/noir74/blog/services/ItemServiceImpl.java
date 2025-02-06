@@ -7,9 +7,7 @@ import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.item.Item;
 import ru.noir74.blog.models.item.ItemBrief;
 import ru.noir74.blog.models.item.ItemMapper;
-import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.ItemRepository;
-import ru.noir74.blog.repositories.TagRepository;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -24,7 +22,6 @@ public class ItemServiceImpl implements ItemService {
     private final TagService tagService;
 
     @Override
-    @Transactional(readOnly = true)
     public List<ItemBrief> getPage(String page, String size, String selectedTags) {
         var selectedTagList = new ArrayList<>(new ArrayList<>(Arrays.asList(selectedTags.split(","))));
         return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(Integer.parseInt(page), Integer.parseInt(size)))
@@ -41,7 +38,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Item get(Integer id) {
         return itemMapper.entity2Model(itemRepository.findById(id).orElseThrow(() -> new NotFoundException("post is not found", "post_id = " + id)));
     }
@@ -54,7 +50,7 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.save(itemMapper.model2entity(item));
         item.getTags().stream()
                 .filter(tag -> Objects.isNull(tag.getId()))
-                .forEach(tagService::save);
+                .forEach(tag -> tag.setId(tagService.save(tag).getId()));
     }
 
     @Override
@@ -65,21 +61,18 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional
     public void delete(Integer id) {
         throwIfNotFound(id);
         itemRepository.deleteById(id);
     }
 
     @Override
-    @Transactional
     public void addLike(Integer id) {
         throwIfNotFound(id);
         itemRepository.addLike(id);
     }
 
     @Override
-    @Transactional
     public void removeLike(Integer id) {
         throwIfNotFound(id);
         itemRepository.removeLike(id);

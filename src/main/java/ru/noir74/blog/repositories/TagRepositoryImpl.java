@@ -22,6 +22,7 @@ public class TagRepositoryImpl implements TagRepository {
     private List<TagEntity> allTagEntityList;
 
     @PostConstruct
+    @Transactional(readOnly = true)
     private void populateAllTagEntityList() {
         this.allTagEntityList = new LinkedList<>(jdbcTemplate.query("SELECT id, name FROM blog.tags ORDER BY name",
                 (rs, rowNum) -> TagEntity.builder()
@@ -45,6 +46,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TagEntity> findAllByItemId(Integer itemId) {
         return new LinkedList<>(jdbcTemplate.query(
                         "SELECT tag_id FROM blog.items_tags item_id = ?",
@@ -59,7 +61,7 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     @Transactional
-    public void save(TagEntity tagEntity) {
+    public TagEntity save(TagEntity tagEntity) {
         String sql = "INSERT INTO blog.tags (name) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -69,11 +71,13 @@ public class TagRepositoryImpl implements TagRepository {
             return stmt;
         }, keyHolder);
 
-        var newTag = TagEntity.builder().id(Objects.requireNonNull(keyHolder.getKey()).intValue()).name(tagEntity.getName()).build();
-        this.allTagEntityList.add(newTag);
+        var newTagEntity = TagEntity.builder().id(Objects.requireNonNull(keyHolder.getKey()).intValue()).name(tagEntity.getName()).build();
+        this.allTagEntityList.add(newTagEntity);
+        return newTagEntity;
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
         jdbcTemplate.update("DELETE FROM blog.tags WHERE id = ?", id);
         this.allTagEntityList = this.allTagEntityList.stream()
