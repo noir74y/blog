@@ -25,8 +25,8 @@ public class ItemDtoReq {
         Stream<String> newItemNewTagsStream = Arrays.stream(Optional.ofNullable(newItemNewTagsCsv).orElse("").split(","));
         return Stream.concat(newItemSelectedStream, newItemNewTagsStream)
                 .filter(newItemTagName -> !newItemTagName.isBlank())
-                .map(newItemTagName -> newItemTagName.replaceAll("^\\s*",""))
-                .map(newItemTagName -> newItemTagName.replaceAll("\\s*$",""))
+                .map(newItemTagName -> newItemTagName.replaceAll("^\\s*", ""))
+                .map(newItemTagName -> newItemTagName.replaceAll("\\s*$", ""))
                 .distinct()
                 .toList();
     }

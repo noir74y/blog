@@ -3,10 +3,9 @@ package ru.noir74.blog.services;
 import ru.noir74.blog.models.tag.Tag;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TagService {
-    List<Tag> getAll();
+    List<Tag> findAll();
 
     Tag findById(Integer id);
 
@@ -15,6 +14,10 @@ public interface TagService {
     List<Tag> findAllByItemId(Integer itemId);
 
     Tag save(Tag tag);
+
+    List<Tag> save(List<Tag> tags);
+
+    void attachTagsToItem(List<Integer> tagIdList, Integer itemId);
 
     void deleteById(Integer id);
 

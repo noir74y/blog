@@ -2,14 +2,17 @@ package ru.noir74.blog.repositories;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.tag.TagEntity;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -74,6 +77,35 @@ public class TagRepositoryImpl implements TagRepository {
         var newTagEntity = TagEntity.builder().id(Objects.requireNonNull(keyHolder.getKey()).intValue()).name(tagEntity.getName()).build();
         this.allTagEntityList.add(newTagEntity);
         return newTagEntity;
+    }
+
+    @Override
+    public List<TagEntity> save(List<TagEntity> tagEntities) {
+        return tagEntities.stream().map(this::save).toList();
+    }
+
+    @Override
+    @Transactional
+    public void unstickFromItem(Integer itemId) {
+        jdbcTemplate.update("DELETE FROM blog.items_tags WHERE item_id = ?", itemId);
+    }
+
+    @Override
+    @Transactional
+    public void stickToItem(List<Integer> tagIdList, Integer itemId) {
+        jdbcTemplate.batchUpdate("INSERT INTO blog.items_tags (item_id, tag_id) VALUES (?, ?)",
+                new BatchPreparedStatementSetter() {
+                    @Override
+                    public void setValues(@NonNull PreparedStatement ps, int i) throws SQLException {
+                        ps.setInt(1, itemId);
+                        ps.setInt(2, tagIdList.get(i));
+                    }
+
+                    @Override
+                    public int getBatchSize() {
+                        return tagIdList.size();
+                    }
+                });
     }
 
     @Override

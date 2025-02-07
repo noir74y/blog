@@ -13,7 +13,6 @@ import ru.noir74.blog.models.item.ItemMapper;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.services.ItemService;
 import ru.noir74.blog.services.TagService;
-import ru.noir74.blog.validations.OnCreate;
 import ru.noir74.blog.validations.OnUpdate;
 
 import java.util.ArrayList;
@@ -36,13 +35,13 @@ public class ItemController {
                           @RequestParam(defaultValue = "10", required = false, name = "size") String size,
                           @RequestParam(defaultValue = "", required = false, name = "selectedTags") String selectedTags) {
 
-        List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.getPage(page, size, selectedTags));
+        List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.findPage(page, size, selectedTags));
 
         model.addAttribute("page", page);
         model.addAttribute("size", size);
         model.addAttribute("posts", posts);
         model.addAttribute("selectedTags", new ArrayList<>(Arrays.stream(selectedTags.split(",")).toList()));
-        model.addAttribute("allTags", tagService.getAll().stream().map(Tag::getName).collect(Collectors.toList()));
+        model.addAttribute("allTags", tagService.findAll().stream().map(Tag::getName).collect(Collectors.toList()));
 
         return "items";
     }
@@ -50,7 +49,7 @@ public class ItemController {
     @GetMapping("/{id}")
     public ItemDtoResp get(@PathVariable Integer id) {
         log.info("GET /{}", id);
-        return itemMapper.model2dtoResp(itemService.get(id));
+        return itemMapper.model2dtoResp(itemService.findById(id));
     }
 
     @PostMapping

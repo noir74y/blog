@@ -19,13 +19,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Comment> getAllByItemId(Integer itemId) {
+    public List<Comment> findAllByItemId(Integer itemId) {
         return commentMapper.BulkEntity2Model(commentRepository.findAllByItemId(itemId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Comment get(Integer id) {
+    public Comment findById(Integer id) {
         throwIfNotFound(id);
         return commentMapper.entity2Model(commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("comment is not found", "comment_id = " + id)));

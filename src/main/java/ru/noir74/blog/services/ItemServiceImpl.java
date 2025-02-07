@@ -7,11 +7,13 @@ import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.item.Item;
 import ru.noir74.blog.models.item.ItemBrief;
 import ru.noir74.blog.models.item.ItemMapper;
+import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.ItemRepository;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -20,9 +22,10 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
     private final TagService tagService;
+    private final CommentService commentService;
 
     @Override
-    public List<ItemBrief> getPage(String page, String size, String selectedTags) {
+    public List<ItemBrief> findPage(String page, String size, String selectedTags) {
         var selectedTagList = new ArrayList<>(new ArrayList<>(Arrays.asList(selectedTags.split(","))));
         return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(Integer.parseInt(page), Integer.parseInt(size)))
                 .stream()
@@ -38,8 +41,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item get(Integer id) {
-        return itemMapper.entity2Model(itemRepository.findById(id).orElseThrow(() -> new NotFoundException("post is not found", "post_id = " + id)));
+    public Item findById(Integer id) {
+        var item = itemMapper.entity2Model(itemRepository.findById(id).orElseThrow(() -> new NotFoundException("post is not found", "post_id = " + id)));
+        item.setTags(tagService.findAllByItemId(item.getId()));
+        item.setComments(commentService.findAllByItemId(item.getId()));
+        return item;
     }
 
     @Override
@@ -47,10 +53,17 @@ public class ItemServiceImpl implements ItemService {
     public void create(Item item) {
         item.setLikes(0);
         item.setCreated(LocalDateTime.now());
-        itemRepository.save(itemMapper.model2entity(item));
-        item.getTags().stream()
-                .filter(tag -> Objects.isNull(tag.getId()))
-                .forEach(tag -> tag.setId(tagService.save(tag).getId()));
+
+        var selectedTags = item.getTags();
+        item = itemMapper.entity2Model(itemRepository.save(itemMapper.model2entity(item)));
+        item.setTags(selectedTags);
+
+        var existingTags = item.getTags().stream().filter(tag -> Objects.nonNull(tag.getId())).toList();
+        var newTags = tagService.save(item.getTags().stream().filter(tag -> Objects.isNull(tag.getId())).toList());
+        var allSelectedTags = Stream.concat(existingTags.stream(), newTags.stream()).toList();
+
+        item.setTags(allSelectedTags);
+        tagService.attachTagsToItem(item.getTags().stream().map(Tag::getId).toList(), item.getId());
     }
 
     @Override

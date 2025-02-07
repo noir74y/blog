@@ -4,7 +4,6 @@ import ru.noir74.blog.models.tag.TagEntity;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface TagRepository {
     List<TagEntity> findAll();
@@ -16,6 +15,12 @@ public interface TagRepository {
     List<TagEntity> findAllByItemId(Integer itemId);
 
     TagEntity save(TagEntity tagEntity);
+
+    List<TagEntity> save(List<TagEntity> tagEntities);
+
+    void unstickFromItem(Integer itemId);
+
+    void stickToItem(List<Integer> tagIdList, Integer itemId);
 
     void deleteById(Integer id);
 

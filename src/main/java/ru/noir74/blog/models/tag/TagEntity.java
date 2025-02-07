@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagEntity  implements Comparable<TagEntity>{
+public class TagEntity implements Comparable<TagEntity> {
     private Integer id;
     private String name;
 

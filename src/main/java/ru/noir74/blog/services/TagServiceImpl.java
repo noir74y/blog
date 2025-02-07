@@ -25,7 +25,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAll() {
+    public List<Tag> findAll() {
         return this.allTagsList;
     }
 
@@ -50,6 +50,21 @@ public class TagServiceImpl implements TagService {
         var newTag = tagMapper.entity2Model(this.tagRepository.save(tagMapper.model2entity(tag)));
         this.populateAllTagList();
         return newTag;
+    }
+
+    @Override
+    @Transactional
+    public List<Tag> save(List<Tag> tags) {
+        var newTags = tagMapper.BulkEntity2Model(this.tagRepository.save(tagMapper.BulkModel2Entity(tags)));
+        this.populateAllTagList();
+        return newTags;
+    }
+
+    @Override
+    @Transactional
+    public void attachTagsToItem(List<Integer> tagIdList, Integer itemId) {
+        tagRepository.unstickFromItem(itemId);
+        tagRepository.stickToItem(tagIdList, itemId);
     }
 
     @Override

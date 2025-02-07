@@ -5,9 +5,9 @@ import ru.noir74.blog.models.comment.Comment;
 import java.util.List;
 
 public interface CommentService {
-    List<Comment> getAllByItemId(Integer itemId);
+    List<Comment> findAllByItemId(Integer itemId);
 
-    Comment get(Integer id);
+    Comment findById(Integer id);
 
     Comment create(Comment item);
 

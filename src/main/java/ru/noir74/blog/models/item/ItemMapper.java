@@ -30,7 +30,7 @@ public class ItemMapper {
         Converter<List<String>, List<Tag>> tagStringCsv2ModelConverter = newItemTagNameList ->
                 newItemTagNameList.getSource()
                         .stream()
-                        .map(newItemTagName -> tagService.getAll()
+                        .map(newItemTagName -> tagService.findAll()
                                 .stream()
                                 .filter(tag -> tag.getName().equals(newItemTagName))
                                 .findAny().orElse(Tag.builder().name(newItemTagName).build()))

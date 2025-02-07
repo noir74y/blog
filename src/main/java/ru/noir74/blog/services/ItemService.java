@@ -6,9 +6,9 @@ import ru.noir74.blog.models.item.ItemBrief;
 import java.util.List;
 
 public interface ItemService {
-    List<ItemBrief> getPage(String page, String size, String selectedTags);
+    List<ItemBrief> findPage(String page, String size, String selectedTags);
 
-    Item get(Integer id);
+    Item findById(Integer id);
 
     void create(Item item);
 
