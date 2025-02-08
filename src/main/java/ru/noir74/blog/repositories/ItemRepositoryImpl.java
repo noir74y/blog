@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.item.ItemEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
 
@@ -65,9 +66,63 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public ItemEntity save(ItemEntity itemEntity) {
-        String sql = "INSERT INTO blog.items (title, message, likes, created) VALUES (?, ?, ?, ?)";
+    @Transactional
+    public Integer save(ItemEntity itemEntity) {
+        return Objects.isNull(itemEntity.getId()) ? insert(itemEntity) : update(itemEntity);
+    }
 
+    @Override
+    public boolean existsById(Integer id) {
+        String sql = "SELECT COUNT(*) cnt FROM blog.items WHERE id = ?";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"cnt"});
+            stmt.setInt(1, id);
+            return stmt;
+        }, keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).intValue() != 0;
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Integer id) {
+        String sql = "DELETE FROM blog.items WHERE id = ?";
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(0, id);
+            return stmt;
+        });
+    }
+
+    @Override
+    @Transactional
+    public void addLike(Integer id) {
+        changeLikes(id, 1);
+    }
+
+    @Override
+    @Transactional
+    public void removeLike(Integer id) {
+        changeLikes(id, -1);
+    }
+
+    @Transactional
+    private void changeLikes(Integer id, int change) {
+        String sql = "UPDATE blog.items SET likes = likes + ? WHERE id = ?";
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, change);
+            stmt.setInt(2, id);
+            return stmt;
+        });
+    }
+
+    @Transactional
+    private Integer insert(ItemEntity itemEntity) {
+        String sql = "INSERT INTO blog.items (title, message, likes, created) VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -79,25 +134,20 @@ public class ItemRepositoryImpl implements ItemRepository {
             return stmt;
         }, keyHolder);
 
-        itemEntity.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
-        return itemEntity;
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
-    @Override
-    public boolean existsById(Integer id) {
-        return true;
-    }
+    @Transactional
+    private Integer update(ItemEntity itemEntity) {
+        String sql = "UPDATE blog.items SET title = ?,  message = ? WHERE id = ?";
 
-    @Override
-    public void deleteById(Integer id) {
-    }
-
-    @Override
-    public void addLike(Integer id) {
-    }
-
-    @Override
-    public void removeLike(Integer id) {
-
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, itemEntity.getTitle());
+            stmt.setString(2, itemEntity.getMessage());
+            stmt.setInt(3, itemEntity.getId());
+            return stmt;
+        });
+        return itemEntity.getId();
     }
 }

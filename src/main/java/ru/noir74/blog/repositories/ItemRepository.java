@@ -13,15 +13,13 @@ public interface ItemRepository {
 
     Optional<ItemEntity> findById(Integer id);
 
-    ItemEntity save(ItemEntity itemEntity);
+    Integer save(ItemEntity itemEntity);
 
     boolean existsById(Integer id);
 
     void deleteById(Integer id);
 
-    //@Query("UPDATE ItemEntity SET likes = likes + 1 WHERE id = ?1")
     void addLike(Integer id);
 
-    //@Query("UPDATE ItemEntity SET likes = likes - 1 WHERE id = ?1")
     void removeLike(Integer id);
 }

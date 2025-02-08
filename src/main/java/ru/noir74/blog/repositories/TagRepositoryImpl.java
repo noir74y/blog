@@ -25,7 +25,6 @@ public class TagRepositoryImpl implements TagRepository {
     private List<TagEntity> allTagEntityList;
 
     @PostConstruct
-    @Transactional(readOnly = true)
     private void populateAllTagEntityList() {
         this.allTagEntityList = new LinkedList<>(jdbcTemplate.query("SELECT id, name FROM blog.tags ORDER BY name",
                 (rs, rowNum) -> TagEntity.builder()
@@ -49,7 +48,6 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<TagEntity> findAllByItemId(Integer itemId) {
         return new LinkedList<>(jdbcTemplate.query(
                         "SELECT tag_id FROM blog.items_tags item_id = ?",
@@ -80,6 +78,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
+    @Transactional
     public List<TagEntity> save(List<TagEntity> tagEntities) {
         return tagEntities.stream().map(this::save).toList();
     }

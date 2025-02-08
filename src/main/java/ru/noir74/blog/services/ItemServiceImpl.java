@@ -53,17 +53,8 @@ public class ItemServiceImpl implements ItemService {
     public void create(Item item) {
         item.setLikes(0);
         item.setCreated(LocalDateTime.now());
-
-        var selectedTags = item.getTags();
-        item = itemMapper.entity2Model(itemRepository.save(itemMapper.model2entity(item)));
-        item.setTags(selectedTags);
-
-        var existingTags = item.getTags().stream().filter(tag -> Objects.nonNull(tag.getId())).toList();
-        var newTags = tagService.save(item.getTags().stream().filter(tag -> Objects.isNull(tag.getId())).toList());
-        var allSelectedTags = Stream.concat(existingTags.stream(), newTags.stream()).toList();
-
-        item.setTags(allSelectedTags);
-        tagService.attachTagsToItem(item.getTags().stream().map(Tag::getId).toList(), item.getId());
+        item.setId(itemRepository.save(itemMapper.model2entity(item)));
+        saveTags(item);
     }
 
     @Override
@@ -71,24 +62,38 @@ public class ItemServiceImpl implements ItemService {
     public void update(Item item) {
         throwIfNotFound(item.getId());
         itemRepository.save(itemMapper.model2entity(item));
+        saveTags(item);
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         throwIfNotFound(id);
         itemRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void addLike(Integer id) {
         throwIfNotFound(id);
         itemRepository.addLike(id);
     }
 
     @Override
+    @Transactional
     public void removeLike(Integer id) {
         throwIfNotFound(id);
         itemRepository.removeLike(id);
+    }
+
+    @Transactional
+    private void saveTags(Item item) {
+        var existingTags = item.getTags().stream().filter(tag -> Objects.nonNull(tag.getId())).toList();
+        var newTags = tagService.save(item.getTags().stream().filter(tag -> Objects.isNull(tag.getId())).toList());
+        var allSelectedTags = Stream.concat(existingTags.stream(), newTags.stream()).toList();
+
+        item.setTags(allSelectedTags);
+        tagService.attachTagsToItem(item.getTags().stream().map(Tag::getId).toList(), item.getId());
     }
 
     private void throwIfNotFound(Integer id) {

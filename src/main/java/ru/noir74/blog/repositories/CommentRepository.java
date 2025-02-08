@@ -10,7 +10,7 @@ public interface CommentRepository {
 
     List<CommentEntity> findAllByItemId(Integer itemId);
 
-    CommentEntity save(CommentEntity commentEntity);
+    Integer save(CommentEntity commentEntity);
 
     void deleteById(Integer id);
 

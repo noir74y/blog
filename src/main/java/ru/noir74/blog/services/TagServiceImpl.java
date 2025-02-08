@@ -65,6 +65,7 @@ public class TagServiceImpl implements TagService {
     public void attachTagsToItem(List<Integer> tagIdList, Integer itemId) {
         tagRepository.unstickFromItem(itemId);
         tagRepository.stickToItem(tagIdList, itemId);
+        this.populateAllTagList();
     }
 
     @Override

@@ -2,11 +2,16 @@ package ru.noir74.blog.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.comment.CommentEntity;
 
+import java.sql.PreparedStatement;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -35,16 +40,56 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public CommentEntity save(CommentEntity commentEntity) {
-        return null;
+    @Transactional
+    public Integer save(CommentEntity commentEntity) {
+        return Objects.isNull(commentEntity.getId()) ? insert(commentEntity) : update(commentEntity);
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
+        jdbcTemplate.update("DELETE FROM blog.comments WHERE id = ?", id);
     }
 
     @Override
     public boolean existsById(Integer id) {
-        return true;
+        String sql = "SELECT COUNT(*) cnt FROM blog.comments WHERE id = ?";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"cnt"});
+            stmt.setInt(1, id);
+            return stmt;
+        }, keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).intValue() != 0;
+    }
+
+    @Transactional
+    private Integer insert(CommentEntity commentEntity) {
+        String sql = "INSERT INTO blog.comments (message) VALUES (?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"id"});
+            stmt.setString(1, commentEntity.getMessage());
+            return stmt;
+        }, keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
+    }
+
+    @Transactional
+    private Integer update(CommentEntity commentEntity) {
+        String sql = "UPDATE blog.comments SET message = ? WHERE id = ?";
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, commentEntity.getMessage());
+            stmt.setInt(2, commentEntity.getId());
+            return stmt;
+        });
+        return commentEntity.getId();
     }
 }
