@@ -77,16 +77,8 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public boolean existsById(Integer id) {
         String sql = "SELECT COUNT(*) cnt FROM blog.items WHERE id = ?";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"cnt"});
-            stmt.setInt(1, id);
-            return stmt;
-        }, keyHolder);
-
-        return Objects.requireNonNull(keyHolder.getKey()).intValue() != 0;
+        Integer cnt = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return !Objects.equals(cnt, (Integer) 0);
     }
 
     @Override
@@ -143,14 +135,15 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Transactional
     private Integer update(ItemEntity itemEntity) {
-        String sql = "UPDATE blog.items SET title = ?,  message = ?, changed = ? WHERE id = ?";
+        String sql = "UPDATE blog.items SET title = ?,  message = ?, likes = ?, changed = ? WHERE id = ?";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, itemEntity.getTitle());
             stmt.setString(2, itemEntity.getMessage());
-            stmt.setTimestamp(3, itemEntity.getChanged());
-            stmt.setInt(4, itemEntity.getId());
+            stmt.setInt(3, itemEntity.getLikes());
+            stmt.setTimestamp(4, itemEntity.getChanged());
+            stmt.setInt(5, itemEntity.getId());
             return stmt;
         });
         return itemEntity.getId();

@@ -16,7 +16,7 @@ public class ItemEntity {
     private Integer id;
     private String title;
     private String message;
-    private byte[] picture;
     private Integer likes;
+    private byte[] picture;
     private Timestamp changed;
 }

@@ -18,8 +18,8 @@ public class Item {
     private Integer id;
     private String title;
     private String message;
-    private byte[] picture;
     private Integer likes;
+    private byte[] picture;
     private List<Comment> comments;
     private List<Tag> tags;
 }

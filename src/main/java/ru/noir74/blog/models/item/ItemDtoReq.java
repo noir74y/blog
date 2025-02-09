@@ -18,6 +18,7 @@ public class ItemDtoReq {
     private Integer id;
     private String title;
     private String message;
+    private Integer likes;
     private String itemSelectedTagsCsv;
     private String itemNewTagsCsv;
 

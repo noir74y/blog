@@ -3,7 +3,6 @@ package ru.noir74.blog.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.item.Item;
 import ru.noir74.blog.models.item.ItemBrief;
 import ru.noir74.blog.models.item.ItemMapper;
@@ -40,7 +39,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item findById(Integer id) {
-        var item = itemMapper.entity2Model(itemRepository.findById(id).orElseThrow(() -> new NotFoundException("post is not found", "post_id = " + id)));
+        var item = itemMapper.entity2Model(itemRepository.findById(id).orElseThrow(() -> new RuntimeException("post is not found, post_id = " + id)));
         item.setTags(tagService.findAllByItemId(item.getId()));
         item.setComments(commentService.findAllByItemId(item.getId()));
         return item;
@@ -94,7 +93,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void throwIfNotFound(Integer id) {
-        if (!itemRepository.existsById(id)) throw new NotFoundException("post is not found", "post_id = " + id);
+        if (!itemRepository.existsById(id)) throw new RuntimeException("post is not found, post_id = " + id);
     }
 
 }

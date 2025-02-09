@@ -53,6 +53,7 @@ public class ItemController {
         log.info("GET /item/{}", id);
         var itemDtoResp = itemMapper.model2dtoResp(itemService.findById(id));
 
+        model.addAttribute("id", itemDtoResp.getId());
         model.addAttribute("title", itemDtoResp.getTitle());
         model.addAttribute("message", itemDtoResp.getMessage());
         model.addAttribute("likes", itemDtoResp.getLikes());
@@ -70,10 +71,9 @@ public class ItemController {
         return "redirect:/item/list";
     }
 
-    @PatchMapping("/{id}")
-    public String update(@PathVariable Integer id, @ModelAttribute ItemDtoReq dtoReq) {
+    @PostMapping("/{id}")
+    public String update(@ModelAttribute ItemDtoReq dtoReq, @PathVariable("id") Integer id) {
         log.info("PATCH /item/{}, dtoReq={}", id, dtoReq.toString());
-        dtoReq.setId(id);
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
         return "redirect:/item/list";
     }

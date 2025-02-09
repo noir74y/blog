@@ -72,7 +72,7 @@
 </table>
 
 <p>
-    <button onclick="toggleNewItemForm()">Добавить пост</button>
+    <button id="toggleNewItemFormButton" onclick="toggleNewItemForm()">Добавить</button>
 </p>
 
 <div class="new-item-form" style="display: none;" id="newItemForm">
@@ -92,11 +92,11 @@
         </select>
 
         <p></p>
-        <label for="itemNewTagsCsv">Добавьте новые теги (через запятую):</label>
+        <label for="itemNewTagsCsv">Добавьте новые теги через запятую:</label>
         <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
 
         <p></p>
-        <button type="submit" onclick="toggleNewItemForm()">Добавить</button>
+        <button type="submit" onclick="postNewItem()">Сохранить</button>
     </form>
 </div>
 
@@ -114,24 +114,31 @@
         );
     }
 
-    function toggleNewItemForm() {
+    function postNewItem() {
         const newItemForm = document.getElementById('newItemForm');
 
+        const postNewItemForm = document.getElementById('postNewItemForm');
+        const formData = new URLSearchParams(new FormData(postNewItemForm));
+
+        fetch('http://localhost:9090/item', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: formData
+        });
+        newItemForm.style.display = 'none'
+    }
+
+    function toggleNewItemForm() {
+        const newItemForm = document.getElementById('newItemForm');
         if (newItemForm.style.display === 'none') {
            newItemForm.style.display = 'block'
+           document.getElementById('toggleNewItemFormButton').innerText = 'Скрыть';
         }
         else {
-            const postNewItemForm = document.getElementById('postNewItemForm');
-            const formData = new URLSearchParams(new FormData(postNewItemForm));
-
-            fetch('http://localhost:9090/item', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                },
-                body: formData
-            });
-            newItemForm.style.display = 'none'
+           newItemForm.style.display = 'none'
+           document.getElementById('toggleNewItemFormButton').innerText = 'Добавить';
         }
     }
 
