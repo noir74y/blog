@@ -58,12 +58,14 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public Optional<ItemEntity> findById(Integer id) {
         var row = jdbcTemplate.queryForRowSet("SELECT title, message, likes FROM blog.items WHERE id = ?", id);
-        return Optional.of(ItemEntity.builder()
-                .id(id)
-                .title(row.getString("title"))
-                .message(row.getString("message"))
-                .likes(row.getInt("likes"))
-                .build());
+        return row.next() ?
+                Optional.of(ItemEntity.builder()
+                        .id(id)
+                        .title(row.getString("title"))
+                        .message(row.getString("message"))
+                        .likes(row.getInt("likes"))
+                        .build())
+                : Optional.empty();
     }
 
     @Override

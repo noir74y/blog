@@ -86,14 +86,14 @@
         <textarea rows="5" name="message" id="message"></textarea>
 
         <p></p>
-        <label for="newItemSelectedTagsCsv">Выберите сущ. теги:</label>
-        <select id="newItemSelectedTagsCsv" name="newItemSelectedTagsCsv" multiple size="6">
+        <label for="itemSelectedTagsCsv">Выберите сущ. теги:</label>
+        <select id="itemSelectedTagsCsv" name="itemSelectedTagsCsv" multiple size="6">
             <option th:each="option : ${allTags}" th:text="${option}"></option>
         </select>
 
         <p></p>
-        <label for="newItemNewTagsCsv">Добавьте новые теги (через запятую):</label>
-        <input type="text" id="newItemNewTagsCsv" name="newItemNewTagsCsv">
+        <label for="itemNewTagsCsv">Добавьте новые теги (через запятую):</label>
+        <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
 
         <p></p>
         <button type="submit" onclick="toggleNewItemForm()">Добавить</button>

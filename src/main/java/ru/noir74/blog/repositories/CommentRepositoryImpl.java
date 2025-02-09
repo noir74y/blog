@@ -22,11 +22,12 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public Optional<CommentEntity> findById(Integer id) {
         var row = jdbcTemplate.queryForRowSet("SELECT id, message FROM blog.comments WHERE id = ?", id);
-        var comment = CommentEntity.builder()
-                .id(row.getInt("id"))
-                .message(row.getString("message"))
-                .build();
-        return Optional.ofNullable(comment);
+        return row.next() ?
+                Optional.of(CommentEntity.builder()
+                        .id(id)
+                        .message(row.getString("message"))
+                        .build())
+                : Optional.empty();
     }
 
     @Override

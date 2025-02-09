@@ -13,7 +13,6 @@ import ru.noir74.blog.services.TagService;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +39,7 @@ public class ItemMapper {
                         .toList();
         TypeMap<ItemDtoReq, Item> dtoReq2ModelPropertyMapper = modelMapper.createTypeMap(ItemDtoReq.class, Item.class);
         dtoReq2ModelPropertyMapper.addMappings(modelMapper ->
-                modelMapper.using(tagStringCsv2ModelConverter).map(ItemDtoReq::newItemTagNameList, Item::setTags));
+                modelMapper.using(tagStringCsv2ModelConverter).map(ItemDtoReq::itemTagNameList, Item::setTags));
     }
 
     public Item dtoReq2Model(ItemDtoReq dtoReq) {

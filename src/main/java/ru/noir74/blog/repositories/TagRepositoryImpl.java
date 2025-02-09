@@ -50,7 +50,7 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public List<TagEntity> findAllByItemId(Integer itemId) {
         return new LinkedList<>(jdbcTemplate.query(
-                        "SELECT tag_id FROM blog.items_tags item_id = ?",
+                        "SELECT tag_id FROM blog.items_tags WHERE item_id = ?",
                         (rs, rowNum) -> rs.getInt("tag_id"), itemId)
                 .stream()
                 .map(tag_id ->

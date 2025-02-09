@@ -7,10 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.noir74.blog.models.item.ItemDtoReq;
-import ru.noir74.blog.models.item.ItemDtoResp;
 import ru.noir74.blog.models.item.ItemDtoRespBrief;
 import ru.noir74.blog.models.item.ItemMapper;
 import ru.noir74.blog.models.tag.Tag;
+import ru.noir74.blog.services.CommentService;
 import ru.noir74.blog.services.ItemService;
 import ru.noir74.blog.services.TagService;
 import ru.noir74.blog.validations.OnUpdate;
@@ -18,7 +18,6 @@ import ru.noir74.blog.validations.OnUpdate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -28,6 +27,7 @@ public class ItemController {
     private final ItemMapper itemMapper;
     private final ItemService itemService;
     private final TagService tagService;
+    private final CommentService commentService;
 
     @GetMapping("/list")
     public String getPage(Model model,
@@ -35,51 +35,67 @@ public class ItemController {
                           @RequestParam(defaultValue = "10", required = false, name = "size") String size,
                           @RequestParam(defaultValue = "", required = false, name = "selectedTags") String selectedTags) {
 
+        log.info("GET /item/list");
+
         List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.findPage(page, size, selectedTags));
 
         model.addAttribute("page", page);
         model.addAttribute("size", size);
         model.addAttribute("posts", posts);
         model.addAttribute("selectedTags", new ArrayList<>(Arrays.stream(selectedTags.split(",")).toList()));
-        model.addAttribute("allTags", tagService.findAll().stream().map(Tag::getName).collect(Collectors.toList()));
+        model.addAttribute("allTags", tagService.findAll().stream().map(Tag::getName).toList());
 
         return "items";
     }
 
     @GetMapping("/{id}")
-    public ItemDtoResp get(@PathVariable Integer id) {
-        log.info("GET /{}", id);
-        return itemMapper.model2dtoResp(itemService.findById(id));
+    public String get(Model model, @PathVariable("id") Integer id) {
+        log.info("GET /item/{}", id);
+        var itemDtoResp = itemMapper.model2dtoResp(itemService.findById(id));
+
+        model.addAttribute("title", itemDtoResp.getTitle());
+        model.addAttribute("message", itemDtoResp.getMessage());
+        model.addAttribute("likes", itemDtoResp.getLikes());
+        model.addAttribute("itemSelectedTags", itemDtoResp.getTags().stream().map(Tag::getName).toList());
+        model.addAttribute("allTags", tagService.findAll().stream().map(Tag::getName).toList());
+        model.addAttribute("comments", commentService.findAllByItemId(id));
+
+        return "item";
     }
 
     @PostMapping
     public String create(@ModelAttribute ItemDtoReq dtoReq) {
-        log.info("POST /item, item={}", dtoReq.toString());
+        log.info("POST /item, dtoReq={}", dtoReq.toString());
         itemService.create(itemMapper.dtoReq2Model(dtoReq));
         return "redirect:/item/list";
     }
 
-    @PatchMapping
-    public void update(@Validated(OnUpdate.class) @RequestBody ItemDtoReq dtoReq) {
-        log.info("PATCH /item, item={}", dtoReq.toString());
+    @PatchMapping("/{id}")
+    public String update(@PathVariable Integer id, @ModelAttribute ItemDtoReq dtoReq) {
+        log.info("PATCH /item/{}, dtoReq={}", id, dtoReq.toString());
+        dtoReq.setId(id);
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
+        return "redirect:/item/list";
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public String delete(@PathVariable Integer id) {
         log.info("DELETE /item/{}", id);
         itemService.delete(id);
+        return "redirect:/item/list";
     }
 
-    @PatchMapping("/addLike/{id}")
-    public void addLike(@PathVariable Integer id) {
-        log.info("PATCH /item/addLike/{}", id);
+    @PatchMapping("/{id}/addLike")
+    public String addLike(@PathVariable Integer id) {
+        log.info("PATCH /item/{}/addLike", id);
         itemService.addLike(id);
+        return "redirect:/item/list";
     }
 
-    @PatchMapping("/removeLike/{id}")
-    public void removeLike(@PathVariable Integer id) {
-        log.info("PATCH /item/removeLike/{}", id);
+    @PatchMapping("/{id}/removeLike")
+    public String removeLike(@PathVariable Integer id) {
+        log.info("PATCH /item/{}/removeLike", id);
         itemService.removeLike(id);
+        return "redirect:/item/list";
     }
 }

@@ -15,18 +15,19 @@ import java.util.stream.Stream;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemDtoReq {
+    private Integer id;
     private String title;
     private String message;
-    private String newItemSelectedTagsCsv;
-    private String newItemNewTagsCsv;
+    private String itemSelectedTagsCsv;
+    private String itemNewTagsCsv;
 
-    public List<String> newItemTagNameList() {
-        Stream<String> newItemSelectedStream = Arrays.stream(Optional.ofNullable(newItemSelectedTagsCsv).orElse("").split(","));
-        Stream<String> newItemNewTagsStream = Arrays.stream(Optional.ofNullable(newItemNewTagsCsv).orElse("").split(","));
-        return Stream.concat(newItemSelectedStream, newItemNewTagsStream)
-                .filter(newItemTagName -> !newItemTagName.isBlank())
-                .map(newItemTagName -> newItemTagName.replaceAll("^\\s*", ""))
-                .map(newItemTagName -> newItemTagName.replaceAll("\\s*$", ""))
+    public List<String> itemTagNameList() {
+        Stream<String> itemSelectedStream = Arrays.stream(Optional.ofNullable(itemSelectedTagsCsv).orElse("").split(","));
+        Stream<String> itemNewTagsStream = Arrays.stream(Optional.ofNullable(itemNewTagsCsv).orElse("").split(","));
+        return Stream.concat(itemSelectedStream, itemNewTagsStream)
+                .filter(itemTagName -> !itemTagName.isBlank())
+                .map(itemTagName -> itemTagName.replaceAll("^\\s*", ""))
+                .map(itemTagName -> itemTagName.replaceAll("\\s*$", ""))
                 .distinct()
                 .toList();
     }

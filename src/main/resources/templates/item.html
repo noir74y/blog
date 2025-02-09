@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta>
+    <title>Посты</title>
+    <style>
+        table {
+             border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid;
+        }
+    </style>
+</head>
+
+<body onload="selectItemTags()">
+<h1>Пост</h1>
+
+<div class="current-item-form" id="currentItemForm">
+    <form id="patchCurrentItemForm">
+        <label for="title">Название</label>
+        <input type="text" id="title" name="title" required>
+
+        <p></p>
+        <label for="message">Текст</label>
+        <textarea rows="5" name="message" id="message"></textarea>
+
+        <p></p>
+        <label for="itemSelectedTags">Выберите сущ. теги:</label>
+        <select id="itemSelectedTags" name="itemSelectedTagsCsv" multiple size="6">
+            <option th:each="option : ${allTags}" th:text="${option}"></option>
+        </select>
+
+        <p></p>
+        <label for="itemNewTagsCsv">Добавьте новые теги (через запятую):</label>
+        <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
+
+        <p></p>
+        <button type="submit" onclick="patchCurrentItemForm()">Сохранить</button>
+    </form>
+</div>
+
+<!--<p></p>-->
+<!--<h2>Комментарии</h2>-->
+<!--<table>-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>Текст</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+
+<!--    <tbody>-->
+<!--    <tr th:each="comment : ${comments}">-->
+<!--        <td>-->
+<!--            <label>-->
+<!--                <textarea rows="3" th:text="${comment.message}"></textarea>-->
+<!--            </label>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--            <form th:action="@{/item/{id}}" method="post">-->
+<!--                <input type="hidden" name="_method" value="edit">-->
+<!--                <button type="submit">Сохранить</button>-->
+<!--            </form>-->
+<!--            <p></p>-->
+<!--            <form th:action="@{/item/{id}}" method="post">-->
+<!--                <input type="hidden" name="_method" value="delete">-->
+<!--                <button type="submit">Удалить</button>-->
+<!--            </form>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+
+
+<script defer type="text/javascript" th:inline="javascript">
+    var allTagsList = [[${allTags}]];
+    var itemSelectedTagList = [[${itemSelectedTags}]];
+
+    function selectItemTags() {
+        const options = document.getElementById("itemSelectedTags").options;
+        allTagsList.forEach((value, index) => {
+            if (itemSelectedTagList.includes(value))
+                options[index+1].selected = true;
+            }
+        );
+    }
+
+<!--    function toggleNewItemForm() {-->
+<!--        const newItemForm = document.getElementById('newItemForm');-->
+
+<!--        if (newItemForm.style.display === 'none') {-->
+<!--           newItemForm.style.display = 'block'-->
+<!--        }-->
+<!--        else {-->
+<!--            const postNewItemForm = document.getElementById('postNewItemForm');-->
+<!--            const formData = new URLSearchParams(new FormData(postNewItemForm));-->
+
+<!--            fetch('http://localhost:9090/item', {-->
+<!--                method: 'POST',-->
+<!--                headers: {-->
+<!--                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'-->
+<!--                },-->
+<!--                body: formData-->
+<!--            });-->
+<!--            newItemForm.style.display = 'none'-->
+<!--        }-->
+<!--    }-->
+
+</script>
+
+</body>
+</html>
