@@ -68,20 +68,6 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public void addLike(Integer id) {
-        throwIfNotFound(id);
-        itemRepository.addLike(id);
-    }
-
-    @Override
-    @Transactional
-    public void removeLike(Integer id) {
-        throwIfNotFound(id);
-        itemRepository.removeLike(id);
-    }
-
     @Transactional
     private void saveTags(Item item) {
         var existingTags = item.getTags().stream().filter(tag -> Objects.nonNull(tag.getId())).toList();

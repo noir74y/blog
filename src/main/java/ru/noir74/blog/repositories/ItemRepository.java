@@ -18,8 +18,4 @@ public interface ItemRepository {
     boolean existsById(Integer id);
 
     void deleteById(Integer id);
-
-    void addLike(Integer id);
-
-    void removeLike(Integer id);
 }

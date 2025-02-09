@@ -87,30 +87,6 @@ public class ItemRepositoryImpl implements ItemRepository {
         jdbcTemplate.update("DELETE FROM blog.items WHERE id = ?", id);
     }
 
-    @Override
-    @Transactional
-    public void addLike(Integer id) {
-        changeLikes(id, 1);
-    }
-
-    @Override
-    @Transactional
-    public void removeLike(Integer id) {
-        changeLikes(id, -1);
-    }
-
-    @Transactional
-    private void changeLikes(Integer id, int change) {
-        String sql = "UPDATE blog.items SET likes = likes + ?, changed = ? WHERE id = ?";
-        jdbcTemplate.update(connection -> {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, change);
-            stmt.setTimestamp(2, Timestamp.from(LocalDateTime.now().toInstant((ZoneOffset.UTC))));
-            stmt.setInt(3, id);
-            return stmt;
-        });
-    }
-
     @Transactional
     private Integer insert(ItemEntity itemEntity) {
         String sql = "INSERT INTO blog.items (title, message, likes, changed) VALUES (?, ?, ?, ?)";

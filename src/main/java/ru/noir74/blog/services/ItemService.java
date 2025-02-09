@@ -15,8 +15,4 @@ public interface ItemService {
     void update(Item item);
 
     void delete(Integer id);
-
-    void addLike(Integer id);
-
-    void removeLike(Integer id);
 }
