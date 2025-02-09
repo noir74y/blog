@@ -55,8 +55,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public boolean existsById(Integer id) {
         String sql = "SELECT COUNT(*) cnt FROM blog.comments WHERE id = ?";
-        Integer cnt = jdbcTemplate.queryForObject(sql, Integer.class, id);
-        return !Objects.equals(cnt, (Integer) 0);
+        return !Objects.equals(jdbcTemplate.queryForObject(sql, Integer.class, id), (Integer) 0);
     }
 
     @Transactional
