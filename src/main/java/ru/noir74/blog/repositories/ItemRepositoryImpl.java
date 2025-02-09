@@ -28,7 +28,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public List<ItemEntityBrief> findByPage(Integer page, Integer size) {
         var sql = "WITH " +
-                "t1 AS ( SELECT * FROM blog.items i ORDER BY changed OFFSET ? LIMIT ? ), " +
+                "t1 AS ( SELECT * FROM blog.items i ORDER BY changed DESC OFFSET ? LIMIT ? ), " +
                 "t2 AS ( SELECT c.item_id, COUNT(c.item_id) commentsCounter " +
                 "FROM blog.comments c " +
                 "WHERE c.item_id IN (SELECT id FROM t1) " +
