@@ -10,9 +10,7 @@ import ru.noir74.blog.models.item.ItemMapper;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.ItemRepository;
 
-import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -32,12 +30,12 @@ public class ItemServiceImpl implements ItemService {
                 .filter(obj -> {
                     if (selectedTags.isEmpty()) return true;
                     else
-                        for (String tag : selectedTagList)
-                            if (Optional.ofNullable(obj.getTagsCSV()).orElse("").matches(".*,?" + tag + ",?.*"))
-                                return true;
+                        for (String selectedTag : selectedTagList)
+                            return Arrays.asList(Optional.ofNullable(obj.getTagsCSV()).orElseGet(() -> "")
+                                    .split(",")).contains(selectedTag);
                     return false;
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
