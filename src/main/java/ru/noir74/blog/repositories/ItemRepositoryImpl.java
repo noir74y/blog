@@ -27,7 +27,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public List<ItemEntityBrief> findByPage(Integer page, Integer size) {
         var sql = "WITH " +
-                "t1 AS ( SELECT * FROM blog.items i ORDER BY created OFFSET ? LIMIT ? ), " +
+                "t1 AS ( SELECT * FROM blog.items i ORDER BY changed OFFSET ? LIMIT ? ), " +
                 "t2 AS ( SELECT c.item_id, COUNT(c.item_id) commentsCounter " +
                 "FROM blog.comments c " +
                 "WHERE c.item_id IN (SELECT id FROM t1) " +
@@ -41,7 +41,7 @@ public class ItemRepositoryImpl implements ItemRepository {
                 "FROM t1 " +
                 "LEFT OUTER JOIN t2 ON t2.item_id = t1.id " +
                 "LEFT OUTER JOIN t3 ON t3.item_id = t1.id " +
-                "ORDER BY t1.created DESC";
+                "ORDER BY t1.changed DESC";
 
         return new LinkedList<>(jdbcTemplate.query(sql,
                 (rs, rowNum) -> ItemEntityBrief.builder()
@@ -130,7 +130,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             stmt.setString(1, itemEntity.getTitle());
             stmt.setString(2, itemEntity.getMessage());
             stmt.setInt(3, itemEntity.getLikes());
-            stmt.setTimestamp(4, Timestamp.from(itemEntity.getCreated().toInstant((ZoneOffset.UTC))));
+            stmt.setTimestamp(4, Timestamp.from(itemEntity.getChanged().toInstant((ZoneOffset.UTC))));
             return stmt;
         }, keyHolder);
 
@@ -139,7 +139,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Transactional
     private Integer update(ItemEntity itemEntity) {
-        String sql = "UPDATE blog.items SET title = ?,  message = ? WHERE id = ?";
+        String sql = "UPDATE blog.items SET title = ?,  message = ? , WHERE id = ?";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql);

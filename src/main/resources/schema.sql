@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS blog.items (
     message    TEXT,
     picture    BYTEA,
     likes      INTEGER,
-    created    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    changed    TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     CONSTRAINT pk_post PRIMARY KEY (id)
 );
 

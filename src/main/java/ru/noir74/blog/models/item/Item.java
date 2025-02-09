@@ -20,7 +20,7 @@ public class Item {
     private String message;
     private byte[] picture;
     private Integer likes;
-    private LocalDateTime created;
+    private LocalDateTime changed;
     private List<Comment> comments;
     private List<Tag> tags;
 }
