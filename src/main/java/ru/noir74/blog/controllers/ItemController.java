@@ -21,7 +21,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/item")
+@RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemMapper itemMapper;
@@ -29,13 +29,13 @@ public class ItemController {
     private final TagService tagService;
     private final CommentService commentService;
 
-    @GetMapping("/list")
+    @GetMapping
     public String getPage(Model model,
                           @RequestParam(defaultValue = "1", required = false, name = "page") String page,
                           @RequestParam(defaultValue = "10", required = false, name = "size") String size,
                           @RequestParam(defaultValue = "", required = false, name = "selectedTags") String selectedTags) {
 
-        log.info("GET /item/list");
+        log.info("GET /items");
 
         List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.findPage(page, size, selectedTags));
 
@@ -45,12 +45,12 @@ public class ItemController {
         model.addAttribute("selectedTags", new ArrayList<>(Arrays.stream(selectedTags.split(",")).toList()));
         model.addAttribute("allTags", tagService.findAll().stream().map(Tag::getName).toList());
 
-        return "items";
+        return "/items";
     }
 
     @GetMapping("/{id}")
     public String get(Model model, @PathVariable("id") Integer id) {
-        log.info("GET /item/{}", id);
+        log.info("GET /items/{}", id);
         var itemDtoResp = itemMapper.model2dtoResp(itemService.findById(id));
 
         model.addAttribute("id", itemDtoResp.getId());
@@ -61,41 +61,27 @@ public class ItemController {
         model.addAttribute("allTags", tagService.findAll().stream().map(Tag::getName).toList());
         model.addAttribute("comments", commentService.findAllByItemId(id));
 
-        return "item";
+        return "/item";
     }
 
     @PostMapping
     public String create(@ModelAttribute ItemDtoReq dtoReq) {
-        log.info("POST /item, dtoReq={}", dtoReq.toString());
+        log.info("POST (for create) /items, dtoReq={}", dtoReq.toString());
         itemService.create(itemMapper.dtoReq2Model(dtoReq));
-        return "redirect:/item/list";
+        return "redirect:/items";
     }
 
-    @PostMapping("/{id}")
+    @PostMapping(value = "/{id}")
     public String update(@ModelAttribute ItemDtoReq dtoReq, @PathVariable("id") Integer id) {
-        log.info("POST /item/{}, dtoReq={}", id, dtoReq.toString());
+        log.info("POST (for update) /items/{}, dtoReq={}", id, dtoReq.toString());
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
-        return "redirect:/item/list";
+        return "redirect:/items";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Integer id) {
-        log.info("DELETE /item/{}", id);
+    @PostMapping(value = "/{id}", params = "_method=delete")
+    public String delete(@PathVariable("id") Integer id) {
+        log.info("POST (for delete) /items/{}", id);
         itemService.delete(id);
-        return "redirect:/item/list";
-    }
-
-    @PatchMapping("/{id}/addLike")
-    public String addLike(@PathVariable Integer id) {
-        log.info("PATCH /item/{}/addLike", id);
-        itemService.addLike(id);
-        return "redirect:/item/list";
-    }
-
-    @PatchMapping("/{id}/removeLike")
-    public String removeLike(@PathVariable Integer id) {
-        log.info("PATCH /item/{}/removeLike", id);
-        itemService.removeLike(id);
-        return "redirect:/item/list";
+        return "redirect:/items";
     }
 }

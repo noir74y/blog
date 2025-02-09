@@ -17,7 +17,6 @@
 <body onload="selectItemTags()">
 <h1>Пост</h1>
 
-<div class="item-form-class" id="itemFormClass">
     <form id="itemForm">
         <label for="id"></label>
         <input type="text" id="id" name="id" th:value="${id}" hidden>
@@ -45,9 +44,14 @@
         <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
 
         <p></p>
-        <button type="submit" onclick="updateItem()">Сохранить</button>
+        <button type="button" onclick="updateItem()">Сохранить</button>
     </form>
-</div>
+
+    <form th:action="${id}" method="post">
+        <p></p>
+        <input type="hidden" name="_method" value="delete">
+        <button>Удалить</button>
+    </form>
 
 <script defer type="text/javascript" th:inline="javascript">
     var allTagsList = [[${allTags}]];
@@ -72,13 +76,14 @@
         const itemForm = document.getElementById('itemForm');
         const formData = new URLSearchParams(new FormData(itemForm));
 
-        fetch('http://localhost:9090/item/' + document.getElementById('id').value, {
+        fetch('/items/' + document.getElementById('id').value, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
             body: formData
         });
+        window.location.href = "/items";
     }
 
 </script>

@@ -57,7 +57,7 @@
 
     <tbody>
     <tr th:each="post : ${posts}">
-        <td><a th:href="${post.id}" th:text="${post.title}"></a></td>
+        <td><a th:href="|items/${post.id}|" th:text="${post.title}"></a></td>
         <td>
             <label>
                             <textarea rows="3" th:text="${post.message}" disabled>
@@ -120,7 +120,7 @@
         const postNewItemForm = document.getElementById('postNewItemForm');
         const formData = new URLSearchParams(new FormData(postNewItemForm));
 
-        fetch('http://localhost:9090/item', {
+        fetch('/items', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'

@@ -84,12 +84,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     @Transactional
     public void deleteById(Integer id) {
-        String sql = "DELETE FROM blog.items WHERE id = ?";
-        jdbcTemplate.update(connection -> {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(0, id);
-            return stmt;
-        });
+        jdbcTemplate.update("DELETE FROM blog.items WHERE id = ?", id);
     }
 
     @Override
