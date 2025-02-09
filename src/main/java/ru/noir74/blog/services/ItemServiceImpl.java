@@ -52,7 +52,6 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public void create(Item item) {
         item.setLikes(0);
-        item.setChanged(LocalDateTime.now());
         item.setId(itemRepository.save(itemMapper.model2entity(item)));
         saveTags(item);
     }
@@ -61,7 +60,6 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public void update(Item item) {
         throwIfNotFound(item.getId());
-        item.setChanged(LocalDateTime.now());
         itemRepository.save(itemMapper.model2entity(item));
         saveTags(item);
     }

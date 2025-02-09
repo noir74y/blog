@@ -11,6 +11,9 @@ import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagMapper;
 import ru.noir74.blog.services.TagService;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,9 +52,11 @@ public class ItemMapper {
     }
 
     public ItemEntity model2entity(Item model) {
-        return Optional.ofNullable(model)
+        var entity = Optional.ofNullable(model)
                 .map(obj -> modelMapper.map(obj, ItemEntity.class))
                 .orElse(null);
+        Optional.ofNullable(entity).ifPresent(obj -> obj.setChanged(Timestamp.from(Instant.now())));
+        return entity;
     }
 
     public Item entity2Model(ItemEntity entity) {

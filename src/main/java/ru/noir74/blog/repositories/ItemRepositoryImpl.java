@@ -11,6 +11,7 @@ import ru.noir74.blog.models.item.ItemEntityBrief;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.LinkedList;
 import java.util.List;
@@ -111,18 +112,19 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Transactional
     private void changeLikes(Integer id, int change) {
-        String sql = "UPDATE blog.items SET likes = likes + ? WHERE id = ?";
+        String sql = "UPDATE blog.items SET likes = likes + ?, changed = ? WHERE id = ?";
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, change);
-            stmt.setInt(2, id);
+            stmt.setTimestamp(2, Timestamp.from(LocalDateTime.now().toInstant((ZoneOffset.UTC))));
+            stmt.setInt(3, id);
             return stmt;
         });
     }
 
     @Transactional
     private Integer insert(ItemEntity itemEntity) {
-        String sql = "INSERT INTO blog.items (title, message, likes, created) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO blog.items (title, message, likes, changed) VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -130,7 +132,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             stmt.setString(1, itemEntity.getTitle());
             stmt.setString(2, itemEntity.getMessage());
             stmt.setInt(3, itemEntity.getLikes());
-            stmt.setTimestamp(4, Timestamp.from(itemEntity.getChanged().toInstant((ZoneOffset.UTC))));
+            stmt.setTimestamp(4, itemEntity.getChanged());
             return stmt;
         }, keyHolder);
 
@@ -139,13 +141,14 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Transactional
     private Integer update(ItemEntity itemEntity) {
-        String sql = "UPDATE blog.items SET title = ?,  message = ? , WHERE id = ?";
+        String sql = "UPDATE blog.items SET title = ?,  message = ?, changed = ? WHERE id = ?";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, itemEntity.getTitle());
             stmt.setString(2, itemEntity.getMessage());
-            stmt.setInt(3, itemEntity.getId());
+            stmt.setTimestamp(3, itemEntity.getChanged());
+            stmt.setInt(4, itemEntity.getId());
             return stmt;
         });
         return itemEntity.getId();

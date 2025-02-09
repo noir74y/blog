@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,5 +18,5 @@ public class ItemEntity {
     private String message;
     private byte[] picture;
     private Integer likes;
-    private LocalDateTime changed;
+    private Timestamp changed;
 }
