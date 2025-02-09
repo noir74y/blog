@@ -73,7 +73,7 @@ public class ItemController {
 
     @PostMapping("/{id}")
     public String update(@ModelAttribute ItemDtoReq dtoReq, @PathVariable("id") Integer id) {
-        log.info("PATCH /item/{}, dtoReq={}", id, dtoReq.toString());
+        log.info("POST /item/{}, dtoReq={}", id, dtoReq.toString());
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
         return "redirect:/item/list";
     }
