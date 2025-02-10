@@ -53,6 +53,38 @@
         <button>Удалить</button>
     </form>
 
+<p></p>
+<h2>Комментарии</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Текст</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="comment : ${comments}">
+        <td>
+            <label>
+                <textarea rows="3" th:text="${comment.message}"></textarea>
+            </label>
+        </td>
+        <td>
+            <form th:action="'/items/' + ${comment.itemId} + '/comments/' + ${comment.id}" method="post">
+                <input type="hidden" name="_method" value="edit">
+                <button type="submit">Сохранить</button>
+            </form>
+            <p></p>
+            <form th:action="'/items/' + ${comment.itemId} + '/comments/' + ${comment.id}" method="post">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
 <script defer type="text/javascript" th:inline="javascript">
     var allTagsList = [[${allTags}]];
     var itemSelectedTagList = [[${itemSelectedTags}]];
@@ -91,33 +123,3 @@
 </body>
 </html>
 
-<!--<p></p>-->
-<!--<h2>Комментарии</h2>-->
-<!--<table>-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--        <th>Текст</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-
-<!--    <tbody>-->
-<!--    <tr th:each="comment : ${comments}">-->
-<!--        <td>-->
-<!--            <label>-->
-<!--                <textarea rows="3" th:text="${comment.message}"></textarea>-->
-<!--            </label>-->
-<!--        </td>-->
-<!--        <td>-->
-<!--            <form th:action="@{/item/{id}}" method="post">-->
-<!--                <input type="hidden" name="_method" value="edit">-->
-<!--                <button type="submit">Сохранить</button>-->
-<!--            </form>-->
-<!--            <p></p>-->
-<!--            <form th:action="@{/item/{id}}" method="post">-->
-<!--                <input type="hidden" name="_method" value="delete">-->
-<!--                <button type="submit">Удалить</button>-->
-<!--            </form>-->
-<!--        </td>-->
-<!--    </tr>-->
-<!--    </tbody>-->
-<!--</table>-->

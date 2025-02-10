@@ -33,7 +33,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void create(Comment comment) {
-        comment.setCreated(LocalDateTime.now());
         commentRepository.save(commentMapper.model2entity(comment));
     }
 

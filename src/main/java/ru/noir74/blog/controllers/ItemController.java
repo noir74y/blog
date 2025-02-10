@@ -4,16 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.noir74.blog.models.comment.CommentMapper;
 import ru.noir74.blog.models.item.ItemDtoReq;
 import ru.noir74.blog.models.item.ItemDtoRespBrief;
 import ru.noir74.blog.models.item.ItemMapper;
 import ru.noir74.blog.models.tag.Tag;
+import ru.noir74.blog.models.tag.TagDtoResp;
+import ru.noir74.blog.models.tag.TagMapper;
 import ru.noir74.blog.services.CommentService;
 import ru.noir74.blog.services.ItemService;
 import ru.noir74.blog.services.TagService;
-import ru.noir74.blog.validations.OnUpdate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +28,9 @@ public class ItemController {
     private final ItemMapper itemMapper;
     private final ItemService itemService;
     private final TagService tagService;
+    private final TagMapper tagMapper;
     private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
     @GetMapping
     public String getPage(Model model,
@@ -58,8 +61,8 @@ public class ItemController {
         model.addAttribute("message", itemDtoResp.getMessage());
         model.addAttribute("likes", itemDtoResp.getLikes());
         model.addAttribute("itemSelectedTags", itemDtoResp.getTags().stream().map(Tag::getName).toList());
-        model.addAttribute("allTags", tagService.findAll().stream().map(Tag::getName).toList());
-        model.addAttribute("comments", commentService.findAllByItemId(id));
+        model.addAttribute("allTags", tagMapper.BulkModel2dtoResp(tagService.findAll()).stream().map(TagDtoResp::getName).toList());
+        model.addAttribute("comments", commentMapper.BulkModel2dtoResp(commentService.findAllByItemId(id)));
 
         return "/item";
     }

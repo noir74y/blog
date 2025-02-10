@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -14,5 +15,6 @@ import java.time.LocalDateTime;
 public class CommentEntity {
     private Integer id;
     private String message;
-    private LocalDateTime created;
+    private Integer itemId;
+    private Timestamp changed;
 }

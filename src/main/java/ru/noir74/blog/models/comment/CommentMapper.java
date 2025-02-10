@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,9 +25,11 @@ public class CommentMapper {
     }
 
     public CommentEntity model2entity(Comment model) {
-        return Optional.ofNullable(model)
+        var entity = Optional.ofNullable(model)
                 .map(obj -> modelMapper.map(obj, CommentEntity.class))
                 .orElse(null);
+        Optional.ofNullable(entity).ifPresent(obj -> obj.setChanged(Timestamp.from(Instant.now())));
+        return entity;
     }
 
     public Comment entity2Model(CommentEntity entity) {

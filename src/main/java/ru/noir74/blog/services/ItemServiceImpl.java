@@ -26,11 +26,11 @@ public class ItemServiceImpl implements ItemService {
         var selectedTagList = new ArrayList<>(new ArrayList<>(Arrays.asList(selectedTags.split(","))));
         return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(Integer.parseInt(page), Integer.parseInt(size)))
                 .stream()
-                .filter(obj -> {
+                .filter(item -> {
                     if (selectedTags.isEmpty()) return true;
                     else
                         for (String selectedTag : selectedTagList)
-                            return Arrays.asList(Optional.ofNullable(obj.getTagsCSV()).orElseGet(() -> "")
+                            return Arrays.asList(Optional.ofNullable(item.getTagsCSV()).orElseGet(() -> "")
                                     .split(",")).contains(selectedTag);
                     return false;
                 })
