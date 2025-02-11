@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.noir74.blog.models.comment.CommentDtoReq;
 import ru.noir74.blog.models.comment.CommentMapper;
 import ru.noir74.blog.models.item.ItemDtoReq;
 import ru.noir74.blog.models.item.ItemDtoRespBrief;
@@ -69,22 +70,48 @@ public class ItemController {
 
     @PostMapping
     public String create(@ModelAttribute ItemDtoReq dtoReq) {
-        log.info("POST (for create) /items, dtoReq={}", dtoReq.toString());
+        log.info("POST (for item create) /items, dtoReq={}", dtoReq.toString());
         itemService.create(itemMapper.dtoReq2Model(dtoReq));
         return "redirect:/items";
     }
 
     @PostMapping(value = "/{id}")
     public String update(@ModelAttribute ItemDtoReq dtoReq, @PathVariable("id") Integer id) {
-        log.info("POST (for update) /items/{}, dtoReq={}", id, dtoReq.toString());
+        log.info("POST (for item update) /items/{}, dtoReq={}", id, dtoReq.toString());
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
         return "redirect:/items";
     }
 
     @PostMapping(value = "/{id}", params = "_method=delete")
     public String delete(@PathVariable("id") Integer id) {
-        log.info("POST (for delete) /items/{}", id);
+        log.info("POST (for item delete) /items/{}", id);
         itemService.delete(id);
         return "redirect:/items";
     }
+
+    @PostMapping(value = "/{itemId}/comment")
+    public String create(@ModelAttribute CommentDtoReq dtoReq,
+                         @PathVariable("itemId") Integer itemId) {
+        log.info("POST (for comment create) /items/{}/comment, dtoReq={}", itemId, dtoReq);
+        commentService.create(commentMapper.dtoReq2Model(dtoReq));
+        return "redirect:/item";
+    }
+
+    @PostMapping(value = "/{itemId}/comment/{id}")
+    public String update(@ModelAttribute CommentDtoReq dtoReq,
+                         @PathVariable("itemId") Integer itemId,
+                         @PathVariable("id") Integer id) {
+        log.info("POST (for comment update) /items/{}/comment/{}, dtoReq={}", itemId, id, dtoReq);
+        commentService.update(commentMapper.dtoReq2Model(dtoReq));
+        return "redirect:/item";
+    }
+
+    @PostMapping(value = "/{itemId}/comment/{id}", params = "_method=delete")
+    public String delete(@PathVariable("itemId") Integer itemId,
+                         @PathVariable("id") Integer id) {
+        log.info("POST (for comment delete) /items/{}/comment/{}", itemId, id);
+        commentService.delete(id);
+        return "redirect:/item";
+    }
+
 }

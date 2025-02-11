@@ -66,24 +66,40 @@
     <tbody>
     <tr th:each="comment : ${comments}">
         <td>
-            <label>
-                <textarea rows="3" th:text="${comment.message}"></textarea>
-            </label>
+            <form>
+                <label>
+                    <textarea rows="3" name="message" th:text="${comment.message}"></textarea>
+                </label>
+                <br>
+                <input type="hidden" name="id" th:value="${comment.id}">
+                <input type="hidden" name="itemId" th:value="${comment.itemId}">
+                <button type="button" onclick="actionOnComment(this.form)">Сохранить</button>
+            </form>
         </td>
         <td>
-            <form th:action="'/items/' + ${comment.itemId} + '/comments/' + ${comment.id}" method="post">
-                <input type="hidden" name="_method" value="edit">
-                <button type="submit">Сохранить</button>
-            </form>
-            <p></p>
-            <form th:action="'/items/' + ${comment.itemId} + '/comments/' + ${comment.id}" method="post">
+            <form>
                 <input type="hidden" name="_method" value="delete">
-                <button type="submit">Удалить</button>
+                <input type="hidden" name="id" th:value="${comment.id}">
+                <input type="hidden" name="itemId" th:value="${comment.itemId}">
+                <button type="button" onclick="actionOnComment(this.form)">Удалить</button>
             </form>
         </td>
     </tr>
     </tbody>
 </table>
+
+<p></p>
+<h4>Новый комментарий</h4>
+<form id="newComment">
+    <label>
+        <input type="text" name="itemId" th:value="${id}" hidden>
+    </label>
+    <label>
+        <textarea rows="5" name="message"></textarea>
+    </label>
+    <br>
+    <button type="button" onclick="addComment()">Добавить</button>
+</form>
 
 <script defer type="text/javascript" th:inline="javascript">
     var allTagsList = [[${allTags}]];
@@ -105,10 +121,12 @@
     }
 
     function updateItem() {
-        const itemForm = document.getElementById('itemForm');
-        const formData = new URLSearchParams(new FormData(itemForm));
+        const itemId = document.getElementById('itemForm').elements["id"].value;
 
-        fetch('/items/' + document.getElementById('id').value, {
+        const form = document.getElementById('itemForm');
+        const formData = new URLSearchParams(new FormData(form));
+
+        fetch('/items/' + itemId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -116,6 +134,45 @@
             body: formData
         });
         window.location.href = "/items";
+    }
+
+    function addComment() {
+        const itemId = document.getElementById('itemForm').elements["id"].value;
+
+        const form = document.getElementById('newComment');
+        const formData = new URLSearchParams(new FormData(form));
+
+        fetch('/items/' + itemId + '/comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: formData
+        });
+        window.location.href = '/items/' + itemId;
+    }
+
+    function actionOnComment(commentForm) {
+        const commentId = commentForm.elements["id"].value;
+        const itemId = commentForm.elements["itemId"].value;
+        const formData = new URLSearchParams(new FormData(commentForm));
+
+        if ("message" in commentForm.elements) {
+            const message = commentForm.elements["message"].value;
+                if (/^\s*$/.test(message)) {
+                    window.location.href = '/items/' + itemId;
+                    return;
+                }
+        }
+
+        fetch('/items/' + itemId + '/comment/' + commentId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: formData
+        });
+        window.location.href = '/items/' + itemId;
     }
 
 </script>
