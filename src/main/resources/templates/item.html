@@ -44,7 +44,7 @@
         <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
 
         <p></p>
-        <button type="button" onclick="updateItem()">Сохранить</button>
+        <button type="button" onclick="updateItem(this.form)">Сохранить</button>
     </form>
 
     <form th:action="${id}" method="post">
@@ -98,7 +98,7 @@
         <textarea rows="5" name="message"></textarea>
     </label>
     <br>
-    <button type="button" onclick="addComment()">Добавить</button>
+    <button type="button" onclick="addComment(this.form)">Добавить</button>
 </form>
 
 <script defer type="text/javascript" th:inline="javascript">
@@ -120,10 +120,8 @@
       document.getElementById('likes').value = likes;
     }
 
-    function updateItem() {
+    function updateItem(form) {
         const itemId = document.getElementById('itemForm').elements["id"].value;
-
-        const form = document.getElementById('itemForm');
         const formData = new URLSearchParams(new FormData(form));
 
         fetch('/items/' + itemId, {
@@ -133,14 +131,17 @@
             },
             body: formData
         });
-        window.location.href = "/items";
+<!--        window.location.href = "/items";-->
     }
 
-    function addComment() {
+    function addComment(form) {
         const itemId = document.getElementById('itemForm').elements["id"].value;
-
-        const form = document.getElementById('newComment');
         const formData = new URLSearchParams(new FormData(form));
+
+        const message = form.elements["message"].value;
+        if (/^\s*$/.test(message)) {
+            return;
+        }
 
         fetch('/items/' + itemId + '/comment', {
             method: 'POST',
@@ -152,17 +153,17 @@
         window.location.href = '/items/' + itemId;
     }
 
-    function actionOnComment(commentForm) {
-        const commentId = commentForm.elements["id"].value;
-        const itemId = commentForm.elements["itemId"].value;
-        const formData = new URLSearchParams(new FormData(commentForm));
+    function actionOnComment(form) {
+        const commentId = form.elements["id"].value;
+        const itemId = form.elements["itemId"].value;
+        const formData = new URLSearchParams(new FormData(form));
 
-        if ("message" in commentForm.elements) {
-            const message = commentForm.elements["message"].value;
-                if (/^\s*$/.test(message)) {
-                    window.location.href = '/items/' + itemId;
-                    return;
-                }
+        if ("message" in form.elements) {
+            const message = form.elements["message"].value;
+            if (/^\s*$/.test(message)) {
+<!--                window.location.href = '/items/' + itemId;-->
+                return;
+            }
         }
 
         fetch('/items/' + itemId + '/comment/' + commentId, {
