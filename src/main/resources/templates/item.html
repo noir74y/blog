@@ -29,6 +29,10 @@
         <textarea rows="5" name="message" id="message" th:text="${message}"></textarea>
 
         <p></p>
+        <input id="fileInput" type="file" name="file" accept="image/*">
+        <img id="filePreview" alt="" src="/items/images/1.jpg" width="100" height="100">
+
+        <p></p>
         <label for="likes">Лайки</label>
         <input type="text" id="likes" name="likes" th:value="${likes}">
         <button id="addLikeButton" onclick="addLike()" type="button">Добавить</button>
@@ -105,6 +109,19 @@
     var allTagsList = [[${allTags}]];
     var itemSelectedTagList = [[${itemSelectedTags}]];
 
+    const fileInput = document.getElementById('fileInput');
+    const filePreview = document.getElementById('filePreview');
+
+    fileInput.addEventListener('change', function(event) {
+        if (event.target.files && event.target.files[0]) {
+            const file = new FileReader();
+            file.onload = function(e) {
+                filePreview.src = e.target.result;
+            };
+            file.readAsDataURL(event.target.files[0]);
+        }
+    });
+
     function selectItemTags() {
         const options = document.getElementById("itemSelectedTagsCsv").options;
         allTagsList.forEach((value, index) => {
@@ -131,6 +148,20 @@
             },
             body: formData
         });
+
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length != 0) {
+            const file = fileInput.files[0];
+            const imageForm = new FormData();
+            imageForm.append('file', file);
+
+            fetch('/items/' + itemId + '/uploadImage', {
+                method: 'POST',
+                body: imageForm
+            });
+        }
+
+
 <!--        window.location.href = "/items";-->
     }
 

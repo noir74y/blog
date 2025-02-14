@@ -1,10 +1,12 @@
 package ru.noir74.blog.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.noir74.blog.models.comment.CommentDtoReq;
 import ru.noir74.blog.models.comment.CommentMapper;
 import ru.noir74.blog.models.item.ItemDtoReq;
@@ -17,6 +19,10 @@ import ru.noir74.blog.services.CommentService;
 import ru.noir74.blog.services.ItemService;
 import ru.noir74.blog.services.TagService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,6 +74,34 @@ public class ItemController {
         return "/item";
     }
 
+    @GetMapping("/{id}/downloadImage")
+    public void getImage(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
+        log.info("GET /items/{}/image", id);
+        itemService.findImageById(id, response);
+    }
+
+    @PostMapping("/{id}/uploadImage")
+    public String setImage(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
+        return "/item";
+    }
+
+    @GetMapping("/images/{imageName}")
+    public void getImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException {
+        // Путь к папке с изображениями
+        String imagePath = "D:\\YandexDisk\\mine\\IdeaProjects\\jm-sprint3\\src\\main\\resources\\images\\" + imageName;
+        File imageFile = new File(imagePath);
+        response.setContentType("image/jpeg");
+
+        try (FileInputStream fis = new FileInputStream(imageFile);
+             OutputStream outputStream = response.getOutputStream()) {
+            byte[] buff = new byte[4096];
+            int bytes;
+            while ((bytes = fis.read(buff)) != -1) {
+                outputStream.write(buff, 0, bytes);
+            }
+        }
+    }
+
     @PostMapping
     public String create(@ModelAttribute ItemDtoReq dtoReq) {
         log.info("POST (for item create) /items, dtoReq={}", dtoReq.toString());
@@ -113,5 +147,4 @@ public class ItemController {
         commentService.delete(id);
         return "redirect:/item";
     }
-
 }

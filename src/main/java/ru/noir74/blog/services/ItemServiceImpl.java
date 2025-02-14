@@ -1,14 +1,20 @@
 package ru.noir74.blog.services;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ru.noir74.blog.models.item.Item;
 import ru.noir74.blog.models.item.ItemBrief;
 import ru.noir74.blog.models.item.ItemMapper;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.ItemRepository;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -46,6 +52,19 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public void findImageById(Integer id, HttpServletResponse response) throws IOException {
+        response.setContentType("image/jpeg");
+
+        try (OutputStream outputStream = response.getOutputStream()) {
+            byte[] buff = new byte[4096];
+            int bytes;
+//            while ((bytes = fis.read(buff)) != -1) {
+//                outputStream.write(buff, 0, bytes);
+//            }
+        }
+    }
+
+    @Override
     @Transactional
     public void create(Item item) {
         item.setLikes(0);
@@ -59,6 +78,11 @@ public class ItemServiceImpl implements ItemService {
         throwIfNotFound(item.getId());
         itemRepository.save(itemMapper.model2entity(item));
         saveTags(item);
+    }
+
+    @Override
+    public void updateImageById(Integer id, MultipartFile file) {
+
     }
 
     @Override

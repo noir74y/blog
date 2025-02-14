@@ -1,5 +1,6 @@
 package ru.noir74.blog;
 
+import jakarta.servlet.MultipartConfigElement;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Wrapper;
@@ -27,6 +28,13 @@ public class Main {
                 Tomcat.addServlet(tomcatContext, "dispatcher", dispatcherServlet);
         dispatcherWrapper.addMapping("/");
         dispatcherWrapper.setLoadOnStartup(1);
+
+        dispatcherWrapper.setMultipartConfigElement(new MultipartConfigElement(
+                "D:\\YandexDisk\\mine\\IdeaProjects\\jm-sprint3\\src\\main\\resources\\images",
+                10000000,
+                20000000,
+                5000000
+        ));
 
         tomcat.start();
     }
