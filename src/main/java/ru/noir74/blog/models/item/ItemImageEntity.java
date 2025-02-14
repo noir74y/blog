@@ -6,16 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemEntity {
+public class ItemImageEntity {
     private Integer id;
-    private String title;
-    private String message;
-    private Integer likes;
-    private Timestamp changed;
+    private byte[] image;
+    private String imageName;
 }

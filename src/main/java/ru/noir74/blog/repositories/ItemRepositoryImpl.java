@@ -2,17 +2,18 @@ package ru.noir74.blog.repositories;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.item.ItemEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
+import ru.noir74.blog.models.item.ItemImageEntity;
 
 import java.sql.PreparedStatement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -69,9 +70,22 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
+    public ItemImageEntity findImageById(Integer id) {
+        var sql = "SELECT id, image, image_name FROM blog.items WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new ItemImageEntityMapper(), id);
+    }
+
+    @Override
     @Transactional
     public Integer save(ItemEntity itemEntity) {
         return Objects.isNull(itemEntity.getId()) ? insert(itemEntity) : update(itemEntity);
+    }
+
+    @Override
+    @Transactional
+    public void saveImageById(ItemImageEntity itemImageEntity) {
+        String sql = "UPDATE blog.items SET image = ?, image_name = ? WHERE id = ?";
+        jdbcTemplate.update(sql, itemImageEntity.getImage(), itemImageEntity.getImageName(), itemImageEntity.getId());
     }
 
     @Override
@@ -117,5 +131,16 @@ public class ItemRepositoryImpl implements ItemRepository {
             return stmt;
         });
         return itemEntity.getId();
+    }
+}
+
+class ItemImageEntityMapper implements RowMapper<ItemImageEntity> {
+
+    @Override
+    public ItemImageEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return ItemImageEntity.builder()
+                .id(rs.getInt("id"))
+                .image(rs.getBytes("image"))
+                .imageName(rs.getString("image_name")).build();
     }
 }

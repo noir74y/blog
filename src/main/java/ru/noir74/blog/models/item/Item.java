@@ -19,7 +19,6 @@ public class Item {
     private String title;
     private String message;
     private Integer likes;
-    private byte[] picture;
     private List<Comment> comments;
     private List<Tag> tags;
 }

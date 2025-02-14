@@ -11,6 +11,7 @@ import ru.noir74.blog.models.comment.CommentDtoReq;
 import ru.noir74.blog.models.comment.CommentMapper;
 import ru.noir74.blog.models.item.ItemDtoReq;
 import ru.noir74.blog.models.item.ItemDtoRespBrief;
+import ru.noir74.blog.models.item.ItemImage;
 import ru.noir74.blog.models.item.ItemMapper;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagDtoResp;
@@ -77,12 +78,7 @@ public class ItemController {
     @GetMapping("/{id}/downloadImage")
     public void getImage(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
         log.info("GET /items/{}/image", id);
-        itemService.findImageById(id, response);
-    }
-
-    @PostMapping("/{id}/uploadImage")
-    public String setImage(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) {
-        return "/item";
+        itemService.findImageById(ItemImage.builder().id(id).response(response).build());
     }
 
     @GetMapping("/images/{imageName}")
@@ -114,6 +110,13 @@ public class ItemController {
         log.info("POST (for item update) /items/{}, dtoReq={}", id, dtoReq.toString());
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
         return "redirect:/items";
+    }
+
+    @PostMapping("/{id}/uploadImage")
+    public String setImage(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) throws IOException {
+        log.info("POST /items/{}/uploadImage", id);
+        itemService.setImageById(id, file);
+        return "/item";
     }
 
     @PostMapping(value = "/{id}", params = "_method=delete")
