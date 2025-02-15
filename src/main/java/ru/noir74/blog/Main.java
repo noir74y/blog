@@ -8,9 +8,7 @@ import java.io.File;
 public class Main {
     public static void main(String[] args) throws LifecycleException {
         Tomcat tomcat = new Tomcat();
-        tomcat.setSilent(true);
         tomcat.getConnector().setPort(9090);
-        tomcat.getConnector().setURIEncoding("UTF-8");
         tomcat.addWebapp("", new File("src/main/webapp/").getAbsolutePath());
         tomcat.start();
         tomcat.getServer().await();
