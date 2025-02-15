@@ -20,10 +20,7 @@ import ru.noir74.blog.services.CommentService;
 import ru.noir74.blog.services.ItemService;
 import ru.noir74.blog.services.TagService;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,7 +72,7 @@ public class ItemController {
         return "/item";
     }
 
-    @GetMapping("/{id}/downloadImage")
+    @GetMapping("/{id}/image")
     public void getImage(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
         log.info("GET /items/{}/image", id);
         itemService.findImageById(ItemImage.builder().id(id).response(response).build());
@@ -83,19 +80,22 @@ public class ItemController {
 
     @GetMapping("/images/{imageName}")
     public void getImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException {
-        // Путь к папке с изображениями
-        String imagePath = "D:\\YandexDisk\\mine\\IdeaProjects\\jm-sprint3\\src\\main\\resources\\images\\" + imageName;
-        File imageFile = new File(imagePath);
-        response.setContentType("image/jpeg");
 
-        try (FileInputStream fis = new FileInputStream(imageFile);
-             OutputStream outputStream = response.getOutputStream()) {
-            byte[] buff = new byte[4096];
-            int bytes;
-            while ((bytes = fis.read(buff)) != -1) {
-                outputStream.write(buff, 0, bytes);
-            }
-        }
+        itemService.findImageById(ItemImage.builder().id(1).response(response).build());
+
+
+//        String imagePath = "D:\\YandexDisk\\mine\\IdeaProjects\\jm-sprint3\\src\\main\\resources\\images\\" + imageName;
+//        File imageFile = new File(imagePath);
+//        response.setContentType("image/jpeg");
+//
+//        try (FileInputStream fis = new FileInputStream(imageFile);
+//             OutputStream outputStream = response.getOutputStream()) {
+//            byte[] buff = new byte[4096];
+//            int bytes;
+//            while ((bytes = fis.read(buff)) != -1) {
+//                outputStream.write(buff, 0, bytes);
+//            }
+//        }
     }
 
     @PostMapping
@@ -109,14 +109,14 @@ public class ItemController {
     public String update(@ModelAttribute ItemDtoReq dtoReq, @PathVariable("id") Integer id) {
         log.info("POST (for item update) /items/{}, dtoReq={}", id, dtoReq.toString());
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
-        return "redirect:/items";
+        return "/items";
     }
 
-    @PostMapping("/{id}/uploadImage")
+    @PostMapping("/{id}/image")
     public String setImage(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) throws IOException {
-        log.info("POST /items/{}/uploadImage", id);
-        itemService.setImageById(id, file);
-        return "/item";
+        log.info("POST /items/{}/image", id);
+        itemService.setImageById(ItemImage.builder().id(id).file(file).build());
+        return "/items";
     }
 
     @PostMapping(value = "/{id}", params = "_method=delete")
@@ -131,7 +131,7 @@ public class ItemController {
                          @PathVariable("itemId") Integer itemId) {
         log.info("POST (for comment create) /items/{}/comment, dtoReq={}", itemId, dtoReq);
         commentService.create(commentMapper.dtoReq2Model(dtoReq));
-        return "redirect:/item";
+        return "/items";
     }
 
     @PostMapping(value = "/{itemId}/comment/{id}")
@@ -140,7 +140,7 @@ public class ItemController {
                          @PathVariable("id") Integer id) {
         log.info("POST (for comment update) /items/{}/comment/{}, dtoReq={}", itemId, id, dtoReq);
         commentService.update(commentMapper.dtoReq2Model(dtoReq));
-        return "redirect:/item";
+        return "redirect:/items";
     }
 
     @PostMapping(value = "/{itemId}/comment/{id}", params = "_method=delete")
@@ -148,6 +148,6 @@ public class ItemController {
                          @PathVariable("id") Integer id) {
         log.info("POST (for comment delete) /items/{}/comment/{}", itemId, id);
         commentService.delete(id);
-        return "redirect:/item";
+        return "redirect:/items";
     }
 }

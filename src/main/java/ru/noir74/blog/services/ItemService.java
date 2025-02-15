@@ -22,7 +22,7 @@ public interface ItemService {
 
     void update(Item item);
 
-    void setImageById(Integer id, MultipartFile file) throws IOException;
+    void setImageById(ItemImage itemImage) throws IOException;
 
     void delete(Integer id);
 }

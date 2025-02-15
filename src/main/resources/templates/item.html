@@ -30,7 +30,7 @@
 
         <p></p>
         <input id="fileInput" type="file" name="file" accept="image/*">
-        <img id="filePreview" alt="" src="/items/images/1.jpg" width="100" height="100">
+        <img id="filePreview" alt="" th:src="|/items/${id}/image|" width="100" height="100">
 
         <p></p>
         <label for="likes">Лайки</label>
@@ -155,7 +155,7 @@
             const imageForm = new FormData();
             imageForm.append('file', file);
 
-            fetch('/items/' + itemId + '/uploadImage', {
+            fetch('/items/' + itemId + '/image', {
                 method: 'POST',
                 body: imageForm
             });

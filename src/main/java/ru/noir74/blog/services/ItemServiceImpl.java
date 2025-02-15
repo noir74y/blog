@@ -48,8 +48,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void findImageById(ItemImage itemImage) throws IOException {
         var itemImageEntity = itemRepository.findImageById(itemImage.getId());
-        itemImage.getResponse().setContentType("image/" + itemImageEntity.getImageName().split("\\.")[1]);
-        itemImage.getResponse().getOutputStream().write(itemImageEntity.getImage());
+        if (itemImageEntity.isImagePresent()) {
+            itemImage.getResponse().setContentType("image/" + itemImageEntity.getImageType());
+            itemImage.getResponse().getOutputStream().write(itemImageEntity.getImage());
+        }
     }
 
     @Override
@@ -70,12 +72,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void setImageById(Integer id, MultipartFile file) throws IOException {
+    public void setImageById(ItemImage itemImage) throws IOException {
         itemRepository.saveImageById(
                 ItemImageEntity.builder()
-                        .id(id)
-                        .image(file.getBytes())
-                        .imageName(file.getName()).build());
+                        .id(itemImage.getId())
+                        .image(itemImage.getFile().getBytes())
+                        .imageName(itemImage.getFile().getOriginalFilename()).build());
     }
 
     @Override

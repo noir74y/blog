@@ -65,7 +65,7 @@
                             </textarea>
             </label>
         </td>
-        <td><img src="/items/images/1.jpg" alt="" width="100" height="100"></td>
+        <td><img th:src="|/items/${post.id}/image|" alt="" width="100" height="100"></td>
         <td th:text="${post.likes}"></td>
         <td th:text="${post.commentsCounter}"></td>
         <td th:text="${post.tagsCSV}"></td>
@@ -129,7 +129,9 @@
             },
             body: formData
         });
+<!--        window.location.href = "/items";-->
         newItemForm.style.display = 'none'
+        location.reload(true);
     }
 
     function toggleNewItemForm() {

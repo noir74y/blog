@@ -5,7 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -15,4 +16,16 @@ public class ItemImageEntity {
     private Integer id;
     private byte[] image;
     private String imageName;
+
+    public boolean isImagePresent() {
+        return Objects.nonNull(image) &&
+                Objects.nonNull(imageName) &&
+                imageName.matches("^.+\\.\\w+$");
+    }
+
+    public String getImageType() {
+        return Arrays.stream(imageName.split("\\."))
+                .reduce((first, second) -> second)
+                .orElse("");
+    }
 }
