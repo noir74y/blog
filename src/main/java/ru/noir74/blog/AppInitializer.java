@@ -1,18 +1,22 @@
 package ru.noir74.blog;
 
-import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.FilterRegistration;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.Wrapper;
 import org.apache.catalina.startup.Tomcat;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import ru.noir74.blog.configurations.WebApplicationConfig;
 
+import javax.servlet.Filter;
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 public class AppInitializer implements WebApplicationInitializer {
     @Override
@@ -35,6 +39,11 @@ public class AppInitializer implements WebApplicationInitializer {
 
         registration.setLoadOnStartup(1);
         registration.addMapping("/");
+
+        FilterRegistration.Dynamic encodingFilter = servletContext.addFilter("encodingFilter", new CharacterEncodingFilter());
+        encodingFilter.setInitParameter("encoding", "UTF-8");
+        encodingFilter.setInitParameter("forceEncoding", "true");
+        encodingFilter.addMappingForUrlPatterns(null, true, "/*");
     }
 
     public static void main(String[] args) throws LifecycleException, ServletException {
