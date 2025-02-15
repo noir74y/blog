@@ -78,26 +78,6 @@ public class ItemController {
         itemService.findImageById(ItemImage.builder().id(id).response(response).build());
     }
 
-    @GetMapping("/images/{imageName}")
-    public void getImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException {
-
-        itemService.findImageById(ItemImage.builder().id(1).response(response).build());
-
-
-//        String imagePath = "D:\\YandexDisk\\mine\\IdeaProjects\\jm-sprint3\\src\\main\\resources\\images\\" + imageName;
-//        File imageFile = new File(imagePath);
-//        response.setContentType("image/jpeg");
-//
-//        try (FileInputStream fis = new FileInputStream(imageFile);
-//             OutputStream outputStream = response.getOutputStream()) {
-//            byte[] buff = new byte[4096];
-//            int bytes;
-//            while ((bytes = fis.read(buff)) != -1) {
-//                outputStream.write(buff, 0, bytes);
-//            }
-//        }
-    }
-
     @PostMapping
     public String create(@ModelAttribute ItemDtoReq dtoReq) {
         log.info("POST (for item create) /items, dtoReq={}", dtoReq.toString());
