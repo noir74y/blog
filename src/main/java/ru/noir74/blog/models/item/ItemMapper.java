@@ -6,6 +6,7 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 import ru.noir74.blog.models.comment.CommentMapper;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagMapper;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class ItemMapper {
     private final ModelMapper modelMapper;
     private final CommentMapper commentMapper;
+    private final ItemImageMapper itemImageMapper;
     private final TagMapper tagMapper;
     private final TagService tagService;
 
@@ -37,15 +39,14 @@ public class ItemMapper {
                                 .filter(tag -> tag.getName().equals(newItemTagName))
                                 .findAny().orElse(Tag.builder().name(newItemTagName).build()))
                         .toList();
+
         TypeMap<ItemDtoReq, Item> dtoReq2ModelPropertyMapper = modelMapper.createTypeMap(ItemDtoReq.class, Item.class);
         dtoReq2ModelPropertyMapper.addMappings(modelMapper ->
                 modelMapper.using(tagStringCsv2ModelConverter).map(ItemDtoReq::itemTagNameList, Item::setTags));
     }
 
     public Item dtoReq2Model(ItemDtoReq dtoReq) {
-        var item = Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
-        item.setItemImage(ItemImage.builder().file(dtoReq.getFile()).build());
-        return item;
+        return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
     }
 
     public ItemDtoResp model2dtoResp(Item model) {

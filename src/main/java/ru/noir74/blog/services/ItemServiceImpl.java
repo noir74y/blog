@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
+    private final ItemImageMapper itemImageMapper;
     private final TagService tagService;
     private final CommentService commentService;
 
@@ -72,11 +73,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void setImageById(ItemImage itemImage) throws IOException {
-        itemRepository.saveImageById(
-                ItemImageEntity.builder()
-                        .id(itemImage.getId())
-                        .image(itemImage.getFile().getBytes())
-                        .imageName(itemImage.getFile().getOriginalFilename()).build());
+        itemRepository.saveImageById(itemImageMapper.model2entity(itemImage));
     }
 
     @Override

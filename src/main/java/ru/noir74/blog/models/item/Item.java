@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.tag.Tag;
 
@@ -20,5 +21,5 @@ public class Item {
     private Integer likes;
     private List<Comment> comments;
     private List<Tag> tags;
-    private ItemImage itemImage;
+    private MultipartFile file;
 }
