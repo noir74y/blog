@@ -21,4 +21,5 @@ public class Item {
     private Integer likes;
     private List<Comment> comments;
     private List<Tag> tags;
+    private ItemImage itemImage;
 }

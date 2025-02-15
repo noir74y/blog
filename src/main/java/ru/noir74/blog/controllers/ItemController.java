@@ -78,7 +78,7 @@ public class ItemController {
         itemService.findImageById(ItemImage.builder().id(id).response(response).build());
     }
 
-    @PostMapping
+    @PostMapping(produces = "text/plain;charset=UTF-8")
     public String create(@ModelAttribute ItemDtoReq dtoReq) {
         log.info("POST (for item create) /items, dtoReq={}", dtoReq.toString());
         itemService.create(itemMapper.dtoReq2Model(dtoReq));

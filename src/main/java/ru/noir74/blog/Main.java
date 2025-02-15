@@ -14,6 +14,7 @@ public class Main {
         Tomcat tomcat = new Tomcat();
         tomcat.setSilent(true);
         tomcat.getConnector().setPort(9090);
+        tomcat.getConnector().setURIEncoding("UTF-8");
 
         Context tomcatContext = tomcat.addContext("", null);
 
@@ -37,5 +38,6 @@ public class Main {
         ));
 
         tomcat.start();
+        tomcat.getServer().await();
     }
 }

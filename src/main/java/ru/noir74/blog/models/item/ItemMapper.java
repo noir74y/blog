@@ -43,7 +43,9 @@ public class ItemMapper {
     }
 
     public Item dtoReq2Model(ItemDtoReq dtoReq) {
-        return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
+        var item = Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
+        item.setItemImage(ItemImage.builder().file(dtoReq.getFile()).build());
+        return item;
     }
 
     public ItemDtoResp model2dtoResp(Item model) {

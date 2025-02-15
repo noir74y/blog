@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,7 @@ public class ItemDtoReq {
     private Integer likes;
     private String itemSelectedTagsCsv;
     private String itemNewTagsCsv;
+    private MultipartFile file;
 
     public List<String> itemTagNameList() {
         Stream<String> itemSelectedStream = Arrays.stream(Optional.ofNullable(itemSelectedTagsCsv).orElse("").split(","));

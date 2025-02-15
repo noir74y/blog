@@ -2,7 +2,7 @@
 
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Посты</title>
     <style>
         table {
@@ -77,9 +77,10 @@
     <button id="toggleNewItemFormButton" onclick="toggleNewItemForm()">Добавить</button>
 </p>
 
-<div class="new-item-form" style="display: none;" id="newItemForm">
+<div class="new-item-form" style="display: none;" id="newItemFormClass">
     <h2>Новый пост</h2>
-    <form id="postNewItemForm">
+    <form id="newItemForm" enctype="multipart/form-data" action="/items" method="post" accept-charset="UTF-8">
+<!--    <form id="newItemForm">-->
         <label for="title">Название</label>
         <input type="text" id="title" name="title" required>
 
@@ -102,7 +103,8 @@
         <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
 
         <p></p>
-        <button type="submit" onclick="postNewItem()">Сохранить</button>
+        <button type="submit">Сохранить</button>
+<!--        <button type="submit" onclick="postNewItem()">Сохранить</button>-->
     </form>
 </div>
 
@@ -133,13 +135,28 @@
         }
     });
 
-<!--    const newItemForm = document.getElementById('newItemForm');-->
+    const newItemForm = document.getElementById('newItemForm');
+    const newItemFormClass = document.getElementById('newItemFormClass');
+
+<!--    newItemForm.addEventListener('submit', function(event) {-->
+<!--        event.preventDefault(); // Отменяем стандартную отправку формы-->
+<!--        const formData = new FormData(newItemForm); // Создаем объект FormData-->
+
+<!--        fetch('/items', {-->
+<!--            method: 'POST',-->
+<!--            headers: {-->
+<!--                'Content-Type': 'multipart/form-data; charset=UTF-8'-->
+<!--            },-->
+<!--            body: formData-->
+<!--        });-->
+
+<!--        newItemFormClass.style.display = 'none';-->
+<!--    });-->
 
     function postNewItem() {
+        const newItemFormClass = document.getElementById('newItemFormClass');
         const newItemForm = document.getElementById('newItemForm');
-
-        const postNewItemForm = document.getElementById('postNewItemForm');
-        const formData = new URLSearchParams(new FormData(postNewItemForm));
+        const formData = new URLSearchParams(new FormData(newItemForm));
 
         fetch('/items', {
             method: 'POST',
@@ -155,7 +172,6 @@
     }
 
     function toggleNewItemForm() {
-        const newItemFormClass = document.getElementById('newItemFormClass');
         if (newItemFormClass.style.display === 'none') {
            newItemFormClass.style.display = 'block';
            document.getElementById('toggleNewItemFormButton').innerText = 'Скрыть';
