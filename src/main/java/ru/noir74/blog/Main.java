@@ -1,13 +1,9 @@
 package ru.noir74.blog;
 
-import jakarta.servlet.MultipartConfigElement;
-import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
-import org.apache.catalina.Wrapper;
 import org.apache.catalina.startup.Tomcat;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
-import ru.noir74.blog.configurations.WebApplicationConfig;
+
+import java.io.File;
 
 public class Main {
     public static void main(String[] args) throws LifecycleException {
@@ -15,28 +11,7 @@ public class Main {
         tomcat.setSilent(true);
         tomcat.getConnector().setPort(9090);
         tomcat.getConnector().setURIEncoding("UTF-8");
-
-        Context tomcatContext = tomcat.addContext("", null);
-
-        AnnotationConfigWebApplicationContext applicationContext =
-                new AnnotationConfigWebApplicationContext();
-        applicationContext.register(WebApplicationConfig.class);
-        applicationContext.setServletContext(tomcatContext.getServletContext());
-        applicationContext.refresh();
-
-        DispatcherServlet dispatcherServlet = new DispatcherServlet(applicationContext);
-        Wrapper dispatcherWrapper =
-                Tomcat.addServlet(tomcatContext, "dispatcher", dispatcherServlet);
-        dispatcherWrapper.addMapping("/");
-        dispatcherWrapper.setLoadOnStartup(1);
-
-        dispatcherWrapper.setMultipartConfigElement(new MultipartConfigElement(
-                "D:\\YandexDisk\\mine\\IdeaProjects\\jm-sprint3\\src\\main\\resources\\images",
-                10000000,
-                20000000,
-                5000000
-        ));
-
+        tomcat.addWebapp("", new File("src/main/webapp/").getAbsolutePath());
         tomcat.start();
         tomcat.getServer().await();
     }

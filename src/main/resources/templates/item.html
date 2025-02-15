@@ -17,45 +17,45 @@
 <body onload="selectItemTags()">
 <h1>Пост</h1>
 
-    <form id="itemForm">
-        <label for="id"></label>
-        <input type="text" id="id" name="id" th:value="${id}" hidden>
+<form id="itemForm">
+    <label for="id"></label>
+    <input type="text" id="id" name="id" th:value="${id}" hidden>
 
-        <label for="title">Название</label>
-        <input type="text" id="title" name="title" th:value="${title}" required>
+    <label for="title">Название</label>
+    <input type="text" id="title" name="title" th:value="${title}" required>
 
-        <p></p>
-        <label for="message">Текст</label>
-        <textarea rows="5" name="message" id="message" th:text="${message}"></textarea>
+    <p></p>
+    <label for="message">Текст</label>
+    <textarea rows="5" name="message" id="message" th:text="${message}"></textarea>
 
-        <p></p>
-        <input id="fileInput" type="file" name="file" accept="image/*">
-        <img id="filePreview" alt="" th:src="|/items/${id}/image|" width="100" height="100">
+    <p></p>
+    <input id="fileInput" type="file" name="file" accept="image/*">
+    <img id="filePreview" alt="" th:src="|/items/${id}/image|" width="100" height="100">
 
-        <p></p>
-        <label for="likes">Лайки</label>
-        <input type="text" id="likes" name="likes" th:value="${likes}">
-        <button id="addLikeButton" onclick="addLike()" type="button">Добавить</button>
+    <p></p>
+    <label for="likes">Лайки</label>
+    <input type="text" id="likes" name="likes" th:value="${likes}">
+    <button id="addLikeButton" onclick="addLike()" type="button">Добавить</button>
 
-        <p></p>
-        <label for="itemSelectedTagsCsv">Выберите сущ. теги:</label>
-        <select id="itemSelectedTagsCsv" name="itemSelectedTagsCsv" multiple size="6">
-            <option th:each="option : ${allTags}" th:text="${option}"></option>
-        </select>
+    <p></p>
+    <label for="itemSelectedTagsCsv">Выберите сущ. теги:</label>
+    <select id="itemSelectedTagsCsv" name="itemSelectedTagsCsv" multiple size="6">
+        <option th:each="option : ${allTags}" th:text="${option}"></option>
+    </select>
 
-        <p></p>
-        <label for="itemNewTagsCsv">Добавьте новые теги через запятую:</label>
-        <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
+    <p></p>
+    <label for="itemNewTagsCsv">Добавьте новые теги через запятую:</label>
+    <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
 
-        <p></p>
-        <button type="button" onclick="updateItem(this.form)">Сохранить</button>
-    </form>
+    <p></p>
+    <button type="button" onclick="updateItem(this.form)">Сохранить</button>
+</form>
 
-    <form th:action="${id}" method="post">
-        <p></p>
-        <input type="hidden" name="_method" value="delete">
-        <button>Удалить</button>
-    </form>
+<form th:action="${id}" method="post">
+    <p></p>
+    <input type="hidden" name="_method" value="delete">
+    <button>Удалить</button>
+</form>
 
 <p></p>
 <h2>Комментарии</h2>

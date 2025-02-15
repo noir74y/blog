@@ -1,4 +1,4 @@
-package ru.noir74.blog.configurations;
+package ru.noir74.blog.configurations.root;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

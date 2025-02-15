@@ -3,7 +3,6 @@ package ru.noir74.blog.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import ru.noir74.blog.models.item.*;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.ItemRepository;

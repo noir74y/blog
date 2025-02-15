@@ -1,4 +1,4 @@
-package ru.noir74.blog.configurations;
+package ru.noir74.blog.configurations.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
