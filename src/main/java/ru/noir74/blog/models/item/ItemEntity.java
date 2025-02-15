@@ -18,4 +18,5 @@ public class ItemEntity {
     private String message;
     private Integer likes;
     private Timestamp changed;
-    private MultipartFile file;}
+    private MultipartFile file;
+}
