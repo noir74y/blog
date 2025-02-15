@@ -48,7 +48,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void findImageById(ItemImage itemImage) throws IOException {
         var itemImageEntity = itemRepository.findImageById(itemImage.getId());
-        if (itemImageEntity.isImagePresent()) {
+        if (itemImageEntity.isImageReadyToBeSaved()) {
             itemImage.getResponse().setContentType("image/" + itemImageEntity.getImageType());
             itemImage.getResponse().getOutputStream().write(itemImageEntity.getImage());
         }
@@ -56,17 +56,19 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void create(Item item) {
+    public void create(Item item) throws IOException {
         item.setLikes(0);
         item.setId(itemRepository.save(itemMapper.model2entity(item)));
+        saveImage(item);
         saveTags(item);
     }
 
     @Override
     @Transactional
-    public void update(Item item) {
+    public void update(Item item) throws IOException {
         throwIfNotFound(item.getId());
         itemRepository.save(itemMapper.model2entity(item));
+        saveImage(item);
         saveTags(item);
     }
 
@@ -81,6 +83,16 @@ public class ItemServiceImpl implements ItemService {
     public void delete(Integer id) {
         throwIfNotFound(id);
         itemRepository.deleteById(id);
+    }
+
+    @Transactional
+    private void saveImage(Item item) throws IOException {
+        var itemImageEntity = ItemImageEntity.builder()
+                .id(item.getId())
+                .image(item.getFile().getBytes())
+                .imageName(item.getFile().getOriginalFilename()).build();
+        if (itemImageEntity.isImageReadyToBeSaved())
+            itemRepository.saveImageById(itemImageEntity);
     }
 
     @Transactional

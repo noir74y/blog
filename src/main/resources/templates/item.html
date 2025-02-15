@@ -2,7 +2,7 @@
 
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Посты</title>
     <style>
         table {
@@ -17,7 +17,8 @@
 <body onload="selectItemTags()">
 <h1>Пост</h1>
 
-<form id="itemForm">
+<!--<form id="itemForm">-->
+<form id="itemForm" enctype="multipart/form-data" th:action="|/items/${id}|" method="post" accept-charset="UTF-8">
     <label for="id"></label>
     <input type="text" id="id" name="id" th:value="${id}" hidden>
 
@@ -48,7 +49,8 @@
     <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
 
     <p></p>
-    <button type="button" onclick="updateItem(this.form)">Сохранить</button>
+    <button type="submit">Сохранить</button>
+    <!--    <button type="button" onclick="updateItem(this.form)">Сохранить</button>-->
 </form>
 
 <form th:action="${id}" method="post">

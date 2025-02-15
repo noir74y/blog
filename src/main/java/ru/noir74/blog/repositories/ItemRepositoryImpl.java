@@ -11,7 +11,6 @@ import ru.noir74.blog.models.item.ItemEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
 import ru.noir74.blog.models.item.ItemImageEntity;
 
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -103,7 +102,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Transactional
     private Integer insert(ItemEntity itemEntity) {
-        String sql = "INSERT INTO blog.items (title, message, likes, image, image_name, changed) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO blog.items (title, message, likes, changed) VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -111,15 +110,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             stmt.setString(1, itemEntity.getTitle());
             stmt.setString(2, itemEntity.getMessage());
             stmt.setInt(3, itemEntity.getLikes());
-
-            try {
-                stmt.setBytes(4, Objects.nonNull(itemEntity.getFile()) ? itemEntity.getFile().getBytes() : null);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            stmt.setString(5, Objects.nonNull(itemEntity.getFile()) ? itemEntity.getFile().getOriginalFilename() : null);
-
-            stmt.setTimestamp(6, itemEntity.getChanged());
+            stmt.setTimestamp(4, itemEntity.getChanged());
             return stmt;
         }, keyHolder);
 
@@ -128,23 +119,15 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Transactional
     private Integer update(ItemEntity itemEntity) {
-        String sql = "UPDATE blog.items SET title = ?,  message = ?, likes = ?, image = ?, image_name = ?, changed = ? WHERE id = ?";
+        String sql = "UPDATE blog.items SET title = ?,  message = ?, likes = ?, changed = ? WHERE id = ?";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, itemEntity.getTitle());
             stmt.setString(2, itemEntity.getMessage());
             stmt.setInt(3, itemEntity.getLikes());
-
-            try {
-                stmt.setBytes(4, Objects.nonNull(itemEntity.getFile()) ? itemEntity.getFile().getBytes() : null);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            stmt.setString(5, Objects.nonNull(itemEntity.getFile()) ? itemEntity.getFile().getOriginalFilename() : null);
-
-            stmt.setTimestamp(6, itemEntity.getChanged());
-            stmt.setInt(7, itemEntity.getId());
+            stmt.setTimestamp(4, itemEntity.getChanged());
+            stmt.setInt(5, itemEntity.getId());
             return stmt;
         });
         return itemEntity.getId();

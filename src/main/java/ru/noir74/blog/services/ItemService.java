@@ -14,9 +14,9 @@ public interface ItemService {
 
     void findImageById(ItemImage itemImage) throws IOException;
 
-    void create(Item item);
+    void create(Item item) throws IOException;
 
-    void update(Item item);
+    void update(Item item) throws IOException;
 
     void setImageById(ItemImage itemImage) throws IOException;
 

@@ -17,8 +17,9 @@ public class ItemImageEntity {
     private byte[] image;
     private String imageName;
 
-    public boolean isImagePresent() {
+    public boolean isImageReadyToBeSaved() {
         return Objects.nonNull(image) &&
+                image.length != 0 &&
                 Objects.nonNull(imageName) &&
                 imageName.matches("^.+\\.\\w+$");
     }

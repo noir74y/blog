@@ -79,17 +79,17 @@ public class ItemController {
     }
 
     @PostMapping(produces = "text/plain;charset=UTF-8")
-    public String create(@ModelAttribute ItemDtoReq dtoReq) {
+    public String create(@ModelAttribute ItemDtoReq dtoReq) throws IOException {
         log.info("POST (for item create) /items, dtoReq={}", dtoReq.toString());
         itemService.create(itemMapper.dtoReq2Model(dtoReq));
         return "redirect:/items";
     }
 
     @PostMapping(value = "/{id}")
-    public String update(@ModelAttribute ItemDtoReq dtoReq, @PathVariable("id") Integer id) {
+    public String update(@ModelAttribute ItemDtoReq dtoReq, @PathVariable("id") Integer id) throws IOException {
         log.info("POST (for item update) /items/{}, dtoReq={}", id, dtoReq.toString());
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
-        return "/items";
+        return "redirect:/items";
     }
 
     @PostMapping("/{id}/image")
