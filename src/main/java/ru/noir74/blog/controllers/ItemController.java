@@ -111,7 +111,7 @@ public class ItemController {
                          @PathVariable("itemId") Integer itemId) {
         log.info("POST (for comment create) /items/{}/comment, dtoReq={}", itemId, dtoReq);
         commentService.create(commentMapper.dtoReq2Model(dtoReq));
-        return "/items";
+        return "/item/itemId";
     }
 
     @PostMapping(value = "/{itemId}/comment/{id}")
