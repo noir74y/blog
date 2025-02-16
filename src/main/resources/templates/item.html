@@ -74,7 +74,7 @@
     <tbody>
     <tr th:each="comment : ${comments}">
         <td>
-            <form  th:id="|comment-${comment.id}|" th:name="|comment-${comment.id}|">
+            <form th:id="|comment-${comment.id}|" th:name="|comment-${comment.id}|">
                 <label>
                     <textarea rows="3" name="message" th:text="${comment.message}"></textarea>
                 </label>

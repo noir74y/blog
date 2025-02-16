@@ -4,8 +4,9 @@ import org.h2.Driver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 
@@ -24,9 +25,9 @@ public class DataSourceTestConfig {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 
-//        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-//        populator.addScript(new ClassPathResource("test-schema.sql"));
-//        populator.execute(dataSource);
+        ResourceDatabasePopulator loader = new ResourceDatabasePopulator();
+        loader.addScript(new ClassPathResource("test-schema.sql"));
+        loader.execute(dataSource);
 
         return dataSource;
     }
