@@ -21,7 +21,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Optional<CommentEntity> findById(Integer id) {
-        var row = jdbcTemplate.queryForRowSet("SELECT id, message, item_id FROM blog.comments WHERE id = ?", id);
+        var row = jdbcTemplate.queryForRowSet("SELECT id, message, item_id FROM comments WHERE id = ?", id);
         return row.next() ?
                 Optional.of(CommentEntity.builder()
                         .id(id)
@@ -33,7 +33,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public List<CommentEntity> findAllByItemId(Integer itemId) {
-        return new LinkedList<>(jdbcTemplate.query("SELECT id, message, item_id FROM blog.comments WHERE item_id = ? ORDER BY changed DESC",
+        return new LinkedList<>(jdbcTemplate.query("SELECT id, message, item_id FROM comments WHERE item_id = ? ORDER BY changed DESC",
                 (rs, rowNum) -> CommentEntity.builder()
                         .id(rs.getInt("id"))
                         .message(rs.getString("message"))
@@ -51,18 +51,18 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     @Transactional
     public void deleteById(Integer id) {
-        jdbcTemplate.update("DELETE FROM blog.comments WHERE id = ?", id);
+        jdbcTemplate.update("DELETE FROM comments WHERE id = ?", id);
     }
 
     @Override
     public boolean existsById(Integer id) {
-        String sql = "SELECT COUNT(*) cnt FROM blog.comments WHERE id = ?";
+        String sql = "SELECT COUNT(*) cnt FROM comments WHERE id = ?";
         return !Objects.equals(jdbcTemplate.queryForObject(sql, Integer.class, id), (Integer) 0);
     }
 
     @Transactional
     private Integer insert(CommentEntity commentEntity) {
-        String sql = "INSERT INTO blog.comments (message, item_id, changed) VALUES (?,?,?)";
+        String sql = "INSERT INTO comments (message, item_id, changed) VALUES (?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -78,7 +78,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Transactional
     private Integer update(CommentEntity commentEntity) {
-        String sql = "UPDATE blog.comments SET message = ?, changed = ? WHERE id = ?";
+        String sql = "UPDATE comments SET message = ?, changed = ? WHERE id = ?";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql);

@@ -26,7 +26,7 @@ public class TagRepositoryImpl implements TagRepository {
 
     @PostConstruct
     private void populateAllTagEntityList() {
-        this.allTagEntityList = new LinkedList<>(jdbcTemplate.query("SELECT id, name FROM blog.tags ORDER BY name",
+        this.allTagEntityList = new LinkedList<>(jdbcTemplate.query("SELECT id, name FROM tags ORDER BY name",
                 (rs, rowNum) -> TagEntity.builder()
                         .id(rs.getInt("id"))
                         .name(rs.getString("name")).build()));
@@ -50,7 +50,7 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public List<TagEntity> findAllByItemId(Integer itemId) {
         return new LinkedList<>(jdbcTemplate.query(
-                        "SELECT tag_id FROM blog.items_tags WHERE item_id = ?",
+                        "SELECT tag_id FROM items_tags WHERE item_id = ?",
                         (rs, rowNum) -> rs.getInt("tag_id"), itemId)
                 .stream()
                 .map(tag_id ->
@@ -63,7 +63,7 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     @Transactional
     public TagEntity save(TagEntity tagEntity) {
-        String sql = "INSERT INTO blog.tags (name) VALUES (?)";
+        String sql = "INSERT INTO tags (name) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -86,13 +86,13 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     @Transactional
     public void unstickFromItem(Integer itemId) {
-        jdbcTemplate.update("DELETE FROM blog.items_tags WHERE item_id = ?", itemId);
+        jdbcTemplate.update("DELETE FROM items_tags WHERE item_id = ?", itemId);
     }
 
     @Override
     @Transactional
     public void stickToItem(List<Integer> tagIdList, Integer itemId) {
-        jdbcTemplate.batchUpdate("INSERT INTO blog.items_tags (item_id, tag_id) VALUES (?, ?)",
+        jdbcTemplate.batchUpdate("INSERT INTO items_tags (item_id, tag_id) VALUES (?, ?)",
                 new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(@NonNull PreparedStatement ps, int i) throws SQLException {
@@ -110,7 +110,7 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     @Transactional
     public void deleteById(Integer id) {
-        jdbcTemplate.update("DELETE FROM blog.tags WHERE id = ?", id);
+        jdbcTemplate.update("DELETE FROM tags WHERE id = ?", id);
         this.allTagEntityList = this.allTagEntityList.stream()
                 .filter(tagEntity -> !tagEntity.getId().equals(id))
                 .sorted().toList();

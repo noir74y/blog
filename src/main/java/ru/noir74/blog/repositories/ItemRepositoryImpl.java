@@ -11,6 +11,7 @@ import ru.noir74.blog.models.item.ItemEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
 import ru.noir74.blog.models.item.ItemImageEntity;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,15 +30,15 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public List<ItemEntityBrief> findByPage(Integer page, Integer size) {
         var sql = "WITH " +
-                "t1 AS ( SELECT * FROM blog.items i ORDER BY changed DESC OFFSET ? LIMIT ? ), " +
+                "t1 AS ( SELECT * FROM items i ORDER BY changed DESC OFFSET ? LIMIT ? ), " +
                 "t2 AS ( SELECT c.item_id, COUNT(c.item_id) commentsCounter " +
-                "FROM blog.comments c " +
+                "FROM comments c " +
                 "WHERE c.item_id IN (SELECT id FROM t1) " +
                 "GROUP BY c.item_id), " +
                 "t3 AS ( SELECT it.item_id item_id, STRING_AGG(t.name,',') tagsCSV " +
-                "FROM blog.items_tags it " +
+                "FROM items_tags it " +
                 "JOIN t1 ON t1.id = it.item_id " +
-                "JOIN blog.tags t ON t.id = it.tag_id " +
+                "JOIN tags t ON t.id = it.tag_id " +
                 "GROUP BY it.item_id) " +
                 "SELECT t1.id, t1.title, t1.message, t1.likes, t2.commentsCounter, t3.tagsCSV " +
                 "FROM t1 " +
@@ -58,7 +59,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Optional<ItemEntity> findById(Integer id) {
-        var row = jdbcTemplate.queryForRowSet("SELECT title, message, likes FROM blog.items WHERE id = ?", id);
+        var row = jdbcTemplate.queryForRowSet("SELECT title, message, likes FROM items WHERE id = ?", id);
         return row.next() ?
                 Optional.of(ItemEntity.builder()
                         .id(id)
@@ -71,7 +72,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public ItemImageEntity findImageById(Integer id) {
-        var sql = "SELECT id, image, image_name FROM blog.items WHERE id = ?";
+        var sql = "SELECT id, image, image_name FROM items WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new ItemImageEntityMapper(), id);
     }
 
@@ -84,25 +85,25 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     @Transactional
     public void saveImageById(ItemImageEntity itemImageEntity) {
-        String sql = "UPDATE blog.items SET image = ?, image_name = ? WHERE id = ?";
+        String sql = "UPDATE items SET image = ?, image_name = ? WHERE id = ?";
         jdbcTemplate.update(sql, itemImageEntity.getImage(), itemImageEntity.getImageName(), itemImageEntity.getId());
     }
 
     @Override
     public boolean existsById(Integer id) {
-        String sql = "SELECT COUNT(*) cnt FROM blog.items WHERE id = ?";
+        String sql = "SELECT COUNT(*) cnt FROM items WHERE id = ?";
         return !Objects.equals(jdbcTemplate.queryForObject(sql, Integer.class, id), (Integer) 0);
     }
 
     @Override
     @Transactional
     public void deleteById(Integer id) {
-        jdbcTemplate.update("DELETE FROM blog.items WHERE id = ?", id);
+        jdbcTemplate.update("DELETE FROM items WHERE id = ?", id);
     }
 
     @Transactional
     private Integer insert(ItemEntity itemEntity) {
-        String sql = "INSERT INTO blog.items (title, message, likes, changed) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO items (title, message, likes, changed) VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -119,7 +120,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Transactional
     private Integer update(ItemEntity itemEntity) {
-        String sql = "UPDATE blog.items SET title = ?,  message = ?, likes = ?, changed = ? WHERE id = ?";
+        String sql = "UPDATE items SET title = ?,  message = ?, likes = ?, changed = ? WHERE id = ?";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql);
