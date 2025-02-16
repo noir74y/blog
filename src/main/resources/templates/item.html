@@ -17,7 +17,6 @@
 <body onload="selectItemTags()">
 <h1>Пост</h1>
 
-<!--<form id="itemForm">-->
 <form id="itemForm" enctype="multipart/form-data" th:action="|/items/${id}|" method="post" accept-charset="UTF-8">
     <label for="id"></label>
     <input type="text" id="id" name="id" th:value="${id}" hidden>
@@ -50,7 +49,6 @@
 
     <p></p>
     <button type="submit">Сохранить</button>
-    <!--    <button type="button" onclick="updateItem(this.form)">Сохранить</button>-->
 </form>
 
 <form th:action="${id}" method="post">
@@ -72,14 +70,13 @@
     <tbody>
     <tr th:each="comment : ${comments}">
         <td>
-            <form>
+            <form  th:id="|comment-${comment.id}|" th:name="|comment-${comment.id}|">
                 <label>
                     <textarea rows="3" name="message" th:text="${comment.message}"></textarea>
                 </label>
                 <br>
                 <input type="hidden" name="id" th:value="${comment.id}">
                 <input type="hidden" name="itemId" th:value="${comment.itemId}">
-                <button type="button" onclick="actionOnComment(this.form)">Сохранить</button>
             </form>
         </td>
         <td>
@@ -186,13 +183,29 @@
         window.location.href = '/items/' + itemId;
     }
 
-    function actionOnComment(form) {
-        const commentId = form.elements["id"].value;
-        const itemId = form.elements["itemId"].value;
-        const formData = new URLSearchParams(new FormData(form));
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll("table textarea");
+        inputs.forEach(input => {
+            input.addEventListener("keydown", ctrlEnterCatcher);
+        });
+    });
 
-        if ("message" in form.elements) {
-            const message = form.elements["message"].value;
+   function ctrlEnterCatcher(event) {
+        if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+            commentForm = event.target.form;
+            if (commentForm.name == "comment-" + commentForm.id.value) {
+                actionOnComment(commentForm);
+            }
+        }
+    }
+
+    function actionOnComment(commentForm) {
+        const commentId = commentForm.elements["id"].value;
+        const itemId = commentForm.elements["itemId"].value;
+        const formData = new URLSearchParams(new FormData(commentForm));
+
+        if ("message" in commentForm.elements) {
+            const message = commentForm.elements["message"].value;
             if (/^\s*$/.test(message)) {
 <!--                window.location.href = '/items/' + itemId;-->
                 return;
