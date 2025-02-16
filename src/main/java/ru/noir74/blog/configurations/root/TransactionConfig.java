@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @RequiredArgsConstructor
-public class TransactionConfiguration {
+public class TransactionConfig {
     private final DataSource dataSource;
 
     @Bean
