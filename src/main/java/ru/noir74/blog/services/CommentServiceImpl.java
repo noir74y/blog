@@ -24,7 +24,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public Comment findById(Integer id) {
-        throwIfNotFound(id);
         return commentMapper.entity2Model(commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("comment is not found, comment_id = " + id)));
     }

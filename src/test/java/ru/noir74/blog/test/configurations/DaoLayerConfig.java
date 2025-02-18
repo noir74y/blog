@@ -1,17 +1,14 @@
-package ru.noir74.blog.test;
+package ru.noir74.blog.test.configurations;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import ru.noir74.blog.configurations.root.MapperConfig;
 
 @Configuration
-@Import(MapperConfig.class)
+@Import(ModelLayerConfig.class)
 @ComponentScan(basePackages = {
-        "ru.noir74.blog.test.configurations",
-        "ru.noir74.blog.models",
         "ru.noir74.blog.repositories",
-        "ru.noir74.blog.services"
+        "ru.noir74.blog.test.configurations.dao"
 })
-public class TestConfig {
+public class DaoLayerConfig {
 }
