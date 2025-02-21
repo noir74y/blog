@@ -43,11 +43,6 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Optional<TagEntity> findByName(String name) {
-        return this.allTagEntityList.stream().filter(tagEntity -> tagEntity.getName().equals(name)).findAny();
-    }
-
-    @Override
     public List<TagEntity> findAllByItemId(Integer itemId) {
         return new LinkedList<>(jdbcTemplate.query(
                         "SELECT tag_id FROM items_tags WHERE item_id = ?",
@@ -105,25 +100,5 @@ public class TagRepositoryImpl implements TagRepository {
                         return tagIdList.size();
                     }
                 });
-    }
-
-    @Override
-    @Transactional
-    public void deleteById(Integer id) {
-        jdbcTemplate.update("DELETE FROM tags WHERE id = ?", id);
-        this.allTagEntityList = this.allTagEntityList.stream()
-                .filter(tagEntity -> !tagEntity.getId().equals(id))
-                .sorted().toList();
-        this.populateAllTagEntityList();
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return allTagEntityList.stream().anyMatch(tag -> Objects.equals(tag.getId(), id));
-    }
-
-    @Override
-    public boolean existsByName(String name) {
-        return allTagEntityList.stream().anyMatch(tag -> Objects.equals(tag.getName(), name));
     }
 }

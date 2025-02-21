@@ -35,21 +35,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag findByName(String name) {
-        return this.allTagsList.stream().filter(tagEntity -> tagEntity.getName().equals(name)).findAny().orElse(null);
-    }
-
-    @Override
     public List<Tag> findAllByItemId(Integer itemId) {
         return tagMapper.BulkEntity2Model(tagRepository.findAllByItemId(itemId));
-    }
-
-    @Override
-    @Transactional
-    public Tag save(Tag tag) {
-        var newTag = tagMapper.entity2Model(this.tagRepository.save(tagMapper.model2entity(tag)));
-        this.populateAllTagList();
-        return newTag;
     }
 
     @Override
@@ -67,22 +54,4 @@ public class TagServiceImpl implements TagService {
         tagRepository.stickToItem(tagIdList, itemId);
         this.populateAllTagList();
     }
-
-    @Override
-    @Transactional
-    public void deleteById(Integer id) {
-        this.tagRepository.deleteById(id);
-        this.populateAllTagList();
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return this.tagRepository.existsById(id);
-    }
-
-    @Override
-    public boolean existsByName(String name) {
-        return this.tagRepository.existsByName(name);
-    }
-
 }

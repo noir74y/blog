@@ -10,8 +10,6 @@ public interface TagRepository {
 
     Optional<TagEntity> findById(Integer id);
 
-    Optional<TagEntity> findByName(String name);
-
     List<TagEntity> findAllByItemId(Integer itemId);
 
     TagEntity save(TagEntity tagEntity);
@@ -22,9 +20,4 @@ public interface TagRepository {
 
     void stickToItem(List<Integer> tagIdList, Integer itemId);
 
-    void deleteById(Integer id);
-
-    boolean existsById(Integer id);
-
-    boolean existsByName(String name);
 }

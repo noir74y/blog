@@ -14,10 +14,6 @@ import java.util.stream.Collectors;
 public class TagMapper {
     private final ModelMapper modelMapper;
 
-    public Tag dtoReq2Model(TagDtoReq dtoReq) {
-        return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Tag.class)).orElse(null);
-    }
-
     public TagDtoResp model2dtoResp(Tag model) {
         return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, TagDtoResp.class)).orElse(null);
     }
