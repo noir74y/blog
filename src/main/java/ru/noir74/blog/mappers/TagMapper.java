@@ -19,6 +19,11 @@ public class TagMapper {
     @Getter
     private Map<String, Tag> tags;
 
+    public void setTags(List<Tag> tags) {
+        this.tags = new LinkedHashMap<>();
+        for (Tag tag : tags) this.tags.put(tag.getName(), tag);
+    }
+
     public TagDtoResp model2dtoResp(Tag model) {
         return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, TagDtoResp.class)).orElse(null);
     }
@@ -51,10 +56,5 @@ public class TagMapper {
         return models.stream()
                 .map(this::model2entity)
                 .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = new LinkedHashMap<>();
-        for (Tag tag : tags) this.tags.put(tag.getName(), tag);
     }
 }
