@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.exceptions.NotFoundException;
-import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.mappers.CommentMapper;
+import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.repositories.CommentRepository;
 
 import java.util.List;

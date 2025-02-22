@@ -6,7 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.mappers.ItemImageMapper;
 import ru.noir74.blog.mappers.ItemMapper;
-import ru.noir74.blog.models.item.*;
+import ru.noir74.blog.models.item.Item;
+import ru.noir74.blog.models.item.ItemBrief;
+import ru.noir74.blog.models.item.ItemImage;
+import ru.noir74.blog.models.item.ItemImageEntity;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.ItemRepository;
 

@@ -8,7 +8,6 @@ import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 import ru.noir74.blog.models.item.*;
 import ru.noir74.blog.models.tag.Tag;
-import ru.noir74.blog.services.TagService;
 
 import java.sql.Timestamp;
 import java.time.Instant;

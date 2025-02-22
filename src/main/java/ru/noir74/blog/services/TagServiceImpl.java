@@ -7,8 +7,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.mappers.TagMapper;
+import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.TagRepository;
 
 import java.util.LinkedList;

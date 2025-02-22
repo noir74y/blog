@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({DaoLayerConfig.class, ServiceLayerConfig.class})
+@Import({DaoLayerConfig.class, MappersTestConfig.class})
 @ComponentScan(basePackages = {
         "ru.noir74.blog.controllers",
         "ru.noir74.blog.configurations.web"
