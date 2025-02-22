@@ -8,64 +8,35 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.noir74.blog.configurations.root.MapperConfig;
 import ru.noir74.blog.mappers.CommentMapper;
 import ru.noir74.blog.mappers.ItemImageMapper;
+import ru.noir74.blog.mappers.ItemMapper;
 import ru.noir74.blog.models.tag.TagEntity;
 import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.repositories.CommentRepository;
+import ru.noir74.blog.repositories.ItemRepository;
 import ru.noir74.blog.repositories.TagRepository;
 import ru.noir74.blog.services.*;
 
 import java.util.LinkedList;
 
-@SpringJUnitConfig({MapperConfig.class, CommentMapper.class, TagMapper.class, ItemImageMapper.class})
+@SpringJUnitConfig({MapperConfig.class, ItemImageMapper.class, TagMapper.class, ItemMapper.class})
 public class ItemServiceTest extends GenericServiceTest {
-    @Autowired
-    private CommentMapper commentMapper;
-
     @Mock
-    private CommentRepository commentRepository;
-
-    @InjectMocks
-    private CommentServiceImpl commentService;
-
-    private LinkedList<TagEntity> tags;
-
-    @Autowired
-    private TagMapper tagMapper;
-
-    @Mock
-    private TagRepository tagRepository;
-
-    @Mock
-    private TagService tagService;
+    private ItemRepository itemRepository;
 
     @Autowired
     private ItemImageMapper itemImageMapper;
 
-//    @Autowired
-//    private ItemMapper itemMapper;
+    @Autowired
+    private ItemMapper itemMapper;
 
+    @Mock
+    private TagService tagService;
 
-//    @Autowired
-//    private ItemMapper itemMapper;
+    @Mock
+    private CommentService commentService;
 
-//    @Autowired
-//    private ItemImageMapper itemImageMapper;
-//
-//    @Autowired
-//    private TagService tagService;
-//
-//
-//    @Mock
-//    private CommentRepository commentRepository;
-//
-//    @InjectMocks
-//    private CommentService commentService;
-//
-//    @Mock
-//    private ItemRepository itemRepository;
-//
-//    @InjectMocks
-//    private ItemService itemService;
+    @InjectMocks
+    private ItemServiceImpl itemService;
 
     @Test
     void testFindPage() {
