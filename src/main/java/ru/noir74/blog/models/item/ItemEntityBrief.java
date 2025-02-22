@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,4 +19,8 @@ public class ItemEntityBrief {
     private Integer likes;
     private Integer commentsCounter;
     private String tagsCSV;
+
+    public static String sortTagsCSV(String unsortedTagsCSV) {
+        return Arrays.stream(unsortedTagsCSV.split(",")).sorted().collect(Collectors.joining(","));
+    }
 }

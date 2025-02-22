@@ -52,7 +52,7 @@ public class ItemRepositoryImpl implements ItemRepository {
                         .message(rs.getString("message"))
                         .likes(rs.getInt("likes"))
                         .commentsCounter(rs.getInt("commentsCounter"))
-                        .tagsCSV(rs.getString("tagsCSV")).build()
+                        .tagsCSV(ItemEntityBrief.sortTagsCSV(rs.getString("tagsCSV"))).build()
                 , (page - 1) * size, size));
     }
 
