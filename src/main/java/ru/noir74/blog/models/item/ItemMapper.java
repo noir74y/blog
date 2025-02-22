@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.noir74.blog.models.comment.CommentMapper;
 import ru.noir74.blog.models.tag.Tag;
@@ -23,9 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemMapper {
     private final ModelMapper modelMapper;
-    private final CommentMapper commentMapper;
-    private final ItemImageMapper itemImageMapper;
-    private final TagMapper tagMapper;
     private final TagService tagService;
 
     @PostConstruct

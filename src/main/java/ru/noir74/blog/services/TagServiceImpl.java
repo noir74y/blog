@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.tag.Tag;
@@ -14,19 +15,18 @@ import ru.noir74.blog.repositories.TagRepository;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @Getter
 @Setter
 public class TagServiceImpl implements TagService {
-    private final TagRepository tagRepository;
-    private final TagMapper tagMapper;
+    @Autowired
+    private TagRepository tagRepository;
+    @Autowired
+    private TagMapper tagMapper;
     private List<Tag> allTagsList;
 
     @PostConstruct
     public void populateAllTagList() {
-        assert tagMapper != null;
-        assert tagRepository != null;
         this.allTagsList = tagMapper.BulkEntity2Model(tagRepository.findAll());
     }
 
@@ -48,8 +48,6 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public List<Tag> save(List<Tag> tags) {
-        assert tagMapper != null;
-        assert this.tagRepository != null;
         var newTags = tagMapper.BulkEntity2Model(this.tagRepository.save(tagMapper.BulkModel2Entity(tags)));
         this.populateAllTagList();
         return newTags;
@@ -58,7 +56,6 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     public void attachTagsToItem(List<Integer> tagIdList, Integer itemId) {
-        assert tagRepository != null;
         tagRepository.unstickFromItem(itemId);
         tagRepository.stickToItem(tagIdList, itemId);
         this.populateAllTagList();
