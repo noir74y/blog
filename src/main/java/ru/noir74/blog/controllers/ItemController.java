@@ -45,7 +45,7 @@ public class ItemController {
 
         log.info("GET /items");
 
-        List<ItemDtoRespBrief> posts = itemMapper.BulkModelBrief2dtoRespBrief(itemService.findPage(page, size, selectedTags));
+        List<ItemDtoRespBrief> posts = itemMapper.bulkModelBrief2DtoRespBrief(itemService.findPage(page, size, selectedTags));
 
         model.addAttribute("page", page);
         model.addAttribute("size", size);
@@ -66,8 +66,8 @@ public class ItemController {
         model.addAttribute("message", itemDtoResp.getMessage());
         model.addAttribute("likes", itemDtoResp.getLikes());
         model.addAttribute("itemSelectedTags", itemDtoResp.getTags().stream().map(Tag::getName).toList());
-        model.addAttribute("allTags", tagMapper.BulkModel2dtoResp(tagService.findAll()).stream().map(TagDtoResp::getName).toList());
-        model.addAttribute("comments", commentMapper.BulkModel2dtoResp(commentService.findAllByItemId(id)));
+        model.addAttribute("allTags", tagMapper.bulkModel2DtoResp(tagService.findAll()).stream().map(TagDtoResp::getName).toList());
+        model.addAttribute("comments", commentMapper.bulkModel2DtoResp(commentService.findAllByItemId(id)));
 
         return "/item";
     }

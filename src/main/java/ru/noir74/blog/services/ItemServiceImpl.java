@@ -30,7 +30,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemBrief> findPage(String page, String size, String selectedTags) {
         var selectedTagList = new ArrayList<>(new ArrayList<>(Arrays.asList(selectedTags.split(","))));
-        return itemMapper.BulkEntityBrief2ModelBrief(itemRepository.findByPage(Integer.parseInt(page), Integer.parseInt(size)))
+        return itemMapper.bulkEntityBrief2ModelBrief(itemRepository.findByPage(Integer.parseInt(page), Integer.parseInt(size)))
                 .stream()
                 .filter(item -> {
                     if (selectedTags.isEmpty()) return true;

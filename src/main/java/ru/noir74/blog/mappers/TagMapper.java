@@ -17,11 +17,11 @@ public class TagMapper {
     private final ModelMapper modelMapper;
 
     @Getter
-    private Map<String, Tag> tags;
+    private Map<String, Tag> name2TagMap;
 
-    public void setTags(List<Tag> tags) {
-        this.tags = new LinkedHashMap<>();
-        for (Tag tag : tags) this.tags.put(tag.getName(), tag);
+    public void setName2TagMap(List<Tag> name2TagMap) {
+        this.name2TagMap = new LinkedHashMap<>();
+        for (Tag tag : name2TagMap) this.name2TagMap.put(tag.getName(), tag);
     }
 
     public TagDtoResp model2dtoResp(Tag model) {
@@ -40,19 +40,19 @@ public class TagMapper {
                 .orElse(null);
     }
 
-    public List<Tag> BulkEntity2Model(List<TagEntity> entities) {
+    public List<Tag> bulkEntity2Model(List<TagEntity> entities) {
         return entities.stream()
                 .map(this::entity2Model)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<TagDtoResp> BulkModel2dtoResp(List<Tag> models) {
+    public List<TagDtoResp> bulkModel2DtoResp(List<Tag> models) {
         return models.stream()
                 .map(this::model2dtoResp)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<TagEntity> BulkModel2Entity(List<Tag> models) {
+    public List<TagEntity> bulkModel2Entity(List<Tag> models) {
         return models.stream()
                 .map(this::model2entity)
                 .collect(Collectors.toCollection(ArrayList::new));

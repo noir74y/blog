@@ -42,19 +42,13 @@ public class CommentMapper {
                 .orElse(null);
     }
 
-    public List<Comment> BulkEntity2Model(List<CommentEntity> entities) {
+    public List<Comment> bulkEntity2Model(List<CommentEntity> entities) {
         return entities.stream()
                 .map(this::entity2Model)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<CommentEntity> BulkModel2Entity(List<Comment> models) {
-        return models.stream()
-                .map(this::model2entity)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    public List<CommentDtoResp> BulkModel2dtoResp(List<Comment> models) {
+    public List<CommentDtoResp> bulkModel2DtoResp(List<Comment> models) {
         return models.stream()
                 .map(this::model2dtoResp)
                 .collect(Collectors.toCollection(ArrayList::new));

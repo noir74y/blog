@@ -28,7 +28,7 @@ public class ItemMapper {
         Converter<List<String>, List<Tag>> tagStringCsv2ModelConverter = tagNameList ->
                 tagNameList.getSource()
                         .stream()
-                        .map(tagName -> tagMapper.getTags().getOrDefault(tagName, Tag.builder().name(tagName).build()))
+                        .map(tagName -> tagMapper.getName2TagMap().getOrDefault(tagName, Tag.builder().name(tagName).build()))
                         .toList();
 
         TypeMap<ItemDtoReq, Item> dtoReq2ModelPropertyMapper = modelMapper.createTypeMap(ItemDtoReq.class, Item.class);
@@ -77,13 +77,13 @@ public class ItemMapper {
         return dtoRespBrief;
     }
 
-    public List<ItemBrief> BulkEntityBrief2ModelBrief(List<ItemEntityBrief> entities) {
+    public List<ItemBrief> bulkEntityBrief2ModelBrief(List<ItemEntityBrief> entities) {
         return entities.stream()
                 .map(this::entityBrief2ModelBrief)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<ItemDtoRespBrief> BulkModelBrief2dtoRespBrief(List<ItemBrief> models) {
+    public List<ItemDtoRespBrief> bulkModelBrief2DtoRespBrief(List<ItemBrief> models) {
         return models.stream()
                 .map(this::modelBrief2dtoRespBrief)
                 .collect(Collectors.toCollection(ArrayList::new));
