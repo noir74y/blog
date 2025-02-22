@@ -22,14 +22,14 @@ import static org.mockito.Mockito.doAnswer;
 public class TagServiceTest extends GenericServiceTest {
     private LinkedList<TagEntity> tags;
 
+    @Autowired
+    private TagMapper tagMapper;
+
     @Mock
     private TagRepository tagRepository;
 
     @Spy
     private TagServiceImpl tagService;
-
-    @Autowired
-    private TagMapper tagMapper;
 
     @BeforeEach
     void setUp() {
