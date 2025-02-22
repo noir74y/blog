@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.noir74.blog.configurations.root.MapperConfig;
 import ru.noir74.blog.models.tag.TagEntity;
-import ru.noir74.blog.models.tag.TagMapper;
+import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.repositories.TagRepository;
 import ru.noir74.blog.services.TagServiceImpl;
 

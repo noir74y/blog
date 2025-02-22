@@ -7,14 +7,9 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.noir74.blog.configurations.root.MapperConfig;
-import ru.noir74.blog.models.comment.CommentMapper;
-import ru.noir74.blog.models.tag.TagMapper;
+import ru.noir74.blog.mappers.CommentMapper;
 import ru.noir74.blog.repositories.CommentRepository;
 import ru.noir74.blog.services.CommentServiceImpl;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.when;
 
 @SpringJUnitConfig({MapperConfig.class, CommentMapper.class})
 public class CommentServiceTest extends GenericServiceTest {

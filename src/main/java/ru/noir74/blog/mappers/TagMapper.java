@@ -1,18 +1,23 @@
-package ru.noir74.blog.models.tag;
+package ru.noir74.blog.mappers;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import ru.noir74.blog.models.tag.Tag;
+import ru.noir74.blog.models.tag.TagDtoResp;
+import ru.noir74.blog.models.tag.TagEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class TagMapper {
     private final ModelMapper modelMapper;
+
+    @Getter
+    private Map<String, Tag> tags;
 
     public TagDtoResp model2dtoResp(Tag model) {
         return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, TagDtoResp.class)).orElse(null);
@@ -46,5 +51,10 @@ public class TagMapper {
         return models.stream()
                 .map(this::model2entity)
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = new LinkedHashMap<>();
+        for (Tag tag : tags) this.tags.put(tag.getName(), tag);
     }
 }

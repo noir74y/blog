@@ -3,20 +3,16 @@ package ru.noir74.blog.test.tests.services;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.noir74.blog.configurations.root.MapperConfig;
-import ru.noir74.blog.models.comment.CommentMapper;
-import ru.noir74.blog.models.item.ItemImageMapper;
-import ru.noir74.blog.models.item.ItemMapper;
+import ru.noir74.blog.mappers.CommentMapper;
+import ru.noir74.blog.mappers.ItemImageMapper;
 import ru.noir74.blog.models.tag.TagEntity;
-import ru.noir74.blog.models.tag.TagMapper;
+import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.repositories.CommentRepository;
-import ru.noir74.blog.repositories.ItemRepository;
 import ru.noir74.blog.repositories.TagRepository;
 import ru.noir74.blog.services.*;
-import ru.noir74.blog.test.configurations.ServiceLayerConfig;
 
 import java.util.LinkedList;
 

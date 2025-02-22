@@ -1,4 +1,4 @@
-package ru.noir74.blog.models.item;
+package ru.noir74.blog.mappers;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import ru.noir74.blog.models.item.ItemImage;
+import ru.noir74.blog.models.item.ItemImageEntity;
 
 import java.io.IOException;
 import java.util.Optional;

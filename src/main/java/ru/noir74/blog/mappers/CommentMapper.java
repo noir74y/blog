@@ -1,8 +1,12 @@
-package ru.noir74.blog.models.comment;
+package ru.noir74.blog.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import ru.noir74.blog.models.comment.Comment;
+import ru.noir74.blog.models.comment.CommentDtoReq;
+import ru.noir74.blog.models.comment.CommentDtoResp;
+import ru.noir74.blog.models.comment.CommentEntity;
 
 import java.sql.Timestamp;
 import java.time.Instant;

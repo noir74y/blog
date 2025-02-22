@@ -1,15 +1,13 @@
-package ru.noir74.blog.models.item;
+package ru.noir74.blog.mappers;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.noir74.blog.models.comment.CommentMapper;
+import ru.noir74.blog.models.item.*;
 import ru.noir74.blog.models.tag.Tag;
-import ru.noir74.blog.models.tag.TagMapper;
 import ru.noir74.blog.services.TagService;
 
 import java.sql.Timestamp;
@@ -24,17 +22,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemMapper {
     private final ModelMapper modelMapper;
-    private final TagService tagService;
+    private final TagMapper tagMapper;
 
     @PostConstruct
     private void setup() {
-        Converter<List<String>, List<Tag>> tagStringCsv2ModelConverter = newItemTagNameList ->
-                newItemTagNameList.getSource()
+        Converter<List<String>, List<Tag>> tagStringCsv2ModelConverter = tagNameList ->
+                tagNameList.getSource()
                         .stream()
-                        .map(newItemTagName -> tagService.findAll()
-                                .stream()
-                                .filter(tag -> tag.getName().equals(newItemTagName))
-                                .findAny().orElse(Tag.builder().name(newItemTagName).build()))
+                        .map(tagName -> tagMapper.getTags().getOrDefault(tagName, Tag.builder().name(tagName).build()))
                         .toList();
 
         TypeMap<ItemDtoReq, Item> dtoReq2ModelPropertyMapper = modelMapper.createTypeMap(ItemDtoReq.class, Item.class);

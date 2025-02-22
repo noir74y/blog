@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.exceptions.NotFoundException;
+import ru.noir74.blog.mappers.ItemImageMapper;
+import ru.noir74.blog.mappers.ItemMapper;
 import ru.noir74.blog.models.item.*;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.ItemRepository;
