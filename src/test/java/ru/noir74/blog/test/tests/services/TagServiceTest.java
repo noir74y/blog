@@ -12,13 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class TagServiceTest extends GenericServiceTest {
-    private Tag tag;
     private List<Tag> tags;
     private List<TagEntity> tagEntities;
 
     @BeforeEach
     void setUp() {
-        tag = Tag.builder().id(0).name("tag0").build();
+        Tag tag = Tag.builder().id(0).name("tag0").build();
         tags = new LinkedList<>(List.of(tag));
 
         var tagEntity = tagMapper.model2entity(tag);
@@ -26,6 +25,7 @@ public class TagServiceTest extends GenericServiceTest {
 
         when(tagRepository.findAll()).thenReturn(tagEntities);
         tagService.populateAllTags();
+        verify(tagRepository, times(1)).findAll();
     }
 
     @Test
@@ -41,8 +41,8 @@ public class TagServiceTest extends GenericServiceTest {
     @Test
     void testFindAllByItemId() {
         when(tagRepository.findAllByItemId(0)).thenReturn(tagEntities);
-        assertEquals(List.of(tag), tagService.findAllByItemId(0));
-        verify(tagRepository).findAllByItemId(0);
+        assertEquals(tags, tagService.findAllByItemId(0));
+        verify(tagRepository, times(1)).findAllByItemId(0);
     }
 
     @Test
@@ -54,9 +54,8 @@ public class TagServiceTest extends GenericServiceTest {
         var newModelsSaved = tagMapper.bulkEntity2Model(newEntitiesSaved);
 
         when(tagRepository.save(newEntitiesToBeSaved)).thenReturn(newEntitiesSaved);
-
         assertEquals(newModelsSaved, tagService.save(newModelsToBeSaved));
-        verify(tagRepository).save(newEntitiesToBeSaved);
+        verify(tagRepository, times(1)).save(newEntitiesToBeSaved);
     }
 
     @Test
@@ -65,5 +64,7 @@ public class TagServiceTest extends GenericServiceTest {
         doNothing().when(tagRepository).unstickFromItem(0);
         doNothing().when(tagRepository).stickToItem(List.of(0), 0);
         tagService.attachTagsToItem(List.of(0), 0);
+        verify(tagRepository, times(1)).unstickFromItem(0);
+        verify(tagRepository, times(1)).stickToItem(List.of(0), 0);
     }
 }

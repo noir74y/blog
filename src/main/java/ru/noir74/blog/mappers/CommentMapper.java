@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,10 @@ public class CommentMapper {
         var entity = Optional.ofNullable(model)
                 .map(obj -> modelMapper.map(obj, CommentEntity.class))
                 .orElse(null);
-        Optional.ofNullable(entity).ifPresent(obj -> obj.setChanged(Timestamp.from(Instant.now())));
+        Optional.ofNullable(entity).ifPresent(obj ->
+                obj.setChanged(Objects.nonNull(obj.getChanged()) ?
+                        obj.getChanged() :
+                        Timestamp.from(Instant.now())));
         return entity;
     }
 

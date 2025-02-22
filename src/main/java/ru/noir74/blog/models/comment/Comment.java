@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,4 +15,5 @@ public class Comment {
     private Integer id;
     private String message;
     private Integer itemId;
+    private Timestamp changed;
 }
