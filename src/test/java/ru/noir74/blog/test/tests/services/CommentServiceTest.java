@@ -12,7 +12,6 @@ import ru.noir74.blog.mappers.CommentMapper;
 import ru.noir74.blog.repositories.CommentRepository;
 import ru.noir74.blog.services.CommentServiceImpl;
 
-@SpringJUnitConfig({MapperConfig.class, CommentMapper.class})
 public class CommentServiceTest extends GenericServiceTest {
     @Autowired
     private CommentMapper commentMapper;

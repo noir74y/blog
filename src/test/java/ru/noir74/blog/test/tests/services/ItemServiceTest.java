@@ -18,7 +18,6 @@ import ru.noir74.blog.services.*;
 
 import java.util.LinkedList;
 
-@SpringJUnitConfig({MapperConfig.class, ItemImageMapper.class, TagMapper.class, ItemMapper.class})
 public class ItemServiceTest extends GenericServiceTest {
     @Mock
     private ItemRepository itemRepository;

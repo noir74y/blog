@@ -18,7 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doAnswer;
 
-@SpringJUnitConfig({MapperConfig.class, TagMapper.class})
 public class TagServiceTest extends GenericServiceTest {
     private LinkedList<TagEntity> tags;
 
