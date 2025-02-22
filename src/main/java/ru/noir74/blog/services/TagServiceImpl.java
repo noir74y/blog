@@ -19,7 +19,6 @@ import java.util.List;
 @Getter
 @Setter
 public class TagServiceImpl implements TagService {
-    @Autowired
     private TagRepository tagRepository;
     @Autowired
     private TagMapper tagMapper;

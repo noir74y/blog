@@ -20,9 +20,10 @@ import ru.noir74.blog.services.CommentServiceImpl;
 import ru.noir74.blog.services.ItemServiceImpl;
 import ru.noir74.blog.services.TagServiceImpl;
 import ru.noir74.blog.test.configurations.MappersTestConfig;
+import ru.noir74.blog.test.configurations.ServiceTestConfig;
 
 @ExtendWith(MockitoExtension.class)
-@SpringJUnitConfig({ModelMapperConfig.class, MappersTestConfig.class})
+@SpringJUnitConfig(ServiceTestConfig.class)
 public class GenericServiceTest {
     protected CommentMapper commentMapper;
 
