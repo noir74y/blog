@@ -54,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void findImageById(ItemImage itemImage) throws IOException {
         var itemImageEntity = itemRepository.findImageById(itemImage.getId());
-        if (itemImageEntity.isImageReadyToBeSaved()) {
+        if (itemImageEntity.isImageReadyToBeSaved() && Objects.nonNull(itemImage.getResponse())) {
             itemImage.getResponse().setContentType("image/" + itemImageEntity.getImageType());
             itemImage.getResponse().getOutputStream().write(itemImageEntity.getImage());
         }

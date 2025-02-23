@@ -92,7 +92,10 @@ public class ItemServiceTest extends GenericServiceTest {
     }
 
     @Test
-    void testFindImageById() {
+    void testFindImageById() throws IOException {
+        when(itemRepositoryMock.findImageById(item.getId())).thenReturn(itemImageEntity);
+        itemService.findImageById(itemImage);
+        verify(itemRepositoryMock, times(1)).findImageById(item.getId());
     }
 
     @Test
@@ -125,7 +128,10 @@ public class ItemServiceTest extends GenericServiceTest {
     }
 
     @Test
-    void testSetImageById() {
+    void testSetImageById() throws IOException {
+        doNothing().when(itemRepositoryMock).saveImageById(itemImageEntity);
+        itemService.setImageById(itemImage);
+        verify(itemRepositoryMock, times(1)).saveImageById(itemImageEntity);
     }
 
     @Test
