@@ -1,4 +1,4 @@
-package ru.noir74.blog.test.configurations.dao;
+package ru.noir74.blog.test.configurations.old.dao;
 
 import org.h2.Driver;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,5 +1,6 @@
-package ru.noir74.blog.test.tests.services;
+package ru.noir74.blog.test.tests.unit;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
