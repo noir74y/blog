@@ -23,9 +23,9 @@ public class TagServiceTest extends GenericServiceTest {
         var tagEntity = tagMapper.model2entity(tag);
         tagEntities = new LinkedList<>(List.of(tagEntity));
 
-        when(tagRepository.findAll()).thenReturn(tagEntities);
+        when(tagRepositoryMock.findAll()).thenReturn(tagEntities);
         tagService.populateAllTags();
-        verify(tagRepository, times(1)).findAll();
+        verify(tagRepositoryMock, times(1)).findAll();
     }
 
     @Test
@@ -40,9 +40,9 @@ public class TagServiceTest extends GenericServiceTest {
 
     @Test
     void testFindAllByItemId() {
-        when(tagRepository.findAllByItemId(0)).thenReturn(tagEntities);
+        when(tagRepositoryMock.findAllByItemId(0)).thenReturn(tagEntities);
         assertEquals(tags, tagService.findAllByItemId(0));
-        verify(tagRepository, times(1)).findAllByItemId(0);
+        verify(tagRepositoryMock, times(1)).findAllByItemId(0);
     }
 
     @Test
@@ -53,18 +53,18 @@ public class TagServiceTest extends GenericServiceTest {
         var newModelsToBeSaved = tagMapper.bulkEntity2Model(newEntitiesToBeSaved);
         var newModelsSaved = tagMapper.bulkEntity2Model(newEntitiesSaved);
 
-        when(tagRepository.save(newEntitiesToBeSaved)).thenReturn(newEntitiesSaved);
+        when(tagRepositoryMock.save(newEntitiesToBeSaved)).thenReturn(newEntitiesSaved);
         assertEquals(newModelsSaved, tagService.save(newModelsToBeSaved));
-        verify(tagRepository, times(1)).save(newEntitiesToBeSaved);
+        verify(tagRepositoryMock, times(1)).save(newEntitiesToBeSaved);
     }
 
     @Test
     void testAttachTagsToItem() {
         // just stub
-        doNothing().when(tagRepository).unstickFromItem(0);
-        doNothing().when(tagRepository).stickToItem(List.of(0), 0);
+        doNothing().when(tagRepositoryMock).unstickFromItem(0);
+        doNothing().when(tagRepositoryMock).stickToItem(List.of(0), 0);
         tagService.attachTagsToItem(List.of(0), 0);
-        verify(tagRepository, times(1)).unstickFromItem(0);
-        verify(tagRepository, times(1)).stickToItem(List.of(0), 0);
+        verify(tagRepositoryMock, times(1)).unstickFromItem(0);
+        verify(tagRepositoryMock, times(1)).stickToItem(List.of(0), 0);
     }
 }

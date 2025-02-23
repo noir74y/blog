@@ -32,62 +32,62 @@ public class CommentServiceTest extends GenericServiceTest {
 
     @Test
     void testFindAllByItemId() {
-        when(commentRepository.findAllByItemId(0)).thenReturn(commentEntities);
+        when(commentRepositoryMock.findAllByItemId(0)).thenReturn(commentEntities);
         assertEquals(comments, commentService.findAllByItemId(0));
-        verify(commentRepository, times(1)).findAllByItemId(0);
+        verify(commentRepositoryMock, times(1)).findAllByItemId(0);
     }
 
     @Test
     void testFindById() {
-        when(commentRepository.findById(0)).thenReturn(Optional.of(commentEntity));
+        when(commentRepositoryMock.findById(0)).thenReturn(Optional.of(commentEntity));
         assertEquals(commentService.findById(0), comment);
-        verify(commentRepository, times(1)).findById(0);
+        verify(commentRepositoryMock, times(1)).findById(0);
     }
 
     @Test
     void testFindById_NotFound() {
-        when(commentRepository.findById(1)).thenThrow(new NotFoundException("comment is not found", String.valueOf(1)));
+        when(commentRepositoryMock.findById(1)).thenThrow(new NotFoundException("comment is not found", String.valueOf(1)));
         assertThrows(NotFoundException.class, () -> commentService.findById(1));
-        verify(commentRepository, times(1)).findById(1);
+        verify(commentRepositoryMock, times(1)).findById(1);
     }
 
     @Test
     void testCreate() {
-        when(commentRepository.save(commentEntity)).thenReturn(0);
+        when(commentRepositoryMock.save(commentEntity)).thenReturn(0);
         commentService.create(comment);
-        verify(commentRepository, times(1)).save(commentEntity);
+        verify(commentRepositoryMock, times(1)).save(commentEntity);
     }
 
     @Test
     void testUpdate() {
-        when(commentRepository.existsById(0)).thenReturn(true);
-        when(commentRepository.save(commentEntity)).thenReturn(0);
+        when(commentRepositoryMock.existsById(0)).thenReturn(true);
+        when(commentRepositoryMock.save(commentEntity)).thenReturn(0);
         commentService.update(comment);
-        verify(commentRepository, times(1)).existsById(0);
-        verify(commentRepository, times(1)).save(commentEntity);
+        verify(commentRepositoryMock, times(1)).existsById(0);
+        verify(commentRepositoryMock, times(1)).save(commentEntity);
     }
 
     @Test
     void testUpdate_NotFound() {
-        when(commentRepository.existsById(0)).thenReturn(false);
+        when(commentRepositoryMock.existsById(0)).thenReturn(false);
         assertThrows(NotFoundException.class, () -> commentService.update(comment));
-        verify(commentRepository, times(1)).existsById(0);
+        verify(commentRepositoryMock, times(1)).existsById(0);
     }
 
 
     @Test
     void testDelete() {
-        when(commentRepository.existsById(0)).thenReturn(true);
-        doNothing().when(commentRepository).deleteById(0);
+        when(commentRepositoryMock.existsById(0)).thenReturn(true);
+        doNothing().when(commentRepositoryMock).deleteById(0);
         commentService.delete(0);
-        verify(commentRepository, times(1)).existsById(0);
-        verify(commentRepository, times(1)).deleteById(0);
+        verify(commentRepositoryMock, times(1)).existsById(0);
+        verify(commentRepositoryMock, times(1)).deleteById(0);
     }
 
     @Test
     void testDelete_NotFound() {
-        when(commentRepository.existsById(0)).thenReturn(false);
+        when(commentRepositoryMock.existsById(0)).thenReturn(false);
         assertThrows(NotFoundException.class, () -> commentService.delete(0));
-        verify(commentRepository, times(1)).existsById(0);
+        verify(commentRepositoryMock, times(1)).existsById(0);
     }
 }

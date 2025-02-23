@@ -13,9 +13,7 @@ import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.repositories.CommentRepository;
 import ru.noir74.blog.repositories.ItemRepository;
 import ru.noir74.blog.repositories.TagRepository;
-import ru.noir74.blog.services.CommentServiceImpl;
-import ru.noir74.blog.services.ItemServiceImpl;
-import ru.noir74.blog.services.TagServiceImpl;
+import ru.noir74.blog.services.*;
 import ru.noir74.blog.test.configurations.ServiceTestConfig;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,11 +29,16 @@ public class GenericServiceTest {
     protected ItemMapper itemMapper;
 
     @Mock
-    protected TagRepository tagRepository;
+    protected TagRepository tagRepositoryMock;
     @Mock
-    protected CommentRepository commentRepository;
+    protected CommentRepository commentRepositoryMock;
     @Mock
-    protected ItemRepository itemRepository;
+    protected ItemRepository itemRepositoryMock;
+
+    @Mock
+    protected TagService tagServiceMock;
+    @Mock
+    protected CommentService commentServiceMock;
 
     protected TagServiceImpl tagService;
     protected CommentServiceImpl commentService;
@@ -43,8 +46,8 @@ public class GenericServiceTest {
 
     @BeforeEach
     void genericSetUp() {
-        tagService = new TagServiceImpl(tagRepository, tagMapper);
-        commentService = new CommentServiceImpl(commentRepository, commentMapper);
-        itemService = new ItemServiceImpl(itemRepository, itemMapper, itemImageMapper, tagService, commentService);
+        tagService = new TagServiceImpl(tagRepositoryMock, tagMapper);
+        commentService = new CommentServiceImpl(commentRepositoryMock, commentMapper);
+        itemService = new ItemServiceImpl(itemRepositoryMock, itemMapper, itemImageMapper, tagServiceMock, commentServiceMock);
     }
 }

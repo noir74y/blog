@@ -17,6 +17,6 @@ public class ItemEntity {
     private String title;
     private String message;
     private Integer likes;
-    private Timestamp changed;
     private MultipartFile file;
+    private Timestamp changed;
 }

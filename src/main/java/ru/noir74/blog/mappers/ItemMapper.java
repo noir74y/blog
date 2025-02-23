@@ -11,10 +11,7 @@ import ru.noir74.blog.models.tag.Tag;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -48,7 +45,10 @@ public class ItemMapper {
         var entity = Optional.ofNullable(model)
                 .map(obj -> modelMapper.map(obj, ItemEntity.class))
                 .orElse(null);
-        Optional.ofNullable(entity).ifPresent(obj -> obj.setChanged(Timestamp.from(Instant.now())));
+        Optional.ofNullable(entity).ifPresent(obj ->
+                obj.setChanged(Objects.nonNull(obj.getChanged()) ?
+                        obj.getChanged() :
+                        Timestamp.from(Instant.now())));
         return entity;
     }
 
