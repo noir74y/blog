@@ -14,4 +14,6 @@ public interface TagService {
     List<Tag> save(List<Tag> tags);
 
     void attachTagsToItem(List<Integer> tagIdList, Integer itemId);
+
+    void populateTags();
 }

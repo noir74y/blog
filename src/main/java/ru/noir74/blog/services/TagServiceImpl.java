@@ -22,9 +22,8 @@ public class TagServiceImpl implements TagService {
     private List<Tag> allTags;
 
     @PostConstruct
-    public void populateAllTags() {
-        allTags = new LinkedList<>(tagMapper.bulkEntity2Model(tagRepository.findAll()));
-        tagMapper.setName2TagMap(allTags);
+    private void init() {
+        populateTags();
     }
 
     @Override
@@ -46,7 +45,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     public List<Tag> save(List<Tag> tags) {
         var newTags = tagMapper.bulkEntity2Model(tagRepository.save(tagMapper.bulkModel2Entity(tags)));
-        populateAllTags();
+        populateTags();
         return newTags;
     }
 
@@ -55,6 +54,12 @@ public class TagServiceImpl implements TagService {
     public void attachTagsToItem(List<Integer> tagIdList, Integer itemId) {
         tagRepository.unstickFromItem(itemId);
         tagRepository.stickToItem(tagIdList, itemId);
-        populateAllTags();
+        populateTags();
+    }
+
+    @Override
+    public void populateTags() {
+        allTags = new LinkedList<>(tagMapper.bulkEntity2Model(tagRepository.findAll()));
+        tagMapper.setName2TagMap(allTags);
     }
 }

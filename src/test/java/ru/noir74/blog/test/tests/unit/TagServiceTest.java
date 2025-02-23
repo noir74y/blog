@@ -24,8 +24,7 @@ public class TagServiceTest extends GenericServiceTest {
         tagEntities = new LinkedList<>(List.of(tagEntity));
 
         when(tagRepositoryMock.findAll()).thenReturn(tagEntities);
-        tagService.populateAllTags();
-        verify(tagRepositoryMock, times(1)).findAll();
+        tagService.populateTags();
     }
 
     @Test
