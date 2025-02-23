@@ -20,15 +20,11 @@ import static org.mockito.Mockito.*;
 
 public class ItemServiceTest extends GenericServiceTest {
     private Item item;
-    private List<Item> items;
 
     private ItemEntity itemEntity;
-    private List<ItemEntity> itemEntities;
 
-    private ItemBrief itemBrief;
     private List<ItemBrief> itemBriefs;
 
-    private ItemEntityBrief itemEntityBrief;
     private List<ItemEntityBrief> itemEntityBriefs;
 
     private ItemImage itemImage;
@@ -51,11 +47,9 @@ public class ItemServiceTest extends GenericServiceTest {
                 .tags(new ArrayList<>())
                 .file(file)
                 .changed(Timestamp.from(Instant.now())).build();
-        items = new LinkedList<>(List.of(item));
         itemEntity = itemMapper.model2entity(item);
-        itemEntities = new LinkedList<>(List.of(itemEntity));
 
-        itemEntityBrief = ItemEntityBrief.builder()
+        var itemEntityBrief = ItemEntityBrief.builder()
                 .id(item.getId())
                 .title(item.getTitle())
                 .message(item.getMessage())
@@ -92,7 +86,10 @@ public class ItemServiceTest extends GenericServiceTest {
     }
 
     @Test
-    void testFindImageById() {
+    void testFindImageById() throws IOException {
+        when(itemRepositoryMock.findImageById(item.getId())).thenReturn(itemImageEntity);
+        itemService.findImageById(itemImage);
+        verify(itemRepositoryMock, times(1)).findImageById(item.getId());
     }
 
     @Test
@@ -125,7 +122,10 @@ public class ItemServiceTest extends GenericServiceTest {
     }
 
     @Test
-    void testSetImageById() {
+    void testSetImageById() throws IOException {
+        doNothing().when(itemRepositoryMock).saveImageById(itemImageEntity);
+        itemService.setImageById(itemImage);
+        verify(itemRepositoryMock, times(1)).saveImageById(itemImageEntity);
     }
 
     @Test
