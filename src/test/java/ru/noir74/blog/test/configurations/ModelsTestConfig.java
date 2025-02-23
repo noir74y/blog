@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Import;
 import ru.noir74.blog.configurations.root.ModelMapperConfig;
 
 @Configuration
-@Import(ModelMapperConfig.class)
 @ComponentScan("ru.noir74.blog.models")
 public class ModelsTestConfig {
 }

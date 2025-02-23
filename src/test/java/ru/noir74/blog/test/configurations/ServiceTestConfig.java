@@ -4,6 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(MappersTestConfig.class)
+@Import({MappersTestConfig.class,ModelsTestConfig.class})
 public class ServiceTestConfig {
 }
