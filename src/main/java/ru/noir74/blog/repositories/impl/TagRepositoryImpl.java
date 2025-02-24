@@ -1,4 +1,4 @@
-package ru.noir74.blog.repositories;
+package ru.noir74.blog.repositories.impl;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.tag.TagEntity;
+import ru.noir74.blog.repositories.intf.TagRepository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

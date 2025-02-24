@@ -1,4 +1,4 @@
-package ru.noir74.blog.services;
+package ru.noir74.blog.services.impl;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.models.tag.Tag;
-import ru.noir74.blog.repositories.TagRepository;
+import ru.noir74.blog.repositories.intf.TagRepository;
+import ru.noir74.blog.services.intf.TagService;
 
 import java.util.LinkedList;
 import java.util.List;

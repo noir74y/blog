@@ -16,9 +16,9 @@ import ru.noir74.blog.models.item.ItemDtoRespBrief;
 import ru.noir74.blog.models.item.ItemImage;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagDtoResp;
-import ru.noir74.blog.services.CommentService;
-import ru.noir74.blog.services.ItemService;
-import ru.noir74.blog.services.TagService;
+import ru.noir74.blog.services.intf.CommentService;
+import ru.noir74.blog.services.intf.ItemService;
+import ru.noir74.blog.services.intf.TagService;
 
 import java.io.IOException;
 import java.util.ArrayList;

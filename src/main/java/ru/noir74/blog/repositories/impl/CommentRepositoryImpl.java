@@ -1,4 +1,4 @@
-package ru.noir74.blog.repositories;
+package ru.noir74.blog.repositories.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.comment.CommentEntity;
+import ru.noir74.blog.repositories.intf.CommentRepository;
 
 import java.sql.PreparedStatement;
 import java.util.LinkedList;

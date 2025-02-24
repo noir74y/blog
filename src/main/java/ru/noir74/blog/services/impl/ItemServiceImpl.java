@@ -1,4 +1,4 @@
-package ru.noir74.blog.services;
+package ru.noir74.blog.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,10 @@ import ru.noir74.blog.models.item.ItemBrief;
 import ru.noir74.blog.models.item.ItemImage;
 import ru.noir74.blog.models.item.ItemImageEntity;
 import ru.noir74.blog.models.tag.Tag;
-import ru.noir74.blog.repositories.ItemRepository;
+import ru.noir74.blog.repositories.intf.ItemRepository;
+import ru.noir74.blog.services.intf.CommentService;
+import ru.noir74.blog.services.intf.ItemService;
+import ru.noir74.blog.services.intf.TagService;
 
 import java.io.IOException;
 import java.util.*;

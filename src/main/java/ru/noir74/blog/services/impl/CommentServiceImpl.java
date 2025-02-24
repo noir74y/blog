@@ -1,4 +1,4 @@
-package ru.noir74.blog.services;
+package ru.noir74.blog.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.mappers.CommentMapper;
 import ru.noir74.blog.models.comment.Comment;
-import ru.noir74.blog.repositories.CommentRepository;
+import ru.noir74.blog.repositories.intf.CommentRepository;
+import ru.noir74.blog.services.intf.CommentService;
 
 import java.util.List;
 

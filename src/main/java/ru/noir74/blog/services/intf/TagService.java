@@ -1,4 +1,4 @@
-package ru.noir74.blog.services;
+package ru.noir74.blog.services.intf;
 
 import ru.noir74.blog.models.tag.Tag;
 

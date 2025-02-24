@@ -1,4 +1,4 @@
-package ru.noir74.blog.repositories;
+package ru.noir74.blog.repositories.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.noir74.blog.models.item.ItemEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
 import ru.noir74.blog.models.item.ItemImageEntity;
+import ru.noir74.blog.repositories.intf.CommentRepository;
+import ru.noir74.blog.repositories.intf.ItemRepository;
+import ru.noir74.blog.repositories.intf.TagRepository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

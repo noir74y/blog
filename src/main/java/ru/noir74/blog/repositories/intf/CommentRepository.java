@@ -1,4 +1,4 @@
-package ru.noir74.blog.repositories;
+package ru.noir74.blog.repositories.intf;
 
 import ru.noir74.blog.models.comment.CommentEntity;
 
