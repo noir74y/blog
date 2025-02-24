@@ -49,29 +49,29 @@ public class ServiceTestConfig {
     }
 
     @Bean
-    public TagService tagService(TagRepository tagRepository,
+    public TagService tagService(TagRepository tagRepositoryMock,
                                  TagMapper tagMapper) {
         return new TagServiceImpl(
-                tagRepository,
+                tagRepositoryMock,
                 tagMapper);
     }
 
     @Bean
-    public CommentService commentService(CommentRepository commentRepository,
+    public CommentService commentService(CommentRepository commentRepositoryMock,
                                          CommentMapper commentMapper) {
         return new CommentServiceImpl(
-                commentRepository,
+                commentRepositoryMock,
                 commentMapper);
     }
 
     @Bean
-    public ItemService itemService(ItemRepository itemRepository,
+    public ItemService itemService(ItemRepository itemRepositoryMock,
                                    ItemMapper itemMapper,
                                    ItemImageMapper itemImageMapper,
                                    TagServiceMock tagServiceMock,
                                    CommentServiceMock commentServiceMock) {
         return new ItemServiceImpl(
-                itemRepository,
+                itemRepositoryMock,
                 itemMapper,
                 itemImageMapper,
                 tagServiceMock,
