@@ -31,12 +31,13 @@ public class CommentRepositoryTest extends GenericDaoTest {
 
     @BeforeEach
     void setUp() {
+        message = "message";
+
         jdbcTemplate.execute("DELETE FROM items");
-        jdbcTemplate.execute("INSERT INTO items (title,message) VALUES ('title','message')");
+        jdbcTemplate.update("INSERT INTO items (title,message) VALUES ('title',?)", message);
         allItems = itemRepository.findByPage(1, 10);
         itemId = allItems.getFirst().getId();
         jdbcTemplate.execute("DELETE FROM comments");
-        message = "message";
         commentId = commentRepository.save(CommentEntity.builder().message(message).itemId(itemId).build());
     }
 
