@@ -102,4 +102,9 @@ public class TagRepositoryImpl implements TagRepository {
                     }
                 });
     }
+
+    @Override
+    public void refreshAllTagList() {
+        populateAllTagEntityList();
+    }
 }

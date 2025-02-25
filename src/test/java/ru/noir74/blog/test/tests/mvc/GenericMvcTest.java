@@ -6,7 +6,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
-import ru.noir74.blog.test.configurations.MvcTestConfig;
+import ru.noir74.blog.test.configurations.old.MvcTestConfig;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)

@@ -1,4 +1,4 @@
-package ru.noir74.blog.test.configurations.old.dao;
+package ru.noir74.blog.test.configurations.db;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

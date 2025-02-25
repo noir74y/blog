@@ -20,4 +20,5 @@ public interface TagRepository {
 
     void stickToItem(List<Integer> tagIdList, Integer itemId);
 
+    void refreshAllTagList();
 }

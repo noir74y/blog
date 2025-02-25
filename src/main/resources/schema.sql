@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS items (
     image      BYTEA,
     image_name VARCHAR(255),
     likes      INTEGER,
-    changed    TIMESTAMP WITH TIME ZONE NOT NULL,
+    changed    TIMESTAMP WITH TIME ZONE,
     CONSTRAINT pk_post PRIMARY KEY (id)
 );
 

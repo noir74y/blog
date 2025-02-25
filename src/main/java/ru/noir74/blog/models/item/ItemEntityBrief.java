@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -21,6 +22,8 @@ public class ItemEntityBrief {
     private String tagsCSV;
 
     public static String sortTagsCSV(String unsortedTagsCSV) {
-        return Arrays.stream(unsortedTagsCSV.split(",")).sorted().collect(Collectors.joining(","));
+        return Arrays.stream(Optional.ofNullable(unsortedTagsCSV).orElse("").split(","))
+                .sorted()
+                .collect(Collectors.joining(","));
     }
 }
