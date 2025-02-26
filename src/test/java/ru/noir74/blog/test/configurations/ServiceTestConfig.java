@@ -21,7 +21,7 @@ import ru.noir74.blog.test.tests.unit.intf.CommentServiceMock;
 import ru.noir74.blog.test.tests.unit.intf.TagServiceMock;
 
 @Configuration
-@Import({MappersTestConfig.class, ModelsTestConfig.class})
+@Import(MappersTestConfig.class)
 public class ServiceTestConfig {
     @Bean
     public TagRepository tagRepositoryMock() {

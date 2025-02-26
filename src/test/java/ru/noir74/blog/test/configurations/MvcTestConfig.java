@@ -1,9 +1,12 @@
-package ru.noir74.blog.test.configurations.old;
+package ru.noir74.blog.test.configurations;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import ru.noir74.blog.configurations.WebConfig;
 
 @Configuration
 @EnableWebMvc
+@Import({WebConfig.class, DaoTestConfig.class})
 public class MvcTestConfig {
 }
