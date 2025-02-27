@@ -7,9 +7,9 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 
 @ComponentScan(basePackages = {
-        "ru.noir74.blog.configurations.root",
-        "ru.noir74.blog.mappers",
+        "ru.noir74.blog.configurations.db",
         "ru.noir74.blog.repositories",
+        "ru.noir74.blog.mappers",
         "ru.noir74.blog.services"
 })
 

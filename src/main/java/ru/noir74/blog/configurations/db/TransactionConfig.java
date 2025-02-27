@@ -1,4 +1,4 @@
-package ru.noir74.blog.test.configurations.db;
+package ru.noir74.blog.configurations.db;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @RequiredArgsConstructor
-public class TransactionTestConfig {
+public class TransactionConfig {
     private final DataSource dataSource;
 
     @Bean

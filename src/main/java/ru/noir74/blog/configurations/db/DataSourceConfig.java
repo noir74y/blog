@@ -1,4 +1,4 @@
-package ru.noir74.blog.configurations.root;
+package ru.noir74.blog.configurations.db;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

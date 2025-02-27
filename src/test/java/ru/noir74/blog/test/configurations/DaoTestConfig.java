@@ -9,8 +9,8 @@ import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan(basePackages = {
-        "ru.noir74.blog.repositories",
-        "ru.noir74.blog.test.configurations.db"})
+        "ru.noir74.blog.configurations.db",
+        "ru.noir74.blog.repositories"})
 public class DaoTestConfig {
     public ResourceDatabasePopulator resourceDatabasePopulator(DataSource dataSource) {
         ResourceDatabasePopulator loader = new ResourceDatabasePopulator();

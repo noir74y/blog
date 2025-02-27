@@ -1,4 +1,4 @@
-package ru.noir74.blog.configurations.root;
+package ru.noir74.blog.configurations.db;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
