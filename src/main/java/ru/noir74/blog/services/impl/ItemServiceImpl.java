@@ -18,6 +18,7 @@ import ru.noir74.blog.services.intf.TagService;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 @Service
@@ -114,12 +115,14 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     private void saveTags(Item item) {
-        var existingTags = item.getTags().stream().filter(tag -> Objects.nonNull(tag.getId())).toList();
-        var newTags = tagService.save(item.getTags().stream().filter(tag -> Objects.isNull(tag.getId())).toList());
+        var tagsReceived = Optional.ofNullable(item.getTags()).orElseGet(List::of);
+        var existingTags = tagsReceived.stream().filter(tag -> Objects.nonNull(tag.getId())).toList();
+        var newTags = tagService.save(tagsReceived.stream().filter(tag -> Objects.isNull(tag.getId())).toList());
         var allSelectedTags = Stream.concat(existingTags.stream(), newTags.stream()).toList();
 
         item.setTags(allSelectedTags);
-        tagService.attachTagsToItem(item.getTags().stream().map(Tag::getId).toList(), item.getId());
+        var tagsToStick = Optional.ofNullable(item.getTags()).orElseGet(List::of);
+        tagService.attachTagsToItem(tagsToStick.stream().map(Tag::getId).toList(), item.getId());
     }
 
     private void throwIfNotFound(Integer id) {
