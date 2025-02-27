@@ -7,5 +7,5 @@ import ru.noir74.blog.test.configurations.ServiceTestConfig;
 
 @ExtendWith(MockitoExtension.class)
 @SpringJUnitConfig(ServiceTestConfig.class)
-public class GenericServiceTest {
+public abstract class GenericServiceTest {
 }
