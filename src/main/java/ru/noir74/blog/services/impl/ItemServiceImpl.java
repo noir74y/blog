@@ -65,11 +65,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void create(Item item) throws IOException {
+    public Integer create(Item item) throws IOException {
         item.setLikes(0);
         item.setId(itemRepository.save(itemMapper.model2entity(item)));
         saveImage(item);
         saveTags(item);
+        return item.getId();
     }
 
     @Override
@@ -96,12 +97,19 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     private void saveImage(Item item) throws IOException {
-        var itemImageEntity = ItemImageEntity.builder()
-                .id(item.getId())
-                .image(item.getFile().getBytes())
-                .imageName(item.getFile().getOriginalFilename()).build();
-        if (itemImageEntity.isImageReadyToBeSaved())
-            itemRepository.saveImageById(itemImageEntity);
+        Optional.ofNullable(item.getFile()).ifPresent(file -> {
+            ItemImageEntity itemImageEntity = null;
+            try {
+                itemImageEntity = ItemImageEntity.builder()
+                        .id(item.getId())
+                        .image(file.getBytes())
+                        .imageName(file.getOriginalFilename()).build();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (itemImageEntity.isImageReadyToBeSaved())
+                itemRepository.saveImageById(itemImageEntity);
+        });
     }
 
     @Transactional

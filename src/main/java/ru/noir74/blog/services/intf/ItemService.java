@@ -14,7 +14,7 @@ public interface ItemService {
 
     void findImageById(ItemImage itemImage) throws IOException;
 
-    void create(Item item) throws IOException;
+    Integer create(Item item) throws IOException;
 
     void update(Item item) throws IOException;
 
