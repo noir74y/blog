@@ -25,11 +25,6 @@ public class DataSourceTestConfig {
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
-
-        ResourceDatabasePopulator loader = new ResourceDatabasePopulator();
-        loader.addScript(new ClassPathResource("test-schema.sql"));
-        loader.execute(dataSource);
-
         return dataSource;
     }
 }
