@@ -107,15 +107,15 @@ public class ItemController {
     }
 
     @PostMapping(value = "/{itemId}/comment")
-    public String create(@ModelAttribute CommentDtoReq dtoReq,
-                         @PathVariable("itemId") Integer itemId) {
+    public String createComment(@ModelAttribute CommentDtoReq dtoReq,
+                                @PathVariable("itemId") Integer itemId) {
         log.info("POST (for comment create) /items/{}/comment, dtoReq={}", itemId, dtoReq);
         commentService.create(commentMapper.dtoReq2Model(dtoReq));
-        return "/item/itemId";
+        return "redirect:/items";
     }
 
     @PostMapping(value = "/{itemId}/comment/{id}")
-    public String update(@ModelAttribute CommentDtoReq dtoReq,
+    public String updateComment(@ModelAttribute CommentDtoReq dtoReq,
                          @PathVariable("itemId") Integer itemId,
                          @PathVariable("id") Integer id) {
         log.info("POST (for comment update) /items/{}/comment/{}, dtoReq={}", itemId, id, dtoReq);
@@ -124,7 +124,7 @@ public class ItemController {
     }
 
     @PostMapping(value = "/{itemId}/comment/{id}", params = "_method=delete")
-    public String delete(@PathVariable("itemId") Integer itemId,
+    public String deleteComment(@PathVariable("itemId") Integer itemId,
                          @PathVariable("id") Integer id) {
         log.info("POST (for comment delete) /items/{}/comment/{}", itemId, id);
         commentService.delete(id);
