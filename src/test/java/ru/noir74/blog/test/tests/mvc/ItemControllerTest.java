@@ -11,8 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -31,8 +30,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebAppConfiguration
-@SpringJUnitConfig(MvcTestConfig.class)
+@SpringJUnitWebConfig(MvcTestConfig.class)
 @TestPropertySource(locations = "classpath:test-application.properties")
 public class ItemControllerTest {
     @Autowired
@@ -46,7 +44,6 @@ public class ItemControllerTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     private MockMvc mockMvc;
-
 
     @BeforeEach
     void setUp() {
