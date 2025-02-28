@@ -26,9 +26,7 @@ import ru.noir74.blog.services.intf.CommentService;
 import ru.noir74.blog.services.intf.ItemService;
 import ru.noir74.blog.test.configurations.MvcTestConfig;
 
-import java.io.IOException;
 import java.util.Objects;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -239,7 +237,7 @@ public class ItemControllerTest {
                 )
                 .andExpect(status().is3xxRedirection());
 
-        assertEquals("comment",commentService.findAllByItemId(itemId).getFirst().getMessage());
+        assertEquals("comment", commentService.findAllByItemId(itemId).getFirst().getMessage());
     }
 
     @Test
