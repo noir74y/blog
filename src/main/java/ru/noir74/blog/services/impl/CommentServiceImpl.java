@@ -32,8 +32,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void create(Comment comment) {
-        commentRepository.save(commentMapper.model2entity(comment));
+    public Integer create(Comment comment) {
+        return commentRepository.save(commentMapper.model2entity(comment));
     }
 
     @Override

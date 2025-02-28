@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.noir74.blog.exceptions.NotFoundException;
+import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.item.Item;
 import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.services.intf.CommentService;
@@ -239,5 +240,21 @@ public class ItemControllerTest {
                 .andExpect(status().is3xxRedirection());
 
         assertEquals("comment",commentService.findAllByItemId(itemId).getFirst().getMessage());
+    }
+
+    @Test
+    void updateComment() throws Exception {
+        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+        var commentId = commentService.create(Comment.builder().message("comment").itemId(itemId).build());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/items/" + itemId + "/comment/" + commentId)
+                        .param("id", String.valueOf(commentId))
+                        .param("message", "commentUpdated")
+                        .param("itemId", String.valueOf(itemId))
+                )
+                .andExpect(status().is3xxRedirection());
+
+        assertEquals("commentUpdated", commentService.findById(commentId).getMessage());
+
     }
 }

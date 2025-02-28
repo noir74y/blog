@@ -9,7 +9,7 @@ public interface CommentService {
 
     Comment findById(Integer id);
 
-    void create(Comment item);
+    Integer create(Comment item);
 
     void update(Comment item);
 
