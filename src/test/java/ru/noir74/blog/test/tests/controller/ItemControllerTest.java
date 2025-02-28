@@ -1,4 +1,4 @@
-package ru.noir74.blog.test.tests.mvc;
+package ru.noir74.blog.test.tests.controller;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -6,12 +6,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -23,16 +26,22 @@ import ru.noir74.blog.models.item.Item;
 import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.services.intf.CommentService;
 import ru.noir74.blog.services.intf.ItemService;
-import ru.noir74.blog.test.configurations.MvcTestConfig;
+import ru.noir74.blog.test.configurations.ControllerTestConfig;
+import ru.noir74.blog.test.configurations.DaoTestConfig;
+import ru.noir74.blog.test.tests.GenericTest;
 
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringJUnitWebConfig(MvcTestConfig.class)
-@TestPropertySource(locations = "classpath:test-application.properties")
-public class ItemControllerTest {
+@WebAppConfiguration
+@ExtendWith(SpringExtension.class)
+@ContextHierarchy({
+        @ContextConfiguration(name = "root", classes = DaoTestConfig.class),
+        @ContextConfiguration(name = "web", classes = ControllerTestConfig.class)
+})
+public class ItemControllerTest extends GenericTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired

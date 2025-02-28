@@ -1,4 +1,4 @@
-package ru.noir74.blog.test.tests.unit;
+package ru.noir74.blog.test.tests.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,8 +10,8 @@ import ru.noir74.blog.mappers.ItemMapper;
 import ru.noir74.blog.models.item.*;
 import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.services.intf.ItemService;
-import ru.noir74.blog.test.tests.unit.intf.CommentServiceMock;
-import ru.noir74.blog.test.tests.unit.intf.TagServiceMock;
+import ru.noir74.blog.test.tests.service.intf.CommentServiceMock;
+import ru.noir74.blog.test.tests.service.intf.TagServiceMock;
 
 import java.io.IOException;
 import java.sql.Timestamp;

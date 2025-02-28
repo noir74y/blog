@@ -2,10 +2,7 @@ package ru.noir74.blog.test.configurations;
 
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import ru.noir74.blog.configurations.db.ModelMapperConfig;
 import ru.noir74.blog.mappers.CommentMapper;
 import ru.noir74.blog.mappers.ItemImageMapper;
 import ru.noir74.blog.mappers.ItemMapper;
@@ -19,13 +16,11 @@ import ru.noir74.blog.services.impl.TagServiceImpl;
 import ru.noir74.blog.services.intf.CommentService;
 import ru.noir74.blog.services.intf.ItemService;
 import ru.noir74.blog.services.intf.TagService;
-import ru.noir74.blog.test.tests.unit.intf.CommentServiceMock;
-import ru.noir74.blog.test.tests.unit.intf.TagServiceMock;
+import ru.noir74.blog.test.tests.service.intf.CommentServiceMock;
+import ru.noir74.blog.test.tests.service.intf.TagServiceMock;
 
 @Configuration
-@Import(ModelMapperConfig.class)
-@ComponentScan("ru.noir74.blog.mappers")
-public class ServiceTestConfig {
+public class ServiceTestConfig extends GenericTestConfig {
     @Bean
     public TagRepository tagRepositoryMock() {
         return Mockito.mock(TagRepository.class);
