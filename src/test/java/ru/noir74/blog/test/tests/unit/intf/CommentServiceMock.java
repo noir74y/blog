@@ -1,4 +1,4 @@
-package ru.noir74.blog.test.tests.service.intf;
+package ru.noir74.blog.test.tests.unit.intf;
 
 import ru.noir74.blog.services.intf.CommentService;
 
