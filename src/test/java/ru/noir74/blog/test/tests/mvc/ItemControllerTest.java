@@ -257,4 +257,19 @@ public class ItemControllerTest {
         assertEquals("commentUpdated", commentService.findById(commentId).getMessage());
 
     }
+
+    @Test
+    void deleteComment() throws Exception {
+        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+        var commentId = commentService.create(Comment.builder().message("comment").itemId(itemId).build());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/items/" + itemId + "/comment/" + commentId)
+                        .param("_method", "delete")
+                        .param("id", String.valueOf(commentId))
+                )
+                .andExpect(status().is3xxRedirection());
+
+        assertThrows(NotFoundException.class, () -> commentService.findById(commentId));
+    }
+
 }
