@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -17,11 +18,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.noir74.blog.models.item.Item;
+import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.services.intf.ItemService;
 import ru.noir74.blog.test.configurations.MvcTestConfig;
 
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -33,6 +36,8 @@ public class ItemControllerTest {
     private WebApplicationContext webApplicationContext;
     @Autowired
     private ItemService itemService;
+    @Autowired
+    private ItemRepository itemRepository;
     @Autowired
     private JdbcTemplate jdbcTemplate;
     private MockMvc mockMvc;
@@ -95,5 +100,67 @@ public class ItemControllerTest {
 
         assertEquals("title", valueTitle);
         assertEquals("message", valueMessage);
+    }
+
+    @Test
+    void create() throws Exception {
+        var mockMultipartFileToBeSaved = new MockMultipartFile(
+                "file",
+                "someFile.jpeg",
+                "image/jpeg",
+                new byte[]{(byte) 0x00});
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/items")
+                        .file(mockMultipartFileToBeSaved)
+                        .param("title", "title")
+                        .param("message", "message")
+                        .param("itemNewTagsCsv", "")
+                )
+                .andExpect(status().is3xxRedirection());
+
+        var newItemId = itemService.findPage("1", "10", "").getFirst().getId();
+        var newItem = itemService.findById(newItemId);
+
+        assertEquals("title", newItem.getTitle());
+        assertEquals("message", newItem.getMessage());
+
+        var itemImageEntity = itemRepository.findImageById(newItemId);
+
+        assertArrayEquals(mockMultipartFileToBeSaved.getBytes(), itemImageEntity.getImage());
+        assertEquals(mockMultipartFileToBeSaved.getOriginalFilename(), itemImageEntity.getImageName());
+    }
+
+    @Test
+    void update() throws Exception {
+        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+
+        var mockMultipartFileToBeSaved = new MockMultipartFile(
+                "file",
+                "someFile.jpeg",
+                "image/jpeg",
+                new byte[]{(byte) 0x00});
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/items/" + String.valueOf(itemId))
+                        .file(new MockMultipartFile(
+                                "file",
+                                "someFile.jpeg",
+                                "image/jpeg",
+                                new byte[]{(byte) 0x00}))
+                        .param("id", String.valueOf(itemId))
+                        .param("title", "titleUpdated")
+                        .param("message", "messageUpdated")
+                        .param("itemNewTagsCsv", "")
+                )
+                .andExpect(status().is3xxRedirection());
+
+        var newItem = itemService.findById(itemId);
+
+        assertEquals("titleUpdated", newItem.getTitle());
+        assertEquals("messageUpdated", newItem.getMessage());
+
+        var itemImageEntity = itemRepository.findImageById(itemId);
+
+        assertArrayEquals(mockMultipartFileToBeSaved.getBytes(), itemImageEntity.getImage());
+        assertEquals(mockMultipartFileToBeSaved.getOriginalFilename(), itemImageEntity.getImageName());
     }
 }

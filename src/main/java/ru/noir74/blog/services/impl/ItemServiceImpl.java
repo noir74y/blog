@@ -3,6 +3,7 @@ package ru.noir74.blog.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.mappers.ItemImageMapper;
 import ru.noir74.blog.mappers.ItemMapper;

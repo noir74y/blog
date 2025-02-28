@@ -128,7 +128,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, itemEntity.getTitle());
             stmt.setString(2, itemEntity.getMessage());
-            stmt.setInt(3, itemEntity.getLikes());
+            stmt.setInt(3, Optional.ofNullable(itemEntity.getLikes()).orElse(0));
             stmt.setTimestamp(4, itemEntity.getChanged());
             stmt.setInt(5, itemEntity.getId());
             return stmt;
