@@ -6,23 +6,18 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import ru.noir74.blog.configurations.ModelMapperConfig;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.item.Item;
@@ -30,9 +25,8 @@ import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.services.intf.CommentService;
 import ru.noir74.blog.services.intf.ItemService;
 import ru.noir74.blog.test.configurations.ControllerTestConfig;
-import ru.noir74.blog.test.configurations.DaoTestConfig;
 import ru.noir74.blog.test.configurations.ServiceTestConfig;
-import ru.noir74.blog.test.tests.GenericTest;
+import ru.noir74.blog.test.tests.dao.GenericDaoTest;
 
 import java.util.Objects;
 
@@ -41,12 +35,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringJUnitWebConfig
 @ContextHierarchy({
-        @ContextConfiguration(name = "mapper", classes = ModelMapperConfig.class),
-        @ContextConfiguration(name = "dao", classes = DaoTestConfig.class),
         @ContextConfiguration(name = "service", classes = ServiceTestConfig.class),
         @ContextConfiguration(name = "web", classes = ControllerTestConfig.class)
 })
-public class ItemControllerTest extends GenericTest {
+public class ItemControllerTest extends GenericDaoTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired
