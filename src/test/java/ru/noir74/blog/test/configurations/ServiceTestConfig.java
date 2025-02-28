@@ -20,7 +20,7 @@ import ru.noir74.blog.test.tests.service.intf.CommentServiceMock;
 import ru.noir74.blog.test.tests.service.intf.TagServiceMock;
 
 @Configuration
-public class ServiceTestConfig extends GenericTestConfig {
+public class ServiceTestConfig {
     @Bean
     public TagRepository tagRepositoryMock() {
         return Mockito.mock(TagRepository.class);

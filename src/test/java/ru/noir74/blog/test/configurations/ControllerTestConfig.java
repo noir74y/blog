@@ -8,5 +8,5 @@ import ru.noir74.blog.configurations.WebConfig;
 @Configuration
 @Import(WebConfig.class)
 @ComponentScan("ru.noir74.blog.services")
-public class ControllerTestConfig extends GenericTestConfig {
+public class ControllerTestConfig {
 }

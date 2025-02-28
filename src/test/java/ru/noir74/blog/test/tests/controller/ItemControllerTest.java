@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import ru.noir74.blog.configurations.ModelMapperConfig;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.item.Item;
@@ -38,7 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
 @ContextHierarchy({
-        @ContextConfiguration(name = "root", classes = DaoTestConfig.class),
+        @ContextConfiguration(name = "mapper", classes = ModelMapperConfig.class),
+        @ContextConfiguration(name = "dao", classes = DaoTestConfig.class),
         @ContextConfiguration(name = "web", classes = ControllerTestConfig.class)
 })
 public class ItemControllerTest extends GenericTest {

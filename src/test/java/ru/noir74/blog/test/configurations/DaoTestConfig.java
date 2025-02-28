@@ -7,5 +7,5 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = {
         "ru.noir74.blog.configurations.dao",
         "ru.noir74.blog.repositories"})
-public class DaoTestConfig extends GenericTestConfig {
+public class DaoTestConfig {
 }
