@@ -5,8 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@ComponentScan(basePackages = {
-        "ru.noir74.blog.configurations.web",
-        "ru.noir74.blog.controllers"})
-public class WebConfig {
+@ComponentScan("ru.noir74.blog.services")
+@Import(DaoConfig.class)
+public class ServiceConfig {
 }

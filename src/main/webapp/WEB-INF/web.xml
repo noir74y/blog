@@ -12,7 +12,7 @@
     </context-param>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>ru.noir74.blog.configurations.RootConfig</param-value>
+        <param-value>ru.noir74.blog.configurations.ServiceConfig</param-value>
     </context-param>
 
     <!-- Инициализация корневого контекста -->
