@@ -21,9 +21,11 @@ import org.springframework.web.context.WebApplicationContext;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.item.Item;
 import ru.noir74.blog.repositories.intf.ItemRepository;
+import ru.noir74.blog.services.intf.CommentService;
 import ru.noir74.blog.services.intf.ItemService;
 import ru.noir74.blog.test.configurations.MvcTestConfig;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -41,6 +43,8 @@ public class ItemControllerTest {
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
+    private CommentService commentService;
+    @Autowired
     private JdbcTemplate jdbcTemplate;
     private MockMvc mockMvc;
 
@@ -53,7 +57,7 @@ public class ItemControllerTest {
 
     @Test
     void getPage() throws Exception {
-        var newItemId = itemService.create(Item.builder().title("title").message("message").build());
+        var itemId = itemService.create(Item.builder().title("title").message("message").build());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/items"))
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
@@ -78,9 +82,9 @@ public class ItemControllerTest {
 
     @Test
     void get() throws Exception {
-        var newItemId = itemService.create(Item.builder().title("title").message("message").build());
+        var itemId = itemService.create(Item.builder().title("title").message("message").build());
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/items/" + newItemId))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/items/" + itemId))
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(view().name("/item"))
                 .andExpect(model().attributeExists("id"))
@@ -222,5 +226,18 @@ public class ItemControllerTest {
                 .andExpect(status().is3xxRedirection());
 
         assertThrows(NotFoundException.class, () -> itemService.findById(itemId));
+    }
+
+    @Test
+    void createComment() throws Exception {
+        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/items/" + itemId + "/comment")
+                        .param("message", "comment")
+                        .param("itemId", String.valueOf(itemId))
+                )
+                .andExpect(status().is3xxRedirection());
+
+        assertEquals("comment",commentService.findAllByItemId(itemId).getFirst().getMessage());
     }
 }
