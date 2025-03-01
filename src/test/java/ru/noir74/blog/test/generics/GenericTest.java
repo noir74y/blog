@@ -1,4 +1,4 @@
-package ru.noir74.blog.test.tests;
+package ru.noir74.blog.test.generics;
 
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;

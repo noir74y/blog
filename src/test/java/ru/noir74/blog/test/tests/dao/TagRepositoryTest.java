@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import ru.noir74.blog.models.tag.TagEntity;
 import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.repositories.intf.TagRepository;
+import ru.noir74.blog.test.generics.GenericDaoTest;
 
 import java.util.ArrayList;
 import java.util.List;

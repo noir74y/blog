@@ -10,6 +10,7 @@ import ru.noir74.blog.mappers.ItemMapper;
 import ru.noir74.blog.models.item.*;
 import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.services.intf.ItemService;
+import ru.noir74.blog.test.generics.GenericServiceTest;
 import ru.noir74.blog.test.tests.service.intf.CommentServiceMock;
 import ru.noir74.blog.test.tests.service.intf.TagServiceMock;
 

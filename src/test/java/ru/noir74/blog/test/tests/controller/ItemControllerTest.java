@@ -25,7 +25,7 @@ import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.services.intf.CommentService;
 import ru.noir74.blog.services.intf.ItemService;
 import ru.noir74.blog.test.configurations.ControllerTestConfig;
-import ru.noir74.blog.test.tests.dao.GenericDaoTest;
+import ru.noir74.blog.test.generics.GenericDaoTest;
 
 import java.util.Objects;
 
