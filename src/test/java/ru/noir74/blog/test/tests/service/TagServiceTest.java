@@ -1,4 +1,4 @@
-package ru.noir74.blog.test.tests.unit;
+package ru.noir74.blog.test.tests.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

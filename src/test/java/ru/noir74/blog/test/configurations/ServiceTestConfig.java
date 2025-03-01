@@ -16,11 +16,11 @@ import ru.noir74.blog.services.impl.TagServiceImpl;
 import ru.noir74.blog.services.intf.CommentService;
 import ru.noir74.blog.services.intf.ItemService;
 import ru.noir74.blog.services.intf.TagService;
-import ru.noir74.blog.test.tests.unit.intf.CommentServiceMock;
-import ru.noir74.blog.test.tests.unit.intf.TagServiceMock;
+import ru.noir74.blog.test.tests.service.intf.CommentServiceMock;
+import ru.noir74.blog.test.tests.service.intf.TagServiceMock;
 
 @Configuration
-public class UnitConfig {
+public class ServiceTestConfig {
     @Bean
     public TagRepository tagRepositoryMock() {
         return Mockito.mock(TagRepository.class);
