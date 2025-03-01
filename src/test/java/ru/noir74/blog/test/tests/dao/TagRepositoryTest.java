@@ -3,9 +3,7 @@ package ru.noir74.blog.test.tests.dao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import ru.noir74.blog.models.tag.TagEntity;
-import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.repositories.intf.TagRepository;
 import ru.noir74.blog.test.generics.GenericDaoTest;
 
@@ -16,11 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TagRepositoryTest extends GenericDaoTest {
     @Autowired
-    JdbcTemplate jdbcTemplate;
-    @Autowired
     private TagRepository tagRepository;
-    @Autowired
-    private ItemRepository itemRepository;
 
     @BeforeEach
     void setUp() {

@@ -3,11 +3,9 @@ package ru.noir74.blog.test.tests.dao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import ru.noir74.blog.models.comment.CommentEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
 import ru.noir74.blog.repositories.intf.CommentRepository;
-import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.test.generics.GenericDaoTest;
 
 import java.util.List;
@@ -17,11 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class CommentRepositoryTest extends GenericDaoTest {
     @Autowired
-    JdbcTemplate jdbcTemplate;
-    @Autowired
     private CommentRepository commentRepository;
-    @Autowired
-    private ItemRepository itemRepository;
 
     List<ItemEntityBrief> allItems;
     Integer itemId;
