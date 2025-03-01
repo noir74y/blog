@@ -12,7 +12,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,7 +25,6 @@ import ru.noir74.blog.repositories.intf.ItemRepository;
 import ru.noir74.blog.services.intf.CommentService;
 import ru.noir74.blog.services.intf.ItemService;
 import ru.noir74.blog.test.configurations.ControllerTestConfig;
-import ru.noir74.blog.test.configurations.ServiceTestConfig;
 import ru.noir74.blog.test.tests.dao.GenericDaoTest;
 
 import java.util.Objects;
@@ -33,11 +32,8 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringJUnitWebConfig
-@ContextHierarchy({
-        @ContextConfiguration(name = "service", classes = ServiceTestConfig.class),
-        @ContextConfiguration(name = "web", classes = ControllerTestConfig.class)
-})
+@WebAppConfiguration
+@ContextHierarchy(@ContextConfiguration(name = "web", classes = ControllerTestConfig.class))
 public class ItemControllerTest extends GenericDaoTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
