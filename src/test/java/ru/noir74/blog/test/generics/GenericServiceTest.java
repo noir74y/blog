@@ -1,10 +1,9 @@
-package ru.noir74.blog.test.tests.service;
+package ru.noir74.blog.test.generics;
 
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import ru.noir74.blog.test.configurations.ServiceTestConfig;
-import ru.noir74.blog.test.tests.GenericTest;
 
-@ContextHierarchy(@ContextConfiguration(name = "unit", classes = ServiceTestConfig.class))
+@ContextHierarchy(@ContextConfiguration(name = "service", classes = ServiceTestConfig.class))
 public abstract class GenericServiceTest extends GenericTest {
 }

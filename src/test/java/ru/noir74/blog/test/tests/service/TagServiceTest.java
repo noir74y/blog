@@ -8,6 +8,7 @@ import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagEntity;
 import ru.noir74.blog.repositories.intf.TagRepository;
 import ru.noir74.blog.services.intf.TagService;
+import ru.noir74.blog.test.generics.GenericServiceTest;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -9,6 +9,7 @@ import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.comment.CommentEntity;
 import ru.noir74.blog.repositories.intf.CommentRepository;
 import ru.noir74.blog.services.intf.CommentService;
+import ru.noir74.blog.test.generics.GenericServiceTest;
 
 import java.sql.Timestamp;
 import java.time.Instant;

@@ -8,6 +8,7 @@ import ru.noir74.blog.models.comment.CommentEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
 import ru.noir74.blog.repositories.intf.CommentRepository;
 import ru.noir74.blog.repositories.intf.ItemRepository;
+import ru.noir74.blog.test.generics.GenericDaoTest;
 
 import java.util.List;
 
