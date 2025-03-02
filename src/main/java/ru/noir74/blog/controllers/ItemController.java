@@ -106,6 +106,12 @@ public class ItemController {
         return "redirect:/";
     }
 
+    @PostMapping(value = "{id}", params = "_action=back")
+    public String back() {
+        log.info("POST (back to items\\'s list) ");
+        return "redirect:/";
+    }
+
     @PostMapping(value = "{itemId}/comment")
     public String createComment(@ModelAttribute CommentDtoReq dtoReq,
                                 @PathVariable("itemId") Integer itemId) {
