@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Посты</title>
+    <style>
+        table {
+             border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid;
+        }
+    </style>
+</head>
+
+<body onload="selectItemTags()">
+
+<!--<a href="javascript:history.back()">Назад</a>-->
+<!--<a href="/">Назад</a>-->
+<form method="post">
+    <p></p>
+    <input type="hidden" name="_action" value="back">
+    <button>В список постов</button>
+</form>
+
+
+<p></p>
+<h1>Пост</h1>
+
+<form id="itemForm" enctype="multipart/form-data" th:action="${id}" method="post" accept-charset="UTF-8">
+    <label for="id"></label>
+    <input type="text" id="id" name="id" th:value="${id}" hidden>
+
+    <label for="title">Название</label>
+    <input type="text" id="title" name="title" th:value="${title}" required>
+
+    <p></p>
+    <label for="message">Текст</label>
+    <textarea rows="5" name="message" id="message" th:text="${message}"></textarea>
+
+    <p></p>
+    <input id="fileInput" type="file" name="file" accept="image/*">
+    <img id="filePreview" alt="" th:src="|${id}/image|" width="100" height="100">
+
+    <p></p>
+    <label for="likes">Лайки</label>
+    <input type="text" id="likes" name="likes" th:value="${likes}">
+    <button id="addLikeButton" onclick="addLike()" type="button">Добавить</button>
+
+    <p></p>
+    <label for="itemSelectedTagsCsv">Выберите сущ. теги:</label>
+    <select id="itemSelectedTagsCsv" name="itemSelectedTagsCsv" multiple size="6">
+        <option th:each="option : ${allTags}" th:text="${option}"></option>
+    </select>
+
+    <p></p>
+    <label for="itemNewTagsCsv">Добавьте новые теги через запятую:</label>
+    <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
+
+    <p></p>
+    <button type="submit">Сохранить</button>
+</form>
+
+<form th:action="${id}" method="post">
+    <p></p>
+    <input type="hidden" name="_method" value="delete">
+    <button>Удалить</button>
+</form>
+
+<p></p>
+<h2>Комментарии</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Текст</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="comment : ${comments}">
+        <td>
+            <form th:id="|comment-${comment.id}|" th:name="|comment-${comment.id}|">
+                <label>
+                    <textarea rows="3" name="message" th:text="${comment.message}"></textarea>
+                </label>
+                <br>
+                <input type="hidden" name="id" th:value="${comment.id}">
+                <input type="hidden" name="itemId" th:value="${comment.itemId}">
+            </form>
+        </td>
+        <td>
+            <form>
+                <input type="hidden" name="_method" value="delete">
+                <input type="hidden" name="id" th:value="${comment.id}">
+                <input type="hidden" name="itemId" th:value="${comment.itemId}">
+                <button type="button" onclick="actionOnComment(this.form)">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p></p>
+<h4>Новый комментарий</h4>
+<form id="newComment">
+    <label>
+        <input type="text" name="itemId" th:value="${id}" hidden>
+    </label>
+    <label>
+        <textarea rows="5" name="message"></textarea>
+    </label>
+    <br>
+    <button type="button" onclick="addComment(this.form)">Добавить</button>
+</form>
+
+<script defer type="text/javascript" th:inline="javascript">
+    var allTagsList = [[${allTags}]];
+    var itemSelectedTagList = [[${itemSelectedTags}]];
+
+    const fileInput = document.getElementById('fileInput');
+    const filePreview = document.getElementById('filePreview');
+
+    fileInput.addEventListener('change', function(event) {
+        if (event.target.files && event.target.files[0]) {
+            const file = new FileReader();
+            file.onload = function(e) {
+                filePreview.src = e.target.result;
+            };
+            file.readAsDataURL(event.target.files[0]);
+        }
+    });
+
+    function selectItemTags() {
+        const options = document.getElementById("itemSelectedTagsCsv").options;
+        allTagsList.forEach((value, index) => {
+            if (itemSelectedTagList.includes(value))
+                options[index].selected = true;
+            }
+        );
+    }
+
+    function addLike() {
+      let likes = Number(document.getElementById('likes').value);
+      likes = likes + 1;
+      document.getElementById('likes').value = likes;
+    }
+
+    function addComment(form) {
+        const itemId = document.getElementById('itemForm').elements["id"].value;
+        const formData = new URLSearchParams(new FormData(form));
+
+        const message = form.elements["message"].value;
+        if (/^\s*$/.test(message)) {
+            return;
+        }
+
+        fetch(itemId + '/comment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: formData
+        });
+        window.location.href = itemId;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll("table textarea");
+        inputs.forEach(input => {
+            input.addEventListener("keydown", ctrlEnterCatcher);
+        });
+    });
+
+   function ctrlEnterCatcher(event) {
+        if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+            commentForm = event.target.form;
+            if (commentForm.name == "comment-" + commentForm.id.value) {
+                actionOnComment(commentForm);
+            }
+        }
+    }
+
+    function actionOnComment(commentForm) {
+        const commentId = commentForm.elements["id"].value;
+        const itemId = commentForm.elements["itemId"].value;
+        const formData = new URLSearchParams(new FormData(commentForm));
+
+        if ("message" in commentForm.elements) {
+            const message = commentForm.elements["message"].value;
+            if (/^\s*$/.test(message)) {
+                return;
+            }
+        }
+
+        fetch(itemId + '/comment/' + commentId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: formData
+        });
+        window.location.href = itemId;
+    }
+
+</script>
+
+</body>
+</html>
+

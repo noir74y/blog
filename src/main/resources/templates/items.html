@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Посты</title>
+    <style>
+        table {
+             border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid;
+        }
+    </style>
+</head>
+
+<body onload="selectTags()">
+<h1>Посты</h1>
+
+<form action="" method="get">
+    <p>
+        <label for="size">Количество постов на странице:</label>
+        <select id="size" name="size">
+            <option th:selected="(${size}==10)">10</option>
+            <option th:selected="(${size}==20)">20</option>
+            <option th:selected="(${size}==50)">50</option>
+        </select>
+    </p>
+    <p>
+        <label for="page">Страница:</label>
+        <input id="page" type="text" name="page" pattern="\d+" min=1 th:value="${page}" size=10>
+    </p>
+
+    <p>
+        <label for="selectedTags">Выберите тег:</label>
+        <select id="selectedTags" name="selectedTags" multiple size="6">
+            <option value=""></option>
+            <option th:each="option : ${allTags}" th:text="${option}"></option>
+        </select>
+    </p>
+
+    <p>
+        <button>Показать посты</button>
+    </p>
+</form>
+
+<table id='itemsTable'>
+    <thead>
+    <tr>
+        <th>Название</th>
+        <th>Текст</th>
+        <th>Картинка</th>
+        <th>Количество лайков</th>
+        <th>Количество комментариев</th>
+        <th>Теги</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="post : ${posts}">
+        <td><a th:href="${post.id}" th:text="${post.title}"></a></td>
+        <td>
+            <label>
+                            <textarea rows="3" th:text="${post.message}" disabled>
+                            </textarea>
+            </label>
+        </td>
+        <td><img th:src="|${post.id}/image|" alt="" width="100" height="100"></td>
+        <td th:text="${post.likes}"></td>
+        <td th:text="${post.commentsCounter}"></td>
+        <td th:text="${post.tagsCSV}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<p>
+    <button id="toggleNewItemFormButton" onclick="toggleNewItemForm()">Добавить</button>
+</p>
+
+<div class="new-item-form" style="display: none;" id="newItemFormClass">
+    <h2>Новый пост</h2>
+    <form id="newItemForm" enctype="multipart/form-data" action="" method="post" accept-charset="UTF-8">
+        <!--    <form id="newItemForm">-->
+        <label for="title">Название</label>
+        <input type="text" id="title" name="title" required>
+
+        <p></p>
+        <label for="message">Текст</label>
+        <textarea rows="5" name="message" id="message"></textarea>
+
+        <p></p>
+        <input id="fileInput" type="file" name="file" accept="image/*">
+        <img id="filePreview" alt="" src="" width="100" height="100">
+
+        <p></p>
+        <label for="itemSelectedTagsCsv">Выберите сущ. теги:</label>
+        <select id="itemSelectedTagsCsv" name="itemSelectedTagsCsv" multiple size="6">
+            <option th:each="option : ${allTags}" th:text="${option}"></option>
+        </select>
+
+        <p></p>
+        <label for="itemNewTagsCsv">Добавьте новые теги через запятую:</label>
+        <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
+
+        <p></p>
+        <button type="submit">Сохранить</button>
+    </form>
+</div>
+
+
+<script defer type="text/javascript" th:inline="javascript">
+    var allTagsList = [[${allTags}]];
+    var selectedTagsList = [[${selectedTags}]];
+
+    function selectTags() {
+        const options = document.getElementById("selectedTags").options;
+        allTagsList.forEach((value, index) => {
+            if (selectedTagsList.includes(value))
+                options[index+1].selected = true;
+            }
+        );
+    }
+
+    const fileInput = document.getElementById('fileInput');
+    const filePreview = document.getElementById('filePreview');
+
+    fileInput.addEventListener('change', function(event) {
+        if (event.target.files && event.target.files[0]) {
+            const file = new FileReader();
+            file.onload = function(e) {
+                filePreview.src = e.target.result;
+            };
+            file.readAsDataURL(event.target.files[0]);
+        }
+    });
+
+    const newItemForm = document.getElementById('newItemForm');
+    const newItemFormClass = document.getElementById('newItemFormClass');
+
+    function toggleNewItemForm() {
+        if (newItemFormClass.style.display === 'none') {
+           newItemFormClass.style.display = 'block';
+           document.getElementById('toggleNewItemFormButton').innerText = 'Скрыть';
+        }
+        else {
+           newItemFormClass.style.display = 'none';
+           document.getElementById('toggleNewItemFormButton').innerText = 'Добавить';
+        }
+    }
+
+</script>
+
+</body>
+</html>
