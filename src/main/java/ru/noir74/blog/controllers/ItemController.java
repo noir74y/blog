@@ -27,7 +27,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/items")
+//@RequestMapping("")
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemMapper itemMapper;
@@ -43,7 +43,7 @@ public class ItemController {
                           @RequestParam(defaultValue = "10", required = false, name = "size") String size,
                           @RequestParam(defaultValue = "", required = false, name = "selectedTags") String selectedTags) {
 
-        log.info("GET /items");
+        log.info("GET /");
 
         List<ItemDtoRespBrief> posts = itemMapper.bulkModelBrief2DtoRespBrief(itemService.findPage(page, size, selectedTags));
 
@@ -53,12 +53,12 @@ public class ItemController {
         model.addAttribute("selectedTags", new ArrayList<>(Arrays.stream(selectedTags.split(",")).toList()));
         model.addAttribute("allTags", tagService.findAll().stream().map(Tag::getName).toList());
 
-        return "/items";
+        return "items";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public String get(Model model, @PathVariable("id") Integer id) {
-        log.info("GET /items/{}", id);
+        log.info("GET /{}", id);
         var itemDtoResp = itemMapper.model2dtoResp(itemService.findById(id));
 
         model.addAttribute("id", itemDtoResp.getId());
@@ -69,65 +69,65 @@ public class ItemController {
         model.addAttribute("allTags", tagMapper.bulkModel2DtoResp(tagService.findAll()).stream().map(TagDtoResp::getName).toList());
         model.addAttribute("comments", commentMapper.bulkModel2DtoResp(commentService.findAllByItemId(id)));
 
-        return "/item";
+        return "item";
     }
 
-    @GetMapping("/{id}/image")
+    @GetMapping("{id}/image")
     public void getImage(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
-        log.info("GET /items/{}/image", id);
+        log.info("GET /{}/image", id);
         itemService.findImageById(ItemImage.builder().id(id).response(response).build());
     }
 
     @PostMapping(produces = "text/plain;charset=UTF-8")
     public String create(@ModelAttribute ItemDtoReq dtoReq) throws IOException {
-        log.info("POST (for item create) /items, dtoReq={}", dtoReq.toString());
+        log.info("POST (for item create) /, dtoReq={}", dtoReq.toString());
         itemService.create(itemMapper.dtoReq2Model(dtoReq));
-        return "redirect:/items";
+        return "redirect:/";
     }
 
-    @PostMapping(value = "/{id}")
+    @PostMapping(value = "{id}")
     public String update(@ModelAttribute ItemDtoReq dtoReq, @PathVariable("id") Integer id) throws IOException {
-        log.info("POST (for item update) /items/{}, dtoReq={}", id, dtoReq.toString());
+        log.info("POST (for item update) /{}, dtoReq={}", id, dtoReq.toString());
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
-        return "redirect:/items";
+        return "redirect:" + dtoReq.getId();
     }
 
-    @PostMapping("/{id}/image")
+    @PostMapping("{id}/image")
     public String setImage(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) throws IOException {
-        log.info("POST /items/{}/image", id);
+        log.info("POST /{}/image", id);
         itemService.setImageById(ItemImage.builder().id(id).file(file).build());
-        return "/items";
+        return "item";
     }
 
-    @PostMapping(value = "/{id}", params = "_method=delete")
+    @PostMapping(value = "{id}", params = "_method=delete")
     public String delete(@PathVariable("id") Integer id) {
-        log.info("POST (for item delete) /items/{}", id);
+        log.info("POST (for item delete) /{}", id);
         itemService.delete(id);
-        return "redirect:/items";
+        return "redirect:/";
     }
 
-    @PostMapping(value = "/{itemId}/comment")
+    @PostMapping(value = "{itemId}/comment")
     public String createComment(@ModelAttribute CommentDtoReq dtoReq,
                                 @PathVariable("itemId") Integer itemId) {
-        log.info("POST (for comment create) /items/{}/comment, dtoReq={}", itemId, dtoReq);
+        log.info("POST (for comment create) /{}/comment, dtoReq={}", itemId, dtoReq);
         commentService.create(commentMapper.dtoReq2Model(dtoReq));
-        return "redirect:/items";
+        return "redirect:" + itemId;
     }
 
-    @PostMapping(value = "/{itemId}/comment/{id}")
+    @PostMapping(value = "{itemId}/comment/{id}")
     public String updateComment(@ModelAttribute CommentDtoReq dtoReq,
                                 @PathVariable("itemId") Integer itemId,
                                 @PathVariable("id") Integer id) {
-        log.info("POST (for comment update) /items/{}/comment/{}, dtoReq={}", itemId, id, dtoReq);
+        log.info("POST (for comment update) /{}/comment/{}, dtoReq={}", itemId, id, dtoReq);
         commentService.update(commentMapper.dtoReq2Model(dtoReq));
-        return "redirect:/items";
+        return "redirect:" + itemId;
     }
 
-    @PostMapping(value = "/{itemId}/comment/{id}", params = "_method=delete")
+    @PostMapping(value = "{itemId}/comment/{id}", params = "_method=delete")
     public String deleteComment(@PathVariable("itemId") Integer itemId,
                                 @PathVariable("id") Integer id) {
-        log.info("POST (for comment delete) /items/{}/comment/{}", itemId, id);
+        log.info("POST (for comment delete) /{}/comment/{}", itemId, id);
         commentService.delete(id);
-        return "redirect:/items";
+        return "redirect:" + itemId;
     }
 }

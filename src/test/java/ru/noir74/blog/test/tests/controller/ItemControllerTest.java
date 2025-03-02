@@ -57,9 +57,9 @@ public class ItemControllerTest extends GenericDaoTest {
     void getPage() throws Exception {
         var itemId = itemService.create(Item.builder().title("title").message("message").build());
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/items"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
-                .andExpect(view().name("/items"))
+                .andExpect(view().name("items"))
                 .andExpect(model().attributeExists("page"))
                 .andExpect(model().attributeExists("size"))
                 .andExpect(model().attributeExists("posts"))
@@ -82,9 +82,9 @@ public class ItemControllerTest extends GenericDaoTest {
     void get() throws Exception {
         var itemId = itemService.create(Item.builder().title("title").message("message").build());
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/items/" + itemId))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/" + itemId))
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
-                .andExpect(view().name("/item"))
+                .andExpect(view().name("item"))
                 .andExpect(model().attributeExists("id"))
                 .andExpect(model().attributeExists("title"))
                 .andExpect(model().attributeExists("message"))
@@ -114,7 +114,7 @@ public class ItemControllerTest extends GenericDaoTest {
                 "image/jpeg",
                 new byte[]{(byte) 0x00});
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/items")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/")
                         .file(mockMultipartFileToBeSaved)
                         .param("title", "title")
                         .param("message", "message")
@@ -144,7 +144,7 @@ public class ItemControllerTest extends GenericDaoTest {
                 "image/jpeg",
                 new byte[]{(byte) 0x00});
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/items/" + String.valueOf(itemId))
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/" + itemId)
                         .file(new MockMultipartFile(
                                 "file",
                                 "someFile.jpeg",
@@ -182,7 +182,7 @@ public class ItemControllerTest extends GenericDaoTest {
         item.setFile(mockMultipartFileToBeSaved);
         itemService.update(item);
 
-        MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(MockMvcRequestBuilders.get("/items/" + itemId + "/image"))
+        MockHttpServletResponse mockHttpServletResponse = mockMvc.perform(MockMvcRequestBuilders.get("/" + itemId + "/image"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
@@ -200,7 +200,7 @@ public class ItemControllerTest extends GenericDaoTest {
                 "image/jpeg",
                 new byte[]{(byte) 0x00});
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/items/" + itemId + "/image")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/" + itemId + "/image")
                         .file(new MockMultipartFile(
                                 "file",
                                 "someFile.jpeg",
@@ -220,7 +220,7 @@ public class ItemControllerTest extends GenericDaoTest {
     void delete() throws Exception {
         var itemId = itemService.create(Item.builder().title("title").message("message").build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/items/" + itemId).param("_method", "delete"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId).param("_method", "delete"))
                 .andExpect(status().is3xxRedirection());
 
         assertThrows(NotFoundException.class, () -> itemService.findById(itemId));
@@ -230,7 +230,7 @@ public class ItemControllerTest extends GenericDaoTest {
     void createComment() throws Exception {
         var itemId = itemService.create(Item.builder().title("title").message("message").build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/items/" + itemId + "/comment")
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId + "/comment")
                         .param("message", "comment")
                         .param("itemId", String.valueOf(itemId))
                 )
@@ -244,7 +244,7 @@ public class ItemControllerTest extends GenericDaoTest {
         var itemId = itemService.create(Item.builder().title("title").message("message").build());
         var commentId = commentService.create(Comment.builder().message("comment").itemId(itemId).build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/items/" + itemId + "/comment/" + commentId)
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId + "/comment/" + commentId)
                         .param("id", String.valueOf(commentId))
                         .param("message", "commentUpdated")
                         .param("itemId", String.valueOf(itemId))
@@ -260,7 +260,7 @@ public class ItemControllerTest extends GenericDaoTest {
         var itemId = itemService.create(Item.builder().title("title").message("message").build());
         var commentId = commentService.create(Comment.builder().message("comment").itemId(itemId).build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/items/" + itemId + "/comment/" + commentId)
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId + "/comment/" + commentId)
                         .param("_method", "delete")
                         .param("id", String.valueOf(commentId))
                 )
