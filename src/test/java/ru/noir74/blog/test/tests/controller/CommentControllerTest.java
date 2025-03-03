@@ -1,0 +1,58 @@
+package ru.noir74.blog.test.tests.controller;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.noir74.blog.exceptions.NotFoundException;
+import ru.noir74.blog.models.comment.Comment;
+import ru.noir74.blog.models.item.Item;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+public class CommentControllerTest extends GenericControllerTest {
+
+    @Test
+    void create() throws Exception {
+        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId + "/comment")
+                        .param("message", "comment")
+                        .param("itemId", String.valueOf(itemId))
+                )
+                .andExpect(status().is3xxRedirection());
+
+        assertEquals("comment", commentService.findAllByItemId(itemId).getFirst().getMessage());
+    }
+
+    @Test
+    void update() throws Exception {
+        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+        var commentId = commentService.create(Comment.builder().message("comment").itemId(itemId).build());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId + "/comment/" + commentId)
+                        .param("id", String.valueOf(commentId))
+                        .param("message", "commentUpdated")
+                        .param("itemId", String.valueOf(itemId))
+                )
+                .andExpect(status().is3xxRedirection());
+
+        assertEquals("commentUpdated", commentService.findById(commentId).getMessage());
+
+    }
+
+    @Test
+    void delete() throws Exception {
+        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+        var commentId = commentService.create(Comment.builder().message("comment").itemId(itemId).build());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId + "/comment/" + commentId)
+                        .param("_method", "delete")
+                        .param("id", String.valueOf(commentId))
+                )
+                .andExpect(status().is3xxRedirection());
+
+        assertThrows(NotFoundException.class, () -> commentService.findById(commentId));
+    }
+
+}
