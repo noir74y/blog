@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.noir74.blog.mappers.CommentMapper;
 import ru.noir74.blog.mappers.ItemMapper;
 import ru.noir74.blog.mappers.TagMapper;
-import ru.noir74.blog.models.comment.CommentDtoReq;
 import ru.noir74.blog.models.item.ItemDtoReq;
 import ru.noir74.blog.models.item.ItemDtoRespBrief;
 import ru.noir74.blog.models.item.ItemImage;
@@ -27,7 +26,6 @@ import java.util.List;
 
 @Slf4j
 @Controller
-//@RequestMapping("")
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemMapper itemMapper;
@@ -110,30 +108,5 @@ public class ItemController {
     public String back() {
         log.info("POST (back to items\\'s list) ");
         return "redirect:/";
-    }
-
-    @PostMapping(value = "{itemId}/comment")
-    public String createComment(@ModelAttribute CommentDtoReq dtoReq,
-                                @PathVariable("itemId") Integer itemId) {
-        log.info("POST (for comment create) /{}/comment, dtoReq={}", itemId, dtoReq);
-        commentService.create(commentMapper.dtoReq2Model(dtoReq));
-        return "redirect:" + itemId;
-    }
-
-    @PostMapping(value = "{itemId}/comment/{id}")
-    public String updateComment(@ModelAttribute CommentDtoReq dtoReq,
-                                @PathVariable("itemId") Integer itemId,
-                                @PathVariable("id") Integer id) {
-        log.info("POST (for comment update) /{}/comment/{}, dtoReq={}", itemId, id, dtoReq);
-        commentService.update(commentMapper.dtoReq2Model(dtoReq));
-        return "redirect:" + itemId;
-    }
-
-    @PostMapping(value = "{itemId}/comment/{id}", params = "_method=delete")
-    public String deleteComment(@PathVariable("itemId") Integer itemId,
-                                @PathVariable("id") Integer id) {
-        log.info("POST (for comment delete) /{}/comment/{}", itemId, id);
-        commentService.delete(id);
-        return "redirect:" + itemId;
     }
 }
