@@ -1,18 +1,15 @@
 package ru.noir74.blog.controllers;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import ru.noir74.blog.mappers.CommentMapper;
 import ru.noir74.blog.mappers.ItemMapper;
 import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.models.item.ItemDtoReq;
 import ru.noir74.blog.models.item.ItemDtoRespBrief;
-import ru.noir74.blog.models.item.ItemImage;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagDtoResp;
 import ru.noir74.blog.services.intf.CommentService;
@@ -70,12 +67,6 @@ public class ItemController {
         return "item";
     }
 
-    @GetMapping("{id}/image")
-    public void getImage(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
-        log.info("GET /{}/image", id);
-        itemService.findImageById(ItemImage.builder().id(id).response(response).build());
-    }
-
     @PostMapping(produces = "text/plain;charset=UTF-8")
     public String create(@ModelAttribute ItemDtoReq dtoReq) throws IOException {
         log.info("POST (for item create) /, dtoReq={}", dtoReq.toString());
@@ -88,13 +79,6 @@ public class ItemController {
         log.info("POST (for item update) /{}, dtoReq={}", id, dtoReq.toString());
         itemService.update(itemMapper.dtoReq2Model(dtoReq));
         return "redirect:" + dtoReq.getId();
-    }
-
-    @PostMapping("{id}/image")
-    public String setImage(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) throws IOException {
-        log.info("POST /{}/image", id);
-        itemService.setImageById(ItemImage.builder().id(id).file(file).build());
-        return "item";
     }
 
     @PostMapping(value = "{id}", params = "_method=delete")
