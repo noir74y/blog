@@ -95,6 +95,13 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional
+    public void addLike(Integer id) {
+        throwIfNotFound(id);
+        itemRepository.addLike(id);
+    }
+
     @Transactional
     private void saveImage(Item item) throws IOException {
         Optional.ofNullable(item.getFile()).ifPresent(file -> {

@@ -1,6 +1,5 @@
 package ru.noir74.blog.repositories.intf;
 
-
 import ru.noir74.blog.models.item.ItemEntity;
 import ru.noir74.blog.models.item.ItemEntityBrief;
 import ru.noir74.blog.models.item.ItemImageEntity;
@@ -23,4 +22,6 @@ public interface ItemRepository {
     boolean existsById(Integer id);
 
     void deleteById(Integer id);
+
+    void addLike(Integer id);
 }

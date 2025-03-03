@@ -21,4 +21,6 @@ public interface ItemService {
     void setImageById(ItemImage itemImage) throws IOException;
 
     void delete(Integer id);
+
+    void addLike(Integer id);
 }

@@ -103,6 +103,13 @@ public class ItemRepositoryImpl implements ItemRepository {
         jdbcTemplate.update("DELETE FROM items WHERE id = ?", id);
     }
 
+    @Override
+    @Transactional
+    public void addLike(Integer id) {
+        String sql = "UPDATE items SET likes = likes + 1 WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
+
     @Transactional
     private Integer insert(ItemEntity itemEntity) {
         String sql = "INSERT INTO items (title, message, likes, changed) VALUES (?, ?, ?, ?)";
