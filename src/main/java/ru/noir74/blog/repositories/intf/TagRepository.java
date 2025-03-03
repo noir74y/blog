@@ -10,15 +10,15 @@ public interface TagRepository {
 
     Optional<TagEntity> findById(Integer id);
 
-    List<TagEntity> findAllByItemId(Integer itemId);
+    List<TagEntity> findAllByPostId(Integer postId);
 
     TagEntity save(TagEntity tagEntity);
 
     List<TagEntity> save(List<TagEntity> tagEntities);
 
-    void unstickFromItem(Integer itemId);
+    void unstickFromPost(Integer postId);
 
-    void stickToItem(List<Integer> tagIdList, Integer itemId);
+    void stickToPost(List<Integer> tagIdList, Integer postId);
 
     void refreshAllTagList();
 }

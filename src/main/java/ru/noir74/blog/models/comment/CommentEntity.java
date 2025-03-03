@@ -14,6 +14,6 @@ import java.sql.Timestamp;
 public class CommentEntity {
     private Integer id;
     private String message;
-    private Integer itemId;
+    private Integer postId;
     private Timestamp changed;
 }

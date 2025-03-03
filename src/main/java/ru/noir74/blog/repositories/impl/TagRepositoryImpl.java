@@ -44,10 +44,10 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public List<TagEntity> findAllByItemId(Integer itemId) {
+    public List<TagEntity> findAllByPostId(Integer postId) {
         return new LinkedList<>(jdbcTemplate.query(
-                        "SELECT tag_id FROM items_tags WHERE item_id = ?",
-                        (rs, rowNum) -> rs.getInt("tag_id"), itemId)
+                        "SELECT tag_id FROM posts_tags WHERE post_id = ?",
+                        (rs, rowNum) -> rs.getInt("tag_id"), postId)
                 .stream()
                 .map(tag_id ->
                         allTagEntityList.stream()
@@ -81,18 +81,18 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     @Transactional
-    public void unstickFromItem(Integer itemId) {
-        jdbcTemplate.update("DELETE FROM items_tags WHERE item_id = ?", itemId);
+    public void unstickFromPost(Integer postId) {
+        jdbcTemplate.update("DELETE FROM posts_tags WHERE post_id = ?", postId);
     }
 
     @Override
     @Transactional
-    public void stickToItem(List<Integer> tagIdList, Integer itemId) {
-        jdbcTemplate.batchUpdate("INSERT INTO items_tags (item_id, tag_id) VALUES (?, ?)",
+    public void stickToPost(List<Integer> tagIdList, Integer postId) {
+        jdbcTemplate.batchUpdate("INSERT INTO posts_tags (post_id, tag_id) VALUES (?, ?)",
                 new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(@NonNull PreparedStatement ps, int i) throws SQLException {
-                        ps.setInt(1, itemId);
+                        ps.setInt(1, postId);
                         ps.setInt(2, tagIdList.get(i));
                     }
 

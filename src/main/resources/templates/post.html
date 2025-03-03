@@ -14,21 +14,18 @@
     </style>
 </head>
 
-<body onload="selectItemTags()">
+<body onload="selectPostTags()">
 
-<!--<a href="javascript:history.back()">Назад</a>-->
-<!--<a href="/">Назад</a>-->
 <form method="post">
     <p></p>
     <input type="hidden" name="_action" value="back">
     <button>В список постов</button>
 </form>
 
-
 <p></p>
 <h1>Пост</h1>
 
-<form id="itemForm" enctype="multipart/form-data" th:action="${id}" method="post" accept-charset="UTF-8">
+<form id="postForm" enctype="multipart/form-data" th:action="${id}" method="post" accept-charset="UTF-8">
     <label for="id"></label>
     <input type="text" id="id" name="id" th:value="${id}" hidden>
 
@@ -49,14 +46,14 @@
     <button id="addLikeButton" onclick="addLike()" type="button">Добавить</button>
 
     <p></p>
-    <label for="itemSelectedTagsCsv">Выберите сущ. теги:</label>
-    <select id="itemSelectedTagsCsv" name="itemSelectedTagsCsv" multiple size="6">
+    <label for="postSelectedTagsCsv">Выберите сущ. теги:</label>
+    <select id="postSelectedTagsCsv" name="postSelectedTagsCsv" multiple size="6">
         <option th:each="option : ${allTags}" th:text="${option}"></option>
     </select>
 
     <p></p>
-    <label for="itemNewTagsCsv">Добавьте новые теги через запятую:</label>
-    <input type="text" id="itemNewTagsCsv" name="itemNewTagsCsv">
+    <label for="postNewTagsCsv">Добавьте новые теги через запятую:</label>
+    <input type="text" id="postNewTagsCsv" name="postNewTagsCsv">
 
     <p></p>
     <button type="submit">Сохранить</button>
@@ -87,14 +84,14 @@
                 </label>
                 <br>
                 <input type="hidden" name="id" th:value="${comment.id}">
-                <input type="hidden" name="itemId" th:value="${comment.itemId}">
+                <input type="hidden" name="postId" th:value="${comment.postId}">
             </form>
         </td>
         <td>
             <form>
                 <input type="hidden" name="_method" value="delete">
                 <input type="hidden" name="id" th:value="${comment.id}">
-                <input type="hidden" name="itemId" th:value="${comment.itemId}">
+                <input type="hidden" name="postId" th:value="${comment.postId}">
                 <button type="button" onclick="actionOnComment(this.form)">Удалить</button>
             </form>
         </td>
@@ -106,7 +103,7 @@
 <h4>Новый комментарий</h4>
 <form id="newComment">
     <label>
-        <input type="text" name="itemId" th:value="${id}" hidden>
+        <input type="text" name="postId" th:value="${id}" hidden>
     </label>
     <label>
         <textarea rows="5" name="message"></textarea>
@@ -117,7 +114,7 @@
 
 <script defer type="text/javascript" th:inline="javascript">
     var allTagsList = [[${allTags}]];
-    var itemSelectedTagList = [[${itemSelectedTags}]];
+    var postSelectedTagList = [[${postSelectedTags}]];
 
     const fileInput = document.getElementById('fileInput');
     const filePreview = document.getElementById('filePreview');
@@ -132,10 +129,10 @@
         }
     });
 
-    function selectItemTags() {
-        const options = document.getElementById("itemSelectedTagsCsv").options;
+    function selectPostTags() {
+        const options = document.getElementById("postSelectedTagsCsv").options;
         allTagsList.forEach((value, index) => {
-            if (itemSelectedTagList.includes(value))
+            if (postSelectedTagList.includes(value))
                 options[index].selected = true;
             }
         );
@@ -145,10 +142,18 @@
       let likes = Number(document.getElementById('likes').value);
       likes = likes + 1;
       document.getElementById('likes').value = likes;
+      const postId = document.getElementById('postForm').elements["id"].value;
+      fetch(postId + '/addLike', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain'
+        },
+        body: ' '
+        });
     }
 
     function addComment(form) {
-        const itemId = document.getElementById('itemForm').elements["id"].value;
+        const postId = document.getElementById('postForm').elements["id"].value;
         const formData = new URLSearchParams(new FormData(form));
 
         const message = form.elements["message"].value;
@@ -156,14 +161,14 @@
             return;
         }
 
-        fetch(itemId + '/comment', {
+        fetch(postId + '/comment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
             body: formData
         });
-        window.location.href = itemId;
+        window.location.href = postId;
     }
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -184,7 +189,7 @@
 
     function actionOnComment(commentForm) {
         const commentId = commentForm.elements["id"].value;
-        const itemId = commentForm.elements["itemId"].value;
+        const postId = commentForm.elements["postId"].value;
         const formData = new URLSearchParams(new FormData(commentForm));
 
         if ("message" in commentForm.elements) {
@@ -194,14 +199,14 @@
             }
         }
 
-        fetch(itemId + '/comment/' + commentId, {
+        fetch(postId + '/comment/' + commentId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
             body: formData
         });
-        window.location.href = itemId;
+        window.location.href = postId;
     }
 
 </script>

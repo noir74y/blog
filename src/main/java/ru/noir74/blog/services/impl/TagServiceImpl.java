@@ -38,8 +38,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> findAllByItemId(Integer itemId) {
-        return tagMapper.bulkEntity2Model(tagRepository.findAllByItemId(itemId));
+    public List<Tag> findAllByPostId(Integer postId) {
+        return tagMapper.bulkEntity2Model(tagRepository.findAllByPostId(postId));
     }
 
     @Override
@@ -52,9 +52,9 @@ public class TagServiceImpl implements TagService {
 
     @Override
     @Transactional
-    public void attachTagsToItem(List<Integer> tagIdList, Integer itemId) {
-        tagRepository.unstickFromItem(itemId);
-        tagRepository.stickToItem(tagIdList, itemId);
+    public void attachTagsToPost(List<Integer> tagIdList, Integer postId) {
+        tagRepository.unstickFromPost(postId);
+        tagRepository.stickToPost(tagIdList, postId);
         populateTags();
     }
 

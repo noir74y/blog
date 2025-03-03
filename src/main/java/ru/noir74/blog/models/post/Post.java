@@ -1,4 +1,4 @@
-package ru.noir74.blog.models.item;
+package ru.noir74.blog.models.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Item {
+public class Post {
     private Integer id;
     private String title;
     private String message;
