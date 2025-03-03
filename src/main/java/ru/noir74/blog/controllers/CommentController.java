@@ -17,28 +17,28 @@ public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
 
-    @PostMapping(value = "{itemId}/comment")
+    @PostMapping(value = "{postId}/comment")
     public String create(@ModelAttribute CommentDtoReq dtoReq,
-                         @PathVariable("itemId") Integer itemId) {
-        log.info("POST (for comment create) /{}/comment, dtoReq={}", itemId, dtoReq);
+                         @PathVariable("postId") Integer postId) {
+        log.info("POST (for comment create) /{}/comment, dtoReq={}", postId, dtoReq);
         commentService.create(commentMapper.dtoReq2Model(dtoReq));
-        return "redirect:" + itemId;
+        return "redirect:" + postId;
     }
 
-    @PostMapping(value = "{itemId}/comment/{id}")
+    @PostMapping(value = "{postId}/comment/{id}")
     public String update(@ModelAttribute CommentDtoReq dtoReq,
-                         @PathVariable("itemId") Integer itemId,
+                         @PathVariable("postId") Integer postId,
                          @PathVariable("id") Integer id) {
-        log.info("POST (for comment update) /{}/comment/{}, dtoReq={}", itemId, id, dtoReq);
+        log.info("POST (for comment update) /{}/comment/{}, dtoReq={}", postId, id, dtoReq);
         commentService.update(commentMapper.dtoReq2Model(dtoReq));
-        return "redirect:" + itemId;
+        return "redirect:" + postId;
     }
 
-    @PostMapping(value = "{itemId}/comment/{id}", params = "_method=delete")
-    public String delete(@PathVariable("itemId") Integer itemId,
+    @PostMapping(value = "{postId}/comment/{id}", params = "_method=delete")
+    public String delete(@PathVariable("postId") Integer postId,
                          @PathVariable("id") Integer id) {
-        log.info("POST (for comment delete) /{}/comment/{}", itemId, id);
+        log.info("POST (for comment delete) /{}/comment/{}", postId, id);
         commentService.delete(id);
-        return "redirect:" + itemId;
+        return "redirect:" + postId;
     }
 }

@@ -9,11 +9,11 @@ public interface TagService {
 
     Tag findById(Integer id);
 
-    List<Tag> findAllByItemId(Integer itemId);
+    List<Tag> findAllByPostId(Integer postId);
 
     List<Tag> save(List<Tag> tags);
 
-    void attachTagsToItem(List<Integer> tagIdList, Integer itemId);
+    void attachTagsToPost(List<Integer> tagIdList, Integer postId);
 
     void populateTags();
 }

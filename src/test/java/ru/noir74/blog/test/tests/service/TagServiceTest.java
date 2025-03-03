@@ -50,10 +50,10 @@ public class TagServiceTest extends GenericServiceTest {
     }
 
     @Test
-    void testFindAllByItemId() {
-        when(tagRepositoryMock.findAllByItemId(0)).thenReturn(tagEntities);
-        assertEquals(tags, tagService.findAllByItemId(0));
-        verify(tagRepositoryMock, times(1)).findAllByItemId(0);
+    void testFindAllByPostId() {
+        when(tagRepositoryMock.findAllByPostId(0)).thenReturn(tagEntities);
+        assertEquals(tags, tagService.findAllByPostId(0));
+        verify(tagRepositoryMock, times(1)).findAllByPostId(0);
     }
 
     @Test
@@ -70,12 +70,12 @@ public class TagServiceTest extends GenericServiceTest {
     }
 
     @Test
-    void testAttachTagsToItem() {
+    void testAttachTagsToPost() {
         // just stub
-        doNothing().when(tagRepositoryMock).unstickFromItem(0);
-        doNothing().when(tagRepositoryMock).stickToItem(List.of(0), 0);
-        tagService.attachTagsToItem(List.of(0), 0);
-        verify(tagRepositoryMock, times(1)).unstickFromItem(0);
-        verify(tagRepositoryMock, times(1)).stickToItem(List.of(0), 0);
+        doNothing().when(tagRepositoryMock).unstickFromPost(0);
+        doNothing().when(tagRepositoryMock).stickToPost(List.of(0), 0);
+        tagService.attachTagsToPost(List.of(0), 0);
+        verify(tagRepositoryMock, times(1)).unstickFromPost(0);
+        verify(tagRepositoryMock, times(1)).stickToPost(List.of(0), 0);
     }
 }

@@ -9,22 +9,22 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.noir74.blog.exceptions.NotFoundException;
-import ru.noir74.blog.models.item.Item;
+import ru.noir74.blog.models.post.Post;
 
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class ItemControllerTest extends GenericControllerTest {
+public class PostControllerTest extends GenericControllerTest {
 
     @Test
     void getPage() throws Exception {
-        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+        var postId = postService.create(Post.builder().title("title").message("message").build());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
-                .andExpect(view().name("items"))
+                .andExpect(view().name("posts"))
                 .andExpect(model().attributeExists("page"))
                 .andExpect(model().attributeExists("size"))
                 .andExpect(model().attributeExists("posts"))
@@ -34,7 +34,7 @@ public class ItemControllerTest extends GenericControllerTest {
                 .andReturn();
 
         Document document = Jsoup.parse(result.getResponse().getContentAsString());
-        Elements table = document.select("#itemsTable");
+        Elements table = document.select("#postsTable");
         String valueTitle = table.select("td").get(0).text();
         String valueMessage = table.select("td").get(1).text();
 
@@ -45,16 +45,16 @@ public class ItemControllerTest extends GenericControllerTest {
 
     @Test
     void get() throws Exception {
-        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+        var postId = postService.create(Post.builder().title("title").message("message").build());
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/" + itemId))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/" + postId))
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
-                .andExpect(view().name("item"))
+                .andExpect(view().name("post"))
                 .andExpect(model().attributeExists("id"))
                 .andExpect(model().attributeExists("title"))
                 .andExpect(model().attributeExists("message"))
                 .andExpect(model().attributeExists("likes"))
-                .andExpect(model().attributeExists("itemSelectedTags"))
+                .andExpect(model().attributeExists("postSelectedTags"))
                 .andExpect(model().attributeExists("allTags"))
                 .andExpect(model().attributeExists("comments"))
                 .andExpect(status().isOk())
@@ -62,7 +62,7 @@ public class ItemControllerTest extends GenericControllerTest {
 
         Document document = Jsoup.parse(result.getResponse().getContentAsString());
 
-        Element form = document.select("#itemForm").first();
+        Element form = document.select("#postForm").first();
         assert form != null;
         String valueTitle = Objects.requireNonNull(form.select("#title").first()).attr("value");
         String valueMessage = form.select("#message").text();
@@ -83,25 +83,25 @@ public class ItemControllerTest extends GenericControllerTest {
                         .file(mockMultipartFileToBeSaved)
                         .param("title", "title")
                         .param("message", "message")
-                        .param("itemNewTagsCsv", "")
+                        .param("postNewTagsCsv", "")
                 )
                 .andExpect(status().is3xxRedirection());
 
-        var newItemId = itemService.findPage("1", "10", "").getFirst().getId();
-        var newItem = itemService.findById(newItemId);
+        var newPostId = postService.findPage("1", "10", "").getFirst().getId();
+        var newPost = postService.findById(newPostId);
 
-        assertEquals("title", newItem.getTitle());
-        assertEquals("message", newItem.getMessage());
+        assertEquals("title", newPost.getTitle());
+        assertEquals("message", newPost.getMessage());
 
-        var itemImageEntity = itemRepository.findImageById(newItemId);
+        var postImageEntity = postRepository.findImageById(newPostId);
 
-        assertArrayEquals(mockMultipartFileToBeSaved.getBytes(), itemImageEntity.getImage());
-        assertEquals(mockMultipartFileToBeSaved.getOriginalFilename(), itemImageEntity.getImageName());
+        assertArrayEquals(mockMultipartFileToBeSaved.getBytes(), postImageEntity.getImage());
+        assertEquals(mockMultipartFileToBeSaved.getOriginalFilename(), postImageEntity.getImageName());
     }
 
     @Test
     void update() throws Exception {
-        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+        var postId = postService.create(Post.builder().title("title").message("message").build());
 
         var mockMultipartFileToBeSaved = new MockMultipartFile(
                 "file",
@@ -109,38 +109,38 @@ public class ItemControllerTest extends GenericControllerTest {
                 "image/jpeg",
                 new byte[]{(byte) 0x00});
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/" + itemId)
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/" + postId)
                         .file(new MockMultipartFile(
                                 "file",
                                 "someFile.jpeg",
                                 "image/jpeg",
                                 new byte[]{(byte) 0x00}))
-                        .param("id", String.valueOf(itemId))
+                        .param("id", String.valueOf(postId))
                         .param("title", "titleUpdated")
                         .param("message", "messageUpdated")
-                        .param("itemNewTagsCsv", "")
+                        .param("postNewTagsCsv", "")
                 )
                 .andExpect(status().is3xxRedirection());
 
-        var newItem = itemService.findById(itemId);
+        var newPost = postService.findById(postId);
 
-        assertEquals("titleUpdated", newItem.getTitle());
-        assertEquals("messageUpdated", newItem.getMessage());
+        assertEquals("titleUpdated", newPost.getTitle());
+        assertEquals("messageUpdated", newPost.getMessage());
 
-        var itemImageEntity = itemRepository.findImageById(itemId);
+        var postImageEntity = postRepository.findImageById(postId);
 
-        assertArrayEquals(mockMultipartFileToBeSaved.getBytes(), itemImageEntity.getImage());
-        assertEquals(mockMultipartFileToBeSaved.getOriginalFilename(), itemImageEntity.getImageName());
+        assertArrayEquals(mockMultipartFileToBeSaved.getBytes(), postImageEntity.getImage());
+        assertEquals(mockMultipartFileToBeSaved.getOriginalFilename(), postImageEntity.getImageName());
     }
 
     @Test
     void delete() throws Exception {
-        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+        var postId = postService.create(Post.builder().title("title").message("message").build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId).param("_method", "delete"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + postId).param("_method", "delete"))
                 .andExpect(status().is3xxRedirection());
 
-        assertThrows(NotFoundException.class, () -> itemService.findById(itemId));
+        assertThrows(NotFoundException.class, () -> postService.findById(postId));
     }
 
 }

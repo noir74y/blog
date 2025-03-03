@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.models.comment.Comment;
-import ru.noir74.blog.models.item.Item;
+import ru.noir74.blog.models.post.Post;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,26 +14,26 @@ public class CommentControllerTest extends GenericControllerTest {
 
     @Test
     void create() throws Exception {
-        var itemId = itemService.create(Item.builder().title("title").message("message").build());
+        var postId = postService.create(Post.builder().title("title").message("message").build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId + "/comment")
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + postId + "/comment")
                         .param("message", "comment")
-                        .param("itemId", String.valueOf(itemId))
+                        .param("postId", String.valueOf(postId))
                 )
                 .andExpect(status().is3xxRedirection());
 
-        assertEquals("comment", commentService.findAllByItemId(itemId).getFirst().getMessage());
+        assertEquals("comment", commentService.findAllByPostId(postId).getFirst().getMessage());
     }
 
     @Test
     void update() throws Exception {
-        var itemId = itemService.create(Item.builder().title("title").message("message").build());
-        var commentId = commentService.create(Comment.builder().message("comment").itemId(itemId).build());
+        var postId = postService.create(Post.builder().title("title").message("message").build());
+        var commentId = commentService.create(Comment.builder().message("comment").postId(postId).build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId + "/comment/" + commentId)
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + postId + "/comment/" + commentId)
                         .param("id", String.valueOf(commentId))
                         .param("message", "commentUpdated")
-                        .param("itemId", String.valueOf(itemId))
+                        .param("postId", String.valueOf(postId))
                 )
                 .andExpect(status().is3xxRedirection());
 
@@ -43,10 +43,10 @@ public class CommentControllerTest extends GenericControllerTest {
 
     @Test
     void delete() throws Exception {
-        var itemId = itemService.create(Item.builder().title("title").message("message").build());
-        var commentId = commentService.create(Comment.builder().message("comment").itemId(itemId).build());
+        var postId = postService.create(Post.builder().title("title").message("message").build());
+        var commentId = commentService.create(Comment.builder().message("comment").postId(postId).build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/" + itemId + "/comment/" + commentId)
+        mockMvc.perform(MockMvcRequestBuilders.post("/" + postId + "/comment/" + commentId)
                         .param("_method", "delete")
                         .param("id", String.valueOf(commentId))
                 )

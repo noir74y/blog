@@ -36,7 +36,7 @@ public class CommentServiceTest extends GenericServiceTest {
 
     @BeforeEach
     void setUp() {
-        comment = Comment.builder().id(0).message("comment0").itemId(0).changed(Timestamp.from(Instant.now())).build();
+        comment = Comment.builder().id(0).message("comment0").postId(0).changed(Timestamp.from(Instant.now())).build();
         comments = new LinkedList<>(List.of(comment));
         commentEntity = commentMapper.model2entity(comment);
         commentEntities = new LinkedList<>(List.of(commentEntity));
@@ -44,10 +44,10 @@ public class CommentServiceTest extends GenericServiceTest {
     }
 
     @Test
-    void testFindAllByItemId() {
-        when(commentRepositoryMock.findAllByItemId(0)).thenReturn(commentEntities);
-        assertEquals(comments, commentService.findAllByItemId(0));
-        verify(commentRepositoryMock, times(1)).findAllByItemId(0);
+    void testFindAllByPostId() {
+        when(commentRepositoryMock.findAllByPostId(0)).thenReturn(commentEntities);
+        assertEquals(comments, commentService.findAllByPostId(0));
+        verify(commentRepositoryMock, times(1)).findAllByPostId(0);
     }
 
     @Test

@@ -19,8 +19,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Comment> findAllByItemId(Integer itemId) {
-        return commentMapper.bulkEntity2Model(commentRepository.findAllByItemId(itemId));
+    public List<Comment> findAllByPostId(Integer postId) {
+        return commentMapper.bulkEntity2Model(commentRepository.findAllByPostId(postId));
     }
 
     @Override

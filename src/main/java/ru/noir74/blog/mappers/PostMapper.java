@@ -6,7 +6,7 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
-import ru.noir74.blog.models.item.*;
+import ru.noir74.blog.models.post.*;
 import ru.noir74.blog.models.tag.Tag;
 
 import java.sql.Timestamp;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ItemMapper {
+public class PostMapper {
     private final ModelMapper modelMapper;
     private final TagMapper tagMapper;
 
@@ -28,22 +28,22 @@ public class ItemMapper {
                         .map(tagName -> tagMapper.getName2TagMap().getOrDefault(tagName, Tag.builder().name(tagName).build()))
                         .toList();
 
-        TypeMap<ItemDtoReq, Item> dtoReq2ModelPropertyMapper = modelMapper.createTypeMap(ItemDtoReq.class, Item.class);
+        TypeMap<PostDtoReq, Post> dtoReq2ModelPropertyMapper = modelMapper.createTypeMap(PostDtoReq.class, Post.class);
         dtoReq2ModelPropertyMapper.addMappings(modelMapper ->
-                modelMapper.using(tagStringCsv2ModelConverter).map(ItemDtoReq::itemTagNameList, Item::setTags));
+                modelMapper.using(tagStringCsv2ModelConverter).map(PostDtoReq::postTagNameList, Post::setTags));
     }
 
-    public Item dtoReq2Model(ItemDtoReq dtoReq) {
-        return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Item.class)).orElse(null);
+    public Post dtoReq2Model(PostDtoReq dtoReq) {
+        return Optional.ofNullable(dtoReq).map(obj -> modelMapper.map(obj, Post.class)).orElse(null);
     }
 
-    public ItemDtoResp model2dtoResp(Item model) {
-        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, ItemDtoResp.class)).orElse(null);
+    public PostDtoResp model2dtoResp(Post model) {
+        return Optional.ofNullable(model).map(obj -> modelMapper.map(obj, PostDtoResp.class)).orElse(null);
     }
 
-    public ItemEntity model2entity(Item model) {
+    public PostEntity model2entity(Post model) {
         var entity = Optional.ofNullable(model)
-                .map(obj -> modelMapper.map(obj, ItemEntity.class))
+                .map(obj -> modelMapper.map(obj, PostEntity.class))
                 .orElse(null);
         Optional.ofNullable(entity).ifPresent(obj ->
                 obj.setChanged(Objects.nonNull(obj.getChanged()) ?
@@ -52,21 +52,21 @@ public class ItemMapper {
         return entity;
     }
 
-    public Item entity2Model(ItemEntity entity) {
+    public Post entity2Model(PostEntity entity) {
         return Optional.ofNullable(entity)
-                .map(obj -> modelMapper.map(obj, Item.class))
+                .map(obj -> modelMapper.map(obj, Post.class))
                 .orElse(null);
     }
 
-    public ItemBrief entityBrief2ModelBrief(ItemEntityBrief entity) {
+    public PostBrief entityBrief2ModelBrief(PostEntityBrief entity) {
         return Optional.ofNullable(entity)
-                .map(obj -> modelMapper.map(entity, ItemBrief.class))
+                .map(obj -> modelMapper.map(entity, PostBrief.class))
                 .orElse(null);
     }
 
-    public ItemDtoRespBrief modelBrief2dtoRespBrief(ItemBrief model) {
-        ItemDtoRespBrief dtoRespBrief = Optional.ofNullable(model)
-                .map(obj -> modelMapper.map(model, ItemDtoRespBrief.class))
+    public PostDtoRespBrief modelBrief2dtoRespBrief(PostBrief model) {
+        PostDtoRespBrief dtoRespBrief = Optional.ofNullable(model)
+                .map(obj -> modelMapper.map(model, PostDtoRespBrief.class))
                 .orElse(null);
         Optional.ofNullable(dtoRespBrief)
                 .ifPresent(obj -> obj.setTags(
@@ -77,13 +77,13 @@ public class ItemMapper {
         return dtoRespBrief;
     }
 
-    public List<ItemBrief> bulkEntityBrief2ModelBrief(List<ItemEntityBrief> entities) {
+    public List<PostBrief> bulkEntityBrief2ModelBrief(List<PostEntityBrief> entities) {
         return entities.stream()
                 .map(this::entityBrief2ModelBrief)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<ItemDtoRespBrief> bulkModelBrief2DtoRespBrief(List<ItemBrief> models) {
+    public List<PostDtoRespBrief> bulkModelBrief2DtoRespBrief(List<PostBrief> models) {
         return models.stream()
                 .map(this::modelBrief2dtoRespBrief)
                 .collect(Collectors.toCollection(ArrayList::new));
