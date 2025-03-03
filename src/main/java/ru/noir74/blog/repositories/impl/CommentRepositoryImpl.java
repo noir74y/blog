@@ -22,25 +22,25 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Optional<CommentEntity> findById(Integer id) {
-        var row = jdbcTemplate.queryForRowSet("SELECT id, message, item_id FROM comments WHERE id = ?", id);
+        var row = jdbcTemplate.queryForRowSet("SELECT id, message, post_id FROM comments WHERE id = ?", id);
         return row.next() ?
                 Optional.of(CommentEntity.builder()
                         .id(id)
                         .message(row.getString("message"))
-                        .itemId(row.getInt("item_id"))
+                        .postId(row.getInt("post_id"))
                         .build())
                 : Optional.empty();
     }
 
     @Override
-    public List<CommentEntity> findAllByItemId(Integer itemId) {
-        return new LinkedList<>(jdbcTemplate.query("SELECT id, message, item_id FROM comments WHERE item_id = ? ORDER BY changed DESC",
+    public List<CommentEntity> findAllByPostId(Integer postId) {
+        return new LinkedList<>(jdbcTemplate.query("SELECT id, message, post_id FROM comments WHERE post_id = ? ORDER BY changed DESC",
                 (rs, rowNum) -> CommentEntity.builder()
                         .id(rs.getInt("id"))
                         .message(rs.getString("message"))
-                        .itemId(rs.getInt("item_id"))
+                        .postId(rs.getInt("post_id"))
                         .build()
-                , itemId));
+                , postId));
     }
 
     @Override
@@ -63,13 +63,13 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Transactional
     private Integer insert(CommentEntity commentEntity) {
-        String sql = "INSERT INTO comments (message, item_id, changed) VALUES (?,?,?)";
+        String sql = "INSERT INTO comments (message, post_id, changed) VALUES (?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"id"});
             stmt.setString(1, commentEntity.getMessage());
-            stmt.setInt(2, commentEntity.getItemId());
+            stmt.setInt(2, commentEntity.getPostId());
             stmt.setTimestamp(3, commentEntity.getChanged());
             return stmt;
         }, keyHolder);

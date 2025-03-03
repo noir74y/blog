@@ -3,17 +3,17 @@ package ru.noir74.blog.test.configurations;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import ru.noir74.blog.mappers.CommentMapper;
-import ru.noir74.blog.mappers.ItemImageMapper;
-import ru.noir74.blog.mappers.ItemMapper;
+import ru.noir74.blog.mappers.PostImageMapper;
+import ru.noir74.blog.mappers.PostMapper;
 import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.repositories.intf.CommentRepository;
-import ru.noir74.blog.repositories.intf.ItemRepository;
+import ru.noir74.blog.repositories.intf.PostRepository;
 import ru.noir74.blog.repositories.intf.TagRepository;
 import ru.noir74.blog.services.impl.CommentServiceImpl;
-import ru.noir74.blog.services.impl.ItemServiceImpl;
+import ru.noir74.blog.services.impl.PostServiceImpl;
 import ru.noir74.blog.services.impl.TagServiceImpl;
 import ru.noir74.blog.services.intf.CommentService;
-import ru.noir74.blog.services.intf.ItemService;
+import ru.noir74.blog.services.intf.PostService;
 import ru.noir74.blog.services.intf.TagService;
 import ru.noir74.blog.test.generics.GenericTestConfig;
 import ru.noir74.blog.test.tests.service.intf.CommentServiceMock;
@@ -31,8 +31,8 @@ public class ServiceTestConfig extends GenericTestConfig {
     }
 
     @Bean
-    public ItemRepository itemRepositoryMock() {
-        return Mockito.mock(ItemRepository.class);
+    public PostRepository postRepositoryMock() {
+        return Mockito.mock(PostRepository.class);
     }
 
     @Bean
@@ -62,15 +62,15 @@ public class ServiceTestConfig extends GenericTestConfig {
     }
 
     @Bean
-    public ItemService itemService(ItemRepository itemRepositoryMock,
-                                   ItemMapper itemMapper,
-                                   ItemImageMapper itemImageMapper,
+    public PostService postService(PostRepository postRepositoryMock,
+                                   PostMapper postMapper,
+                                   PostImageMapper postImageMapper,
                                    TagServiceMock tagServiceMock,
                                    CommentServiceMock commentServiceMock) {
-        return new ItemServiceImpl(
-                itemRepositoryMock,
-                itemMapper,
-                itemImageMapper,
+        return new PostServiceImpl(
+                postRepositoryMock,
+                postMapper,
+                postImageMapper,
                 tagServiceMock,
                 commentServiceMock);
     }

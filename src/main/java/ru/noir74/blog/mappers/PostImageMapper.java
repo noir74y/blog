@@ -7,15 +7,15 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import ru.noir74.blog.models.item.ItemImage;
-import ru.noir74.blog.models.item.ItemImageEntity;
+import ru.noir74.blog.models.post.PostImage;
+import ru.noir74.blog.models.post.PostImageEntity;
 
 import java.io.IOException;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class ItemImageMapper {
+public class PostImageMapper {
     private final ModelMapper modelMapper;
 
     @PostConstruct
@@ -32,18 +32,18 @@ public class ItemImageMapper {
         Converter<MultipartFile, String> multipartFile2imageNameConverter = multipartFile ->
                 multipartFile.getSource().getOriginalFilename();
 
-        TypeMap<ItemImage, ItemImageEntity> model2entityPropertyMapper = modelMapper.createTypeMap(ItemImage.class, ItemImageEntity.class);
+        TypeMap<PostImage, PostImageEntity> model2entityPropertyMapper = modelMapper.createTypeMap(PostImage.class, PostImageEntity.class);
 
         model2entityPropertyMapper.addMappings(modelMapper ->
-                modelMapper.using(multipartFile2imageBytesConverter).map(ItemImage::getFile, ItemImageEntity::setImage));
+                modelMapper.using(multipartFile2imageBytesConverter).map(PostImage::getFile, PostImageEntity::setImage));
 
         model2entityPropertyMapper.addMappings(modelMapper ->
-                modelMapper.using(multipartFile2imageNameConverter).map(ItemImage::getFile, ItemImageEntity::setImageName));
+                modelMapper.using(multipartFile2imageNameConverter).map(PostImage::getFile, PostImageEntity::setImageName));
     }
 
-    public ItemImageEntity model2entity(ItemImage model) {
+    public PostImageEntity model2entity(PostImage model) {
         return Optional.ofNullable(model)
-                .map(obj -> modelMapper.map(obj, ItemImageEntity.class))
+                .map(obj -> modelMapper.map(obj, PostImageEntity.class))
                 .orElse(null);
     }
 }

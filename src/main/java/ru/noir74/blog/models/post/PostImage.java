@@ -1,4 +1,4 @@
-package ru.noir74.blog.models.item;
+package ru.noir74.blog.models.post;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemImage {
+public class PostImage {
     private Integer id;
     private MultipartFile file;
     private HttpServletResponse response;

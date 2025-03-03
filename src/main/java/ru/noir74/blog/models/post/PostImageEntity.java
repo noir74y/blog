@@ -1,4 +1,4 @@
-package ru.noir74.blog.models.item;
+package ru.noir74.blog.models.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemImageEntity {
+public class PostImageEntity {
     private Integer id;
     private byte[] image;
     private String imageName;

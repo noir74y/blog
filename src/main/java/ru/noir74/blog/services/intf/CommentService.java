@@ -5,13 +5,13 @@ import ru.noir74.blog.models.comment.Comment;
 import java.util.List;
 
 public interface CommentService {
-    List<Comment> findAllByItemId(Integer itemId);
+    List<Comment> findAllByPostId(Integer postId);
 
     Comment findById(Integer id);
 
-    Integer create(Comment item);
+    Integer create(Comment post);
 
-    void update(Comment item);
+    void update(Comment post);
 
     void delete(Integer id);
 }
