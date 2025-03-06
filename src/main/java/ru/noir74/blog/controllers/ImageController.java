@@ -3,6 +3,10 @@ package ru.noir74.blog.controllers;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,5 +35,11 @@ public class ImageController {
         log.info("POST /{}/image", id);
         postService.setImageById(PostImage.builder().id(id).file(file).build());
         return "post";
+    }
+
+    @GetMapping(value = "/favicon.ico", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<Resource> favicon() {
+        Resource resource = new ClassPathResource("static/favicon.ico");
+        return ResponseEntity.ok(resource);
     }
 }
