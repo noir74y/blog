@@ -2,15 +2,11 @@ package ru.noir74.blog.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.noir74.blog.mappers.PostMapper;
-import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.models.post.Post;
 import ru.noir74.blog.models.post.PostDtoReq;
 import ru.noir74.blog.models.post.PostDtoResp;
-import ru.noir74.blog.services.intf.TagService;
 
 import java.util.Collections;
 

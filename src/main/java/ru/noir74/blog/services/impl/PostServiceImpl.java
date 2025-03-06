@@ -9,7 +9,6 @@ import ru.noir74.blog.mappers.PostMapper;
 import ru.noir74.blog.models.post.Post;
 import ru.noir74.blog.models.post.PostBrief;
 import ru.noir74.blog.models.post.PostImage;
-import ru.noir74.blog.models.post.PostImageEntity;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.repositories.intf.PostRepository;
 import ru.noir74.blog.services.intf.CommentService;
@@ -55,12 +54,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void findImageById(PostImage postImage) throws IOException {
-        var postImageEntity = postRepository.findImageById(postImage.getId());
-        if (postImageEntity.isImageReadyToBeSaved() && Objects.nonNull(postImage.getResponse())) {
-            postImage.getResponse().setContentType("image/" + postImageEntity.getImageType());
-            postImage.getResponse().getOutputStream().write(postImageEntity.getImage());
-        }
+    public PostImage findImageById(Integer postId) throws IOException {
+        return postImageMapper.entity2model(postRepository.findImageById(postId));
     }
 
     @Override
@@ -105,17 +100,17 @@ public class PostServiceImpl implements PostService {
     @Transactional
     private void saveImage(Post post) throws IOException {
         Optional.ofNullable(post.getFile()).ifPresent(file -> {
-            PostImageEntity postImageEntity = null;
+            PostImage postImage = null;
             try {
-                postImageEntity = PostImageEntity.builder()
+                postImage = PostImage.builder()
                         .id(post.getId())
                         .image(file.getBytes())
                         .imageName(file.getOriginalFilename()).build();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if (postImageEntity.isImageReadyToBeSaved())
-                postRepository.saveImageById(postImageEntity);
+            if (postImage.isImageReadyToBeSaved())
+                postRepository.saveImageById(postImageMapper.model2entity(postImage));
         });
     }
 

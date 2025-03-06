@@ -12,7 +12,7 @@ public interface PostService {
 
     Post findById(Integer id);
 
-    void findImageById(PostImage postImage) throws IOException;
+    PostImage findImageById(Integer postId) throws IOException;
 
     Integer create(Post post) throws IOException;
 

@@ -2,13 +2,10 @@ package ru.noir74.blog.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.noir74.blog.mappers.CommentMapper;
 import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.comment.CommentDtoReq;
 import ru.noir74.blog.models.post.Post;
-import ru.noir74.blog.services.intf.CommentService;
 
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

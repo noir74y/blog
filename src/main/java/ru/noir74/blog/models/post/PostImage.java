@@ -1,11 +1,12 @@
 package ru.noir74.blog.models.post;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -13,6 +14,19 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class PostImage {
     private Integer id;
-    private MultipartFile file;
-    private HttpServletResponse response;
+    private byte[] image;
+    private String imageName;
+
+    public boolean isImageReadyToBeSaved() {
+        return Objects.nonNull(image) &&
+                image.length != 0 &&
+                Objects.nonNull(imageName) &&
+                imageName.matches("^.+\\.\\w+$");
+    }
+
+    public String getImageType() {
+        return Arrays.stream(imageName.split("\\."))
+                .reduce((first, second) -> second)
+                .orElse("");
+    }
 }

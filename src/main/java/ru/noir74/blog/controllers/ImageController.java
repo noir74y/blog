@@ -17,6 +17,7 @@ import ru.noir74.blog.models.post.PostImage;
 import ru.noir74.blog.services.intf.PostService;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -27,13 +28,20 @@ public class ImageController {
     @GetMapping("{id}/image")
     public void getImage(@PathVariable("id") Integer id, HttpServletResponse response) throws IOException {
         log.info("GET /{}/image", id);
-        postService.findImageById(PostImage.builder().id(id).response(response).build());
+        Optional.ofNullable(postService.findImageById(id)).ifPresent(postImage -> {
+            response.setContentType("image/" + postImage.getImageType());
+            try {
+                response.getOutputStream().write(postImage.getImage());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @PostMapping("{id}/image")
     public String setImage(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file) throws IOException {
         log.info("POST /{}/image", id);
-        postService.setImageById(PostImage.builder().id(id).file(file).build());
+        postService.setImageById(PostImage.builder().id(id).image(file.getBytes()).imageName(file.getOriginalFilename()).build());
         return "post";
     }
 
