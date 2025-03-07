@@ -2,10 +2,13 @@ package ru.noir74.blog.tests.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.generics.ServiceTest;
 import ru.noir74.blog.models.post.*;
+import ru.noir74.blog.services.intf.CommentService;
+import ru.noir74.blog.services.intf.TagService;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -26,6 +29,11 @@ public class PostServiceTest extends ServiceTest {
     private List<PostEntityBrief> postEntityBriefs;
     private PostImage postImage;
     private PostImageEntity postImageEntity;
+
+    @MockBean
+    private TagService tagServiceMock;
+    @MockBean
+    private CommentService commentServiceMock;
 
     @BeforeEach
     void setUp() throws IOException {

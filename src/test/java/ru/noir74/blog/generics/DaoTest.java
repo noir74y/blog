@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
 import ru.noir74.blog.repositories.intf.PostRepository;
 
 @DataJpaTest
