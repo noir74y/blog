@@ -13,7 +13,7 @@ import ru.noir74.blog.repositories.intf.PostRepository;
 @DataJpaTest
 @ContextHierarchy(@ContextConfiguration(name = "dao", classes = DaoTestConfig.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public abstract class DaoTest extends Test {
+public abstract class DaoTest {
     @Autowired
     protected JdbcTemplate jdbcTemplate;
     @Autowired
