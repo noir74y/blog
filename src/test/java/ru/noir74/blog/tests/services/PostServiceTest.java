@@ -23,17 +23,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class PostServiceTest extends ServiceTest {
+    @MockBean
+    private TagService tagServiceMock;
+    @MockBean
+    private CommentService commentServiceMock;
+
     private Post post;
     private PostEntity postEntity;
     private List<PostBrief> postBriefs;
     private List<PostEntityBrief> postEntityBriefs;
     private PostImage postImage;
     private PostImageEntity postImageEntity;
-
-    @MockBean
-    private TagService tagServiceMock;
-    @MockBean
-    private CommentService commentServiceMock;
 
     @BeforeEach
     void setUp() throws IOException {
