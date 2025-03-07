@@ -46,6 +46,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.2'
+	implementation group: 'org.jsoup', name: 'jsoup', version: '1.19.1'
 }
 
 tasks.named('test') {
