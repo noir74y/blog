@@ -5,6 +5,5 @@ import org.springframework.test.context.ContextHierarchy;
 import ru.noir74.blog.configurations.ModelMapperConfig;
 
 @ContextHierarchy(@ContextConfiguration(name = "mapper", classes = ModelMapperConfig.class))
-//@TestPropertySource(locations = "classpath:application-test.properties")
 public abstract class GenericTest {
 }
