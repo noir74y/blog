@@ -23,7 +23,6 @@ public class CommentRepositoryTest extends DaoTest {
     Integer commentId;
     String message;
 
-
     @BeforeEach
     void setUp() {
         message = "message";

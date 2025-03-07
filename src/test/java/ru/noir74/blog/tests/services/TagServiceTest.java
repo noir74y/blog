@@ -1,14 +1,10 @@
-package ru.noir74.blog.tests.services.unit;
+package ru.noir74.blog.tests.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.noir74.blog.generics.ServiceTest;
-import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagEntity;
-import ru.noir74.blog.repositories.intf.TagRepository;
-import ru.noir74.blog.services.intf.TagService;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,13 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class TagServiceTest extends ServiceTest {
-    @Autowired
-    private TagMapper tagMapper;
-    @Autowired
-    private TagRepository tagRepositoryMock;
-    @Autowired
-    private TagService tagService;
-
     private List<Tag> tags;
     private List<TagEntity> tagEntities;
 
@@ -35,7 +24,7 @@ public class TagServiceTest extends ServiceTest {
         var tagEntity = tagMapper.model2entity(tag);
         tagEntities = new LinkedList<>(List.of(tagEntity));
 
-        when(tagRepositoryMock.findAll()).thenReturn(tagEntities);
+        when(tagRepository.findAll()).thenReturn(tagEntities);
         tagService.populateTags();
     }
 
@@ -51,9 +40,9 @@ public class TagServiceTest extends ServiceTest {
 
     @Test
     void testFindAllByPostId() {
-        when(tagRepositoryMock.findAllByPostId(0)).thenReturn(tagEntities);
+        when(tagRepository.findAllByPostId(0)).thenReturn(tagEntities);
         assertEquals(tags, tagService.findAllByPostId(0));
-        verify(tagRepositoryMock, times(1)).findAllByPostId(0);
+        verify(tagRepository, times(1)).findAllByPostId(0);
     }
 
     @Test
@@ -64,18 +53,18 @@ public class TagServiceTest extends ServiceTest {
         var newModelsToBeSaved = tagMapper.bulkEntity2Model(newEntitiesToBeSaved);
         var newModelsSaved = tagMapper.bulkEntity2Model(newEntitiesSaved);
 
-        when(tagRepositoryMock.save(newEntitiesToBeSaved)).thenReturn(newEntitiesSaved);
+        when(tagRepository.save(newEntitiesToBeSaved)).thenReturn(newEntitiesSaved);
         assertEquals(newModelsSaved, tagService.save(newModelsToBeSaved));
-        verify(tagRepositoryMock, times(1)).save(newEntitiesToBeSaved);
+        verify(tagRepository, times(1)).save(newEntitiesToBeSaved);
     }
 
     @Test
     void testAttachTagsToPost() {
         // just stub
-        doNothing().when(tagRepositoryMock).unstickFromPost(0);
-        doNothing().when(tagRepositoryMock).stickToPost(List.of(0), 0);
+        doNothing().when(tagRepository).unstickFromPost(0);
+        doNothing().when(tagRepository).stickToPost(List.of(0), 0);
         tagService.attachTagsToPost(List.of(0), 0);
-        verify(tagRepositoryMock, times(1)).unstickFromPost(0);
-        verify(tagRepositoryMock, times(1)).stickToPost(List.of(0), 0);
+        verify(tagRepository, times(1)).unstickFromPost(0);
+        verify(tagRepository, times(1)).stickToPost(List.of(0), 0);
     }
 }

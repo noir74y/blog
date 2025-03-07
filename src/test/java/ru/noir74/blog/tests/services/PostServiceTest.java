@@ -1,18 +1,11 @@
-package ru.noir74.blog.tests.services.unit;
+package ru.noir74.blog.tests.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 import ru.noir74.blog.exceptions.NotFoundException;
 import ru.noir74.blog.generics.ServiceTest;
-import ru.noir74.blog.mappers.PostImageMapper;
-import ru.noir74.blog.mappers.PostMapper;
 import ru.noir74.blog.models.post.*;
-import ru.noir74.blog.repositories.intf.PostRepository;
-import ru.noir74.blog.services.intf.PostService;
-import ru.noir74.blog.tests.services.intf.CommentServiceMock;
-import ru.noir74.blog.tests.services.intf.TagServiceMock;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -27,19 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class PostServiceTest extends ServiceTest {
-    @Autowired
-    private PostMapper postMapper;
-    @Autowired
-    private PostImageMapper postImageMapper;
-    @Autowired
-    private PostRepository postRepositoryMock;
-    @Autowired
-    private TagServiceMock tagServiceMock;
-    @Autowired
-    private CommentServiceMock commentServiceMock;
-    @Autowired
-    private PostService postService;
-
     private Post post;
     private PostEntity postEntity;
     private List<PostBrief> postBriefs;
@@ -84,88 +64,88 @@ public class PostServiceTest extends ServiceTest {
                 .imageName(post.getFile().getOriginalFilename()).build();
         postImageEntity = postImageMapper.model2entity(postImage);
 
-        reset(postRepositoryMock);
+        reset(postRepository);
         reset(tagServiceMock);
         reset(commentServiceMock);
     }
 
     @Test
     void testFindPage() {
-        when(postRepositoryMock.findByPage(0, 10)).thenReturn(postEntityBriefs);
+        when(postRepository.findByPage(0, 10)).thenReturn(postEntityBriefs);
         assertEquals(postBriefs, postService.findPage("0", "10", ""));
-        verify(postRepositoryMock, times(1)).findByPage(0, 10);
+        verify(postRepository, times(1)).findByPage(0, 10);
     }
 
     @Test
     void testFindById() {
-        when(postRepositoryMock.findById(0)).thenReturn(Optional.of(postEntity));
+        when(postRepository.findById(0)).thenReturn(Optional.of(postEntity));
         assertEquals(post, postService.findById(0));
-        verify(postRepositoryMock, times(1)).findById(0);
+        verify(postRepository, times(1)).findById(0);
     }
 
     @Test
     void testFindById_NotFound() {
-        when(postRepositoryMock.findById(1)).thenThrow(new NotFoundException("post is not found", String.valueOf(1)));
+        when(postRepository.findById(1)).thenThrow(new NotFoundException("post is not found", String.valueOf(1)));
         assertThrows(NotFoundException.class, () -> postService.findById(1));
-        verify(postRepositoryMock, times(1)).findById(1);
+        verify(postRepository, times(1)).findById(1);
     }
 
     @Test
     void testFindImageById() throws IOException {
-        when(postRepositoryMock.findImageById(post.getId())).thenReturn(postImageEntity);
+        when(postRepository.findImageById(post.getId())).thenReturn(postImageEntity);
         postService.findImageById(postImage.getId());
-        verify(postRepositoryMock, times(1)).findImageById(post.getId());
+        verify(postRepository, times(1)).findImageById(post.getId());
     }
 
     @Test
     void testCreate() throws IOException {
-        when(postRepositoryMock.save(postEntity)).thenReturn(post.getId());
-        doNothing().when(postRepositoryMock).saveImageById(postImageEntity);
+        when(postRepository.save(postEntity)).thenReturn(post.getId());
+        doNothing().when(postRepository).saveImageById(postImageEntity);
         doNothing().when(tagServiceMock).attachTagsToPost(List.of(), post.getId());
 
         postService.create(post);
 
-        verify(postRepositoryMock, times(1)).save(postEntity);
-        verify(postRepositoryMock, times(1)).saveImageById(postImageEntity);
+        verify(postRepository, times(1)).save(postEntity);
+        verify(postRepository, times(1)).saveImageById(postImageEntity);
         verify(tagServiceMock, times(1)).attachTagsToPost(List.of(), post.getId());
     }
 
     @Test
     void testUpdate() throws IOException {
-        when(postRepositoryMock.existsById(post.getId())).thenReturn(true);
-        when(postRepositoryMock.save(postEntity)).thenReturn(post.getId());
+        when(postRepository.existsById(post.getId())).thenReturn(true);
+        when(postRepository.save(postEntity)).thenReturn(post.getId());
         postService.update(post);
-        verify(postRepositoryMock, times(1)).existsById(post.getId());
-        verify(postRepositoryMock, times(1)).save(postEntity);
+        verify(postRepository, times(1)).existsById(post.getId());
+        verify(postRepository, times(1)).save(postEntity);
     }
 
     @Test
     void testUpdate_NotFound() {
-        when(postRepositoryMock.existsById(post.getId())).thenReturn(false);
+        when(postRepository.existsById(post.getId())).thenReturn(false);
         assertThrows(NotFoundException.class, () -> postService.update(post));
-        verify(postRepositoryMock, times(1)).existsById(post.getId());
+        verify(postRepository, times(1)).existsById(post.getId());
     }
 
     @Test
     void testSetImageById() throws IOException {
-        doNothing().when(postRepositoryMock).saveImageById(postImageEntity);
+        doNothing().when(postRepository).saveImageById(postImageEntity);
         postService.setImageById(postImage);
-        verify(postRepositoryMock, times(1)).saveImageById(postImageEntity);
+        verify(postRepository, times(1)).saveImageById(postImageEntity);
     }
 
     @Test
     void testDelete() {
-        when(postRepositoryMock.existsById(post.getId())).thenReturn(true);
-        doNothing().when(postRepositoryMock).deleteById(post.getId());
+        when(postRepository.existsById(post.getId())).thenReturn(true);
+        doNothing().when(postRepository).deleteById(post.getId());
         postService.delete(post.getId());
-        verify(postRepositoryMock, times(1)).existsById(post.getId());
-        verify(postRepositoryMock, times(1)).deleteById(post.getId());
+        verify(postRepository, times(1)).existsById(post.getId());
+        verify(postRepository, times(1)).deleteById(post.getId());
     }
 
     @Test
     void testDelete_NotFound() {
-        when(postRepositoryMock.existsById(post.getId())).thenReturn(false);
+        when(postRepository.existsById(post.getId())).thenReturn(false);
         assertThrows(NotFoundException.class, () -> postService.delete(post.getId()));
-        verify(postRepositoryMock, times(1)).existsById(post.getId());
+        verify(postRepository, times(1)).existsById(post.getId());
     }
 }
