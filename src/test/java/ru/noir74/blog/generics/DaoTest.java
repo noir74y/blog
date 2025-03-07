@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextHierarchy;
 import ru.noir74.blog.repositories.intf.PostRepository;
 
 @DataJpaTest
-@ContextHierarchy(@ContextConfiguration(name = "dao", classes = DaoTestConfig.class))
+@ContextConfiguration(classes = DaoTestConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public abstract class DaoTest {
     @Autowired
