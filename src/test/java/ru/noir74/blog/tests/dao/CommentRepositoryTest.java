@@ -3,7 +3,7 @@ package ru.noir74.blog.tests.dao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.noir74.blog.generics.GenericDaoTest;
+import ru.noir74.blog.generics.DaoTest;
 import ru.noir74.blog.models.comment.CommentEntity;
 import ru.noir74.blog.models.post.PostEntityBrief;
 import ru.noir74.blog.repositories.intf.CommentRepository;
@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class CommentRepositoryTest extends GenericDaoTest {
+public class CommentRepositoryTest extends DaoTest {
     @Autowired
     private CommentRepository commentRepository;
 

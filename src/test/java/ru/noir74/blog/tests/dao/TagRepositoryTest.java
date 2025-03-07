@@ -3,7 +3,7 @@ package ru.noir74.blog.tests.dao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.noir74.blog.generics.GenericDaoTest;
+import ru.noir74.blog.generics.DaoTest;
 import ru.noir74.blog.models.tag.TagEntity;
 import ru.noir74.blog.repositories.intf.TagRepository;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TagRepositoryTest extends GenericDaoTest {
+public class TagRepositoryTest extends DaoTest {
     @Autowired
     private TagRepository tagRepository;
 

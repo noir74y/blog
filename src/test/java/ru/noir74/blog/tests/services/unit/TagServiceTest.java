@@ -1,9 +1,9 @@
-package ru.noir74.blog.tests.services;
+package ru.noir74.blog.tests.services.unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.noir74.blog.generics.GenericServiceTest;
+import ru.noir74.blog.generics.ServiceTest;
 import ru.noir74.blog.mappers.TagMapper;
 import ru.noir74.blog.models.tag.Tag;
 import ru.noir74.blog.models.tag.TagEntity;
@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class TagServiceTest extends GenericServiceTest {
+public class TagServiceTest extends ServiceTest {
     @Autowired
     private TagMapper tagMapper;
     @Autowired

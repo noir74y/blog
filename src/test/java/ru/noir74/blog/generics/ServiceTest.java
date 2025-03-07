@@ -7,5 +7,5 @@ import ru.noir74.blog.configurations.ServiceTestConfig;
 
 @SpringJUnitConfig
 @ContextHierarchy(@ContextConfiguration(name = "service", classes = ServiceTestConfig.class))
-public abstract class GenericServiceTest extends GenericTest {
+public abstract class ServiceTest extends Test {
 }

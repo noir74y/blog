@@ -1,10 +1,10 @@
-package ru.noir74.blog.tests.services;
+package ru.noir74.blog.tests.services.unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.noir74.blog.exceptions.NotFoundException;
-import ru.noir74.blog.generics.GenericServiceTest;
+import ru.noir74.blog.generics.ServiceTest;
 import ru.noir74.blog.mappers.CommentMapper;
 import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.comment.CommentEntity;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class CommentServiceTest extends GenericServiceTest {
+public class CommentServiceTest extends ServiceTest {
     @Autowired
     private CommentMapper commentMapper;
     @Autowired

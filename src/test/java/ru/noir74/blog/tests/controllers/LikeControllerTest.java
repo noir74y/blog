@@ -1,17 +1,14 @@
 package ru.noir74.blog.tests.controllers;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.noir74.blog.controllers.LikeController;
-import ru.noir74.blog.generics.GenericControllerTest;
+import ru.noir74.blog.generics.ControllerTest;
 
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = LikeController.class)
-public class LikeControllerTest extends GenericControllerTest {
+public class LikeControllerTest extends ControllerTest {
     @Test
     void addLike() throws Exception {
         var postId = 1;

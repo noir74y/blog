@@ -1,10 +1,8 @@
 package ru.noir74.blog.tests.controllers;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.noir74.blog.controllers.CommentController;
-import ru.noir74.blog.generics.GenericControllerTest;
+import ru.noir74.blog.generics.ControllerTest;
 import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.comment.CommentDtoReq;
 import ru.noir74.blog.models.post.Post;
@@ -12,8 +10,7 @@ import ru.noir74.blog.models.post.Post;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = CommentController.class)
-public class CommentControllerTest extends GenericControllerTest {
+public class CommentControllerTest extends ControllerTest {
     @Test
     void create() throws Exception {
         var postId = 1;

@@ -2,11 +2,9 @@ package ru.noir74.blog.tests.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.noir74.blog.controllers.ImageController;
-import ru.noir74.blog.generics.GenericControllerTest;
+import ru.noir74.blog.generics.ControllerTest;
 import ru.noir74.blog.models.post.PostImage;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -14,8 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = ImageController.class)
-public class ImageControllerTest extends GenericControllerTest {
+public class ImageControllerTest extends ControllerTest {
     Integer postId;
     MockMultipartFile mockMultipartFile;
 

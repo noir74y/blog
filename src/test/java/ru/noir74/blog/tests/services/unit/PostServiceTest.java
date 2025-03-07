@@ -1,11 +1,11 @@
-package ru.noir74.blog.tests.services;
+package ru.noir74.blog.tests.services.unit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 import ru.noir74.blog.exceptions.NotFoundException;
-import ru.noir74.blog.generics.GenericServiceTest;
+import ru.noir74.blog.generics.ServiceTest;
 import ru.noir74.blog.mappers.PostImageMapper;
 import ru.noir74.blog.mappers.PostMapper;
 import ru.noir74.blog.models.post.*;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class PostServiceTest extends GenericServiceTest {
+public class PostServiceTest extends ServiceTest {
     @Autowired
     private PostMapper postMapper;
     @Autowired
