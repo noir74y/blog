@@ -1,4 +1,4 @@
-package ru.noir74.blog.controllers;
+package ru.noir74.blog.generics;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -10,7 +10,6 @@ import ru.noir74.blog.services.intf.CommentService;
 import ru.noir74.blog.services.intf.PostService;
 import ru.noir74.blog.services.intf.TagService;
 
-//@SpringBootTest(classes  = {PostMapper.class, TagMapper.class, CommentMapper.class})
 public abstract class GenericControllerTest {
     @Autowired
     protected MockMvc mockMvc;

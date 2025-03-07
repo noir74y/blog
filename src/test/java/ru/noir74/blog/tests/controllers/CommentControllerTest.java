@@ -1,8 +1,10 @@
-package ru.noir74.blog.controllers;
+package ru.noir74.blog.tests.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.noir74.blog.controllers.CommentController;
+import ru.noir74.blog.generics.GenericControllerTest;
 import ru.noir74.blog.models.comment.Comment;
 import ru.noir74.blog.models.comment.CommentDtoReq;
 import ru.noir74.blog.models.post.Post;
